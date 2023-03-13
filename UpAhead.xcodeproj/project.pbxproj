@@ -14,7 +14,7 @@
 		3DD5C00F29B1187B002FFF12 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C00E29B1187B002FFF12 /* MainView.swift */; };
 		3DD5C01129B1187C002FFF12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DD5C01029B1187C002FFF12 /* Assets.xcassets */; };
 		3DD5C01429B1187C002FFF12 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DD5C01329B1187C002FFF12 /* Preview Assets.xcassets */; };
-		3DD5C01B29B118EB002FFF12 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C01A29B118EB002FFF12 /* Timeline.swift */; };
+		3DD5C01B29B118EB002FFF12 /* TimelineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C01A29B118EB002FFF12 /* TimelineData.swift */; };
 		3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C01C29B12F6A002FFF12 /* SignView.swift */; };
 		3DD5C02029B12FA3002FFF12 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C01F29B12FA3002FFF12 /* Extensions.swift */; };
 		3DD5C02229B2DDA4002FFF12 /* LoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02129B2DDA4002FFF12 /* LoginPage.swift */; };
@@ -32,7 +32,7 @@
 		3DD5C00E29B1187B002FFF12 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		3DD5C01029B1187C002FFF12 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3DD5C01329B1187C002FFF12 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		3DD5C01A29B118EB002FFF12 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
+		3DD5C01A29B118EB002FFF12 /* TimelineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineData.swift; sourceTree = "<group>"; };
 		3DD5C01C29B12F6A002FFF12 /* SignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignView.swift; sourceTree = "<group>"; };
 		3DD5C01F29B12FA3002FFF12 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3DD5C02129B2DDA4002FFF12 /* LoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPage.swift; sourceTree = "<group>"; };
@@ -52,6 +52,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3DCD296329BD23250064A171 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				3DCAA28A29B6D6E100799E87 /* DayStruct.swift */,
+				3DD5C01A29B118EB002FFF12 /* TimelineData.swift */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
 		3DD5C00029B1187B002FFF12 = {
 			isa = PBXGroup;
 			children = (
@@ -78,7 +87,7 @@
 				3DD5C01F29B12FA3002FFF12 /* Extensions.swift */,
 				3DD5C01229B1187C002FFF12 /* Preview Content */,
 				3DD5C01E29B12F77002FFF12 /* CustomViews */,
-				3DCAA28A29B6D6E100799E87 /* DayStruct.swift */,
+				3DCD296329BD23250064A171 /* Objects */,
 			);
 			path = UpAhead;
 			sourceTree = "<group>";
@@ -94,7 +103,6 @@
 		3DD5C01E29B12F77002FFF12 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				3DD5C01A29B118EB002FFF12 /* Timeline.swift */,
 				3DD5C01C29B12F6A002FFF12 /* SignView.swift */,
 				3DD5C02329B2F0DD002FFF12 /* DayRect.swift */,
 				3DD5C02529B4FF8A002FFF12 /* TrajectView.swift */,
@@ -180,7 +188,7 @@
 				3DD5C02029B12FA3002FFF12 /* Extensions.swift in Sources */,
 				3DCAA28B29B6D6E100799E87 /* DayStruct.swift in Sources */,
 				3DD5C02A29B5A147002FFF12 /* WeatherStruct.swift in Sources */,
-				3DD5C01B29B118EB002FFF12 /* Timeline.swift in Sources */,
+				3DD5C01B29B118EB002FFF12 /* TimelineData.swift in Sources */,
 				3DD5C02629B4FF8A002FFF12 /* TrajectView.swift in Sources */,
 				3DC088FC29B82037005233DF /* EventBox.swift in Sources */,
 				3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */,

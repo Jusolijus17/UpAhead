@@ -21,17 +21,6 @@ struct TrajectView: View {
         }
     }
     
-    var totalHeight: CGFloat {
-        var height: CGFloat = 0
-        for day in timelineData.days {
-            height += day.height
-        }
-        return height
-    }
-    
-    @State private var rectHeight: CGFloat = 0
-    
-    
     var body: some View {
         ZStack {
             GeometryReader { geometry in
@@ -61,11 +50,11 @@ struct TrajectView: View {
                                 Spacer()
                             }
                         )
-                        .frame(width: geometry.size.width - 10, height: rectHeight)
+                        .frame(width: geometry.size.width - 10, height: timelineData.trajectHeight)
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 0))
                 }
             }
-            .frame(width: 30, height: totalHeight)
+            .frame(width: 30, height: timelineData.totalHeight)
         }
     }
 }
@@ -90,7 +79,7 @@ struct RoadSection: View {
             Spacer()
             if eventCount != 0 {
                 ForEach(0..<eventCount, id: \.self) { i in
-                    TimeMark(side: i.isMultiple(of: 2) ? titleSide.opposite : titleSide)
+                    TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite)
                         .foregroundColor(.yellow)
                     Spacer()
                 }
@@ -115,22 +104,50 @@ struct TimeMark: View {
             if side == .left {
                 Rectangle()
                     .frame(width: 30, height: 2)
-                Image(systemName: "circle.fill")
-                    .resizable()
-                    .scaledToFit()
+                Circle()
                     .frame(width: 12)
             } else {
-                Image(systemName: "circle.fill")
-                    .resizable()
-                    .scaledToFit()
+                Circle()
                     .frame(width: 12)
                 Rectangle()
                     .frame(width: 30, height: 2)
             }
         }
-        .offset(x: side == .left ? -21 + 6 : 21 - 6)
+        .offset(x: side == .left ? -15 : 15)
     }
 }
+
+//struct TimeMark: View {
+//    let side: Side
+//    let secondaryMark: Bool
+//
+//    init(side: Side, secondaryMark: Bool = false) {
+//        self.side = side
+//        self.secondaryMark = secondaryMark
+//    }
+//
+//    var body: some View {
+//        let indicatorWidth: CGFloat = secondaryMark ? 60 : 30
+//        HStack(spacing: 0) {
+//            if side == .left {
+//                Rectangle()
+//                    .frame(width: indicatorWidth, height: 2)
+//                Image(systemName: "circle.fill")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(width: 12)
+//            } else {
+//                Image(systemName: "circle.fill")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(width: 12)
+//                Rectangle()
+//                    .frame(width: indicatorWidth, height: 2)
+//            }
+//        }
+//        .offset(x: side == .left ? -21 + 6 : 21 - 6)
+//    }
+//}
 
 struct DirectionPointer: View {
     let radius: CGFloat
@@ -167,7 +184,7 @@ struct TrajectView_Previews: PreviewProvider {
         ScrollView {
             TrajectView()
                 .frame(maxWidth: .infinity)
-                .environmentObject(TimelineData(days: generateWeek(), currentDayIndex: 3))
+                .environmentObject(TimelineData(days: generateWeek(), currentDayIndex: 0))
         }
     }
 }

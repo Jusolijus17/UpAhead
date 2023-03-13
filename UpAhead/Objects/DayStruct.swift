@@ -8,22 +8,19 @@
 import Foundation
 import SwiftUI
 
-class TimelineData: ObservableObject {
-    @Published var days: [Day]
-    @Published var currentDayIndex: Int
-    
-    init(days: [Day], currentDayIndex: Int) {
-        self.days = days
-        self.currentDayIndex = currentDayIndex
-    }
-}
-
 struct Day {
     let date: Date
     let weather: WeatherData?
     var events: [Event]
     var height: CGFloat {
-        return CGFloat(events.count <= 1 ? 200 : events.count * 200)
+//        var totalHeight: CGFloat = 200
+//        for i in 0..<events.count {
+//            if i.isMultiple(of: 2) && i >= 1 {
+//                totalHeight += 125
+//            }
+//        }
+//        return totalHeight
+        return events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
     }
     
     mutating func addEvent(_ event: Event) {

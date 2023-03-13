@@ -15,73 +15,71 @@ struct DayRect: View {
     
     var body: some View {
         GeometryReader { geometry in
-            HStack {
-                if titleSide == .right {
-                    VStack {
-                        if let weather = day.weather {
-                            WeatherView(weather: weather, side: titleSide)
-                        } else {
-                            Text("")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
-                        Spacer()
-//                        EventBox(icon: "square.and.pencil", title: "Devoir INF3405", isChecked: true)
-                        if day.events.count == 0 {
-                            AddBox()
-                                .onTapGesture {
-                                    editData.dayIndex = index
-                                    withAnimation {
-                                        editData.editMode = true
-                                    }
-                                }
-                        } else {
-                            EventBox(event: day.events[0])
-                        }
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    Spacer().frame(width: 40)
-                    
+            VStack(spacing: 0) {
+                HStack {
+                    if titleSide == .right {
                         VStack {
-                            HStack(spacing: 0) {
-                                TitleView(date: day.date, side: titleSide)
+                            if let weather = day.weather {
+                                WeatherView(weather: weather, side: titleSide)
+                            } else {
+                                Text("")
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                             }
-                            Spacer()
+    //                        if day.events.count == 0 {
+    //                            AddBox()
+    //                                .onTapGesture {
+    //                                    editData.dayIndex = index
+    //                                    withAnimation {
+    //                                        editData.editMode = true
+    //                                    }
+    //                                }
+    //                        } else {
+    //                            EventBox(event: day.events[0])
+    //                        }
+    //                        Spacer()
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    VStack {
-                        TitleView(date: day.date, side: titleSide)
-                        Spacer()
+                        .padding(.bottom)
+                        .frame(maxWidth: .infinity, alignment: .top)
+                        
+                        Spacer().frame(width: 40)
+                        
+                        VStack {
+                            TitleView(date: day.date, side: titleSide)
+                        }
+                        .frame(maxWidth: .infinity)
+                    } else {
+                        VStack {
+                            TitleView(date: day.date, side: titleSide)
+                        }
+                        .frame(maxWidth: .infinity)
+                        
+                        Spacer().frame(width: 40)
+                        
+                        VStack {
+                            if let weather = day.weather {
+                                WeatherView(weather: weather, side: titleSide)
+                            } else {
+                                Text("")
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
+    //                        if day.events.count == 0 {
+    //                            AddBox()
+    //                                .onTapGesture {
+    //                                    editData.dayIndex = index
+    //                                    withAnimation {
+    //                                        editData.editMode = true
+    //                                    }
+    //                                }
+    //                        } else {
+    //                            EventBox(event: day.events[0])
+    //                        }
+                        }
+                        .padding(.bottom)
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    Spacer().frame(width: 40)
-                    
-                    VStack {
-                        if let weather = day.weather {
-                            WeatherView(weather: weather, side: titleSide)
-                        } else {
-                            Text("")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
-                        Spacer()
-                        if day.events.count == 0 {
-                            AddBox()
-                                .onTapGesture {
-                                    editData.dayIndex = index
-                                    withAnimation {
-                                        editData.editMode = true
-                                    }
-                                }
-                        } else {
-                            EventBox(event: day.events[0])
-                        }
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                EventSection(events: day.events, initialSide: titleSide)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
     }
@@ -138,6 +136,55 @@ struct TitleView: View {
     }
 }
 
+struct EventSection: View {
+    @State var events: [Event]
+    let initialSide: Side
+    var body: some View {
+        HStack {
+            // Left side here
+            VStack(spacing: 30) {
+                ForEach(0..<events.count, id: \.self) { i in
+                    if initialSide == .left && i.isMultiple(of: 2) {
+                        EventBox(event: events[i])
+                        if i != events.count - 1 {
+                            Spacer()
+                        }
+                    } else if initialSide == .right && !i.isMultiple(of: 2) {
+                        Spacer()
+                        EventBox(event: events[i])
+                    }
+                }
+                if initialSide == .right && !events.count.isMultiple(of: 2) {
+                    Spacer()
+                }
+            }
+            .frame(maxWidth: .infinity)
+            
+            Spacer().frame(width: 40)
+            
+            // Right side here
+            VStack(spacing: 30) {
+                ForEach(0..<events.count, id: \.self) { i in
+                    if initialSide == .right && i.isMultiple(of: 2) {
+                        EventBox(event: events[i])
+                        if i != events.count - 1 {
+                            Spacer()
+                        }
+                    } else if initialSide == .left && !i.isMultiple(of: 2) {
+                        Spacer()
+                        EventBox(event: events[i])
+                    }
+                }
+                if initialSide == .left && !events.count.isMultiple(of: 2) {
+                    Spacer()
+                }
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .padding()
+    }
+}
+
 struct EditData {
     var editMode: Bool
     var dayIndex: Int
@@ -149,7 +196,7 @@ func generateDay() -> Day {
     
     let meetingEvent = Event(title: "Meeting", iconName: "calendar", color: .blue, isCompleted: false)
     let lunchEvent = Event(title: "Lunch with Bob", iconName: "food", color: .green, isCompleted: false)
-    let events = [meetingEvent, lunchEvent]
+    let events = [meetingEvent, meetingEvent, meetingEvent, meetingEvent, meetingEvent, meetingEvent, lunchEvent]
     
     let day = Day(date: date, weather: weather, events: events)
     return day
@@ -158,8 +205,9 @@ func generateDay() -> Day {
 
 struct DayRect_Previews: PreviewProvider {
     static var previews: some View {
-        DayRect(day: .constant(generateDay()), index: 0, titleSide: .right, editData: .constant(EditData(editMode: false, dayIndex: 0)))
+        let day = generateDay()
+        DayRect(day: .constant(day), index: 0, titleSide: .left, editData: .constant(EditData(editMode: false, dayIndex: 0)))
             .background(Color(hex: "394A59"))
-            .frame(height: 200)
+            .frame(height: day.height)
     }
 }
