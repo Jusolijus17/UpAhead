@@ -31,7 +31,7 @@ struct TrajectView: View {
                 VStack(spacing: 0) {
                     ForEach(0..<timelineData.days.count, id: \.self) { i in
                         RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $timelineData.days[i])
-                            .frame(height: CGFloat(timelineData.days[i].height))
+                            .frame(width: 41, height: CGFloat(timelineData.days[i].height))
                     }
                 }
                 .padding(.top, 10)
@@ -79,7 +79,7 @@ struct RoadSection: View {
             Spacer()
             if eventCount != 0 {
                 ForEach(0..<eventCount, id: \.self) { i in
-                    TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite)
+                    TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
                         .foregroundColor(.yellow)
                     Spacer()
                 }
@@ -99,21 +99,29 @@ struct RoadSection: View {
 
 struct TimeMark: View {
     let side: Side
+    let secondaryMark: Bool
+    
+    init(side: Side, secondaryMark: Bool = false) {
+        self.side = side
+        self.secondaryMark = secondaryMark
+    }
+    
     var body: some View {
+        let padding: CGFloat = secondaryMark ? 25 : 15
         HStack(spacing: 0) {
             if side == .left {
                 Rectangle()
-                    .frame(width: 30, height: 2)
+                    .frame(width: secondaryMark ? 50 : 30, height: 2)
                 Circle()
                     .frame(width: 12)
             } else {
                 Circle()
                     .frame(width: 12)
                 Rectangle()
-                    .frame(width: 30, height: 2)
+                    .frame(width: secondaryMark ? 50 : 30, height: 2)
             }
         }
-        .offset(x: side == .left ? -15 : 15)
+        .offset(x: side == .left ? -padding : padding)
     }
 }
 

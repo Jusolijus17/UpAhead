@@ -142,16 +142,16 @@ struct EventSection: View {
     var body: some View {
         HStack {
             // Left side here
-            VStack(spacing: 30) {
+            VStack(spacing: 0) {
                 ForEach(0..<events.count, id: \.self) { i in
                     if initialSide == .left && i.isMultiple(of: 2) {
-                        EventBox(event: events[i])
+                        EventBox(event: events[i], side: .left)
                         if i != events.count - 1 {
                             Spacer()
                         }
                     } else if initialSide == .right && !i.isMultiple(of: 2) {
                         Spacer()
-                        EventBox(event: events[i])
+                        EventBox(event: events[i], side: .left)
                     }
                 }
                 if initialSide == .right && !events.count.isMultiple(of: 2) {
@@ -163,16 +163,16 @@ struct EventSection: View {
             Spacer().frame(width: 40)
             
             // Right side here
-            VStack(spacing: 30) {
+            VStack(spacing: 0) {
                 ForEach(0..<events.count, id: \.self) { i in
                     if initialSide == .right && i.isMultiple(of: 2) {
-                        EventBox(event: events[i])
+                        EventBox(event: events[i], side: .right)
                         if i != events.count - 1 {
                             Spacer()
                         }
                     } else if initialSide == .left && !i.isMultiple(of: 2) {
                         Spacer()
-                        EventBox(event: events[i])
+                        EventBox(event: events[i], side: .right)
                     }
                 }
                 if initialSide == .left && !events.count.isMultiple(of: 2) {
@@ -196,7 +196,7 @@ func generateDay() -> Day {
     
     let meetingEvent = Event(title: "Meeting", iconName: "calendar", color: .blue, isCompleted: false)
     let lunchEvent = Event(title: "Lunch with Bob", iconName: "food", color: .green, isCompleted: false)
-    let events = [meetingEvent, meetingEvent, meetingEvent, meetingEvent, meetingEvent, meetingEvent, lunchEvent]
+    let events = [meetingEvent, meetingEvent, meetingEvent, meetingEvent, lunchEvent]
     
     let day = Day(date: date, weather: weather, events: events)
     return day

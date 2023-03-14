@@ -30,7 +30,7 @@ struct CreateEventView: View {
                 .font(.largeTitle)
                 .bold()
             
-            EventBox(event: Event(title: title, iconName: selectedIcon, color: color, isCompleted: false))
+            EventBox(event: Event(title: title, iconName: selectedIcon, color: color, isCompleted: false), side: .left)
             
             Group {
                 TextField("Enter a title", text: $title)
