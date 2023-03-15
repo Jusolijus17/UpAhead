@@ -34,7 +34,6 @@ struct TrajectView: View {
                             .frame(width: 41, height: CGFloat(timelineData.days[i].height))
                     }
                 }
-                .padding(.top, 10)
                 .offset(x: -6)
                 
                 VStack {
@@ -73,19 +72,25 @@ struct RoadSection: View {
     @State private var eventCount: Int = 0
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             TimeMark(side: titleSide)
                 .foregroundColor(.gray)
-            Spacer()
-            if eventCount != 0 {
+                .frame(height: 40, alignment: .center)
+            if eventCount == 1 {
+                Spacer()
+            }
+            VStack {
                 ForEach(0..<eventCount, id: \.self) { i in
                     TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
                         .foregroundColor(.yellow)
-                    Spacer()
+                        .frame(height: 100)
+                    if i != eventCount - 1 {
+                        Spacer()
+                    }
                 }
-            } else {
-                Spacer()
             }
+            .padding()
+            Spacer()
         }
         .onAppear {
             eventCount = day.events.count
@@ -93,7 +98,6 @@ struct RoadSection: View {
         .onChange(of: $day.events.count, perform: { newValue in
             eventCount = newValue
         })
-        .padding(.bottom, 5)
     }
 }
 

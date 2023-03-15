@@ -141,7 +141,7 @@ func generateWeek() -> [Day] {
     for i in 0..<7 {
         let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
         let weather = getWeather(for: date)
-        let events: [Event] = getEvents(amount: i % 3, random: true)
+        let events: [Event] = getEvents(amount: i % 5, random: true)
         let day = Day(date: date, weather: weather, events: events)
         days.append(day)
     }
