@@ -26,8 +26,6 @@ struct TrajectView: View {
             GeometryReader { geometry in
                 RoundedRectangle(cornerRadius: 15)
                     .foregroundColor(Color(hex: "E5E5E5"))
-                
-//                let rectHeight = (geometry.size.height - 10) * (CGFloat(validatedDay) / CGFloat(days.count))
                 VStack(spacing: 0) {
                     ForEach(0..<timelineData.days.count, id: \.self) { i in
                         RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $timelineData.days[i])
@@ -82,7 +80,7 @@ struct RoadSection: View {
             VStack {
                 ForEach(0..<eventCount, id: \.self) { i in
                     TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
-                        .foregroundColor(.yellow)
+                        .foregroundColor(day.events[i].color)
                         .frame(height: 100)
                     if i != eventCount - 1 {
                         Spacer()
@@ -110,56 +108,35 @@ struct TimeMark: View {
         self.secondaryMark = secondaryMark
     }
     
+    private var rectangleWidth: CGFloat {
+        return secondaryMark ? 50 : 30
+    }
+    
+    private var circleOffset: CGFloat {
+        return side == .left ? -padding : padding
+    }
+    
+    private var padding: CGFloat {
+        return secondaryMark ? 25 : 15
+    }
+    
     var body: some View {
-        let padding: CGFloat = secondaryMark ? 25 : 15
         HStack(spacing: 0) {
             if side == .left {
                 Rectangle()
-                    .frame(width: secondaryMark ? 50 : 30, height: 2)
+                    .frame(width: rectangleWidth, height: 2)
                 Circle()
                     .frame(width: 12)
             } else {
                 Circle()
                     .frame(width: 12)
                 Rectangle()
-                    .frame(width: secondaryMark ? 50 : 30, height: 2)
+                    .frame(width: rectangleWidth, height: 2)
             }
         }
-        .offset(x: side == .left ? -padding : padding)
+        .offset(x: circleOffset)
     }
 }
-
-//struct TimeMark: View {
-//    let side: Side
-//    let secondaryMark: Bool
-//
-//    init(side: Side, secondaryMark: Bool = false) {
-//        self.side = side
-//        self.secondaryMark = secondaryMark
-//    }
-//
-//    var body: some View {
-//        let indicatorWidth: CGFloat = secondaryMark ? 60 : 30
-//        HStack(spacing: 0) {
-//            if side == .left {
-//                Rectangle()
-//                    .frame(width: indicatorWidth, height: 2)
-//                Image(systemName: "circle.fill")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 12)
-//            } else {
-//                Image(systemName: "circle.fill")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 12)
-//                Rectangle()
-//                    .frame(width: indicatorWidth, height: 2)
-//            }
-//        }
-//        .offset(x: side == .left ? -21 + 6 : 21 - 6)
-//    }
-//}
 
 struct DirectionPointer: View {
     let radius: CGFloat

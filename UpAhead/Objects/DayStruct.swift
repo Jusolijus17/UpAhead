@@ -12,15 +12,13 @@ struct Day {
     let date: Date
     let weather: WeatherData?
     var events: [Event]
+    var editMode: Bool = false
     var height: CGFloat {
-//        var totalHeight: CGFloat = 100
-//        for i in 0...events.count {
-//            if events.count.isMultiple(of: 2) && i.isMultiple(of: 2) {
-//                totalHeight += 100
-//            }
-//        }
-//        return events.count <= 1 ? 200 : totalHeight
-        return events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
+        var height: CGFloat = events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
+        if editMode && events.count > 0 {
+            height += 100
+        }
+        return height
     }
     
     mutating func addEvent(_ event: Event) {

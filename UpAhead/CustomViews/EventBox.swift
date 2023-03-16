@@ -47,6 +47,7 @@ struct EventBox: View {
 }
 
 struct AddBox: View {
+    var onTap: () -> Void
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -65,7 +66,9 @@ struct EventBox_Previews: PreviewProvider {
         let dummyEvent = Event(title: "Test", iconName: "plus", color: .blue, isCompleted: true)
         EventBox(event: dummyEvent, side: .right)
             .previewLayout(.fixed(width: 175, height: 150))
-        AddBox()
+        AddBox(onTap: {
+            
+        })
             .previewLayout(.fixed(width: 150, height: 150))
     }
 }

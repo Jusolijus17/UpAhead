@@ -14,73 +14,32 @@ struct DayRect: View {
     @Binding var editData: EditData
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                HStack {
-                    if titleSide == .right {
-                        VStack {
-                            if let weather = day.weather {
-                                WeatherView(weather: weather, side: titleSide)
-                            } else {
-                                Text("")
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-    //                        if day.events.count == 0 {
-    //                            AddBox()
-    //                                .onTapGesture {
-    //                                    editData.dayIndex = index
-    //                                    withAnimation {
-    //                                        editData.editMode = true
-    //                                    }
-    //                                }
-    //                        } else {
-    //                            EventBox(event: day.events[0])
-    //                        }
-    //                        Spacer()
-                        }
-                        .padding(.bottom)
-                        .frame(maxWidth: .infinity, alignment: .top)
-                        
-                        Spacer().frame(width: 40)
-                        
-                        VStack {
-                            TitleView(date: day.date, side: titleSide)
-                        }
-                        .frame(maxWidth: .infinity)
-                    } else {
-                        VStack {
-                            TitleView(date: day.date, side: titleSide)
-                        }
-                        .frame(maxWidth: .infinity)
-                        
-                        Spacer().frame(width: 40)
-                        
-                        VStack {
-                            if let weather = day.weather {
-                                WeatherView(weather: weather, side: titleSide)
-                            } else {
-                                Text("")
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-    //                        if day.events.count == 0 {
-    //                            AddBox()
-    //                                .onTapGesture {
-    //                                    editData.dayIndex = index
-    //                                    withAnimation {
-    //                                        editData.editMode = true
-    //                                    }
-    //                                }
-    //                        } else {
-    //                            EventBox(event: day.events[0])
-    //                        }
-                        }
-                        .padding(.bottom)
-                        .frame(maxWidth: .infinity)
-                    }
+        VStack(spacing: 0) {
+            HStack {
+                if titleSide == .left {
+                    titleView
+                    Spacer().frame(width: 40)
+                    weatherView
+                } else {
+                    weatherView
+                    Spacer().frame(width: 40)
+                    titleView
                 }
-                EventSection(events: day.events, initialSide: titleSide)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            EventSection(events: day.events, editMode: $editData.editMode, initialSide: titleSide)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
+    private var titleView: some View {
+        TitleView(date: day.date, side: titleSide)
+    }
+    
+    private var weatherView: some View {
+        if let weather = day.weather {
+            return AnyView(WeatherView(weather: weather, side: titleSide))
+        } else {
+            return AnyView(Text("").frame(maxWidth: .infinity, alignment: .trailing))
         }
     }
 }
@@ -138,56 +97,54 @@ struct TitleView: View {
 
 struct EventSection: View {
     @State var events: [Event]
+    @Binding var editMode: Bool
     let initialSide: Side
+
     var body: some View {
         HStack {
-            // Left side here
-            VStack(spacing: 0) {
-                ForEach(0..<events.count, id: \.self) { i in
-                    if initialSide == .left && i.isMultiple(of: 2) {
-                        EventBox(event: events[i], side: .left)
-                        if i != events.count - 1 {
-                            Spacer()
-                        }
-                    } else if initialSide == .right && !i.isMultiple(of: 2) {
-                        Spacer()
-                        EventBox(event: events[i], side: .left)
-                    }
-                }
-                if initialSide == .right && !events.count.isMultiple(of: 2) {
-                    Spacer()
-                }
+            if initialSide == .left {
+                VStack1(events: events, side: .left)
+                VStack2(events: events, side: .right)
+            } else {
+                VStack2(events: events, side: .left)
+                VStack1(events: events, side: .right)
             }
-            .frame(maxWidth: .infinity)
-            
-            Spacer().frame(width: 40)
-            
-            // Right side here
-            VStack(spacing: 0) {
-                ForEach(0..<events.count, id: \.self) { i in
-                    if initialSide == .right && i.isMultiple(of: 2) {
-                        EventBox(event: events[i], side: .right)
-                        if i != events.count - 1 {
-                            Spacer()
-                        }
-                    } else if initialSide == .left && !i.isMultiple(of: 2) {
-                        Spacer()
-                        EventBox(event: events[i], side: .right)
-                    }
+        }
+    }
+
+    struct VStack1: View {
+        let events: [Event]
+        let side: Side
+
+        var body: some View {
+            VStack(spacing: 120) {
+                ForEach(events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
+                    EventBox(event: events[index], side: side)
                 }
-                if initialSide == .left && !events.count.isMultiple(of: 2) {
-                    Spacer()
+                if events.count.isMultiple(of: 2) {
+                    Spacer().frame(height: 0)
                 }
             }
             .frame(maxWidth: .infinity)
         }
-        .padding()
     }
-}
 
-struct EditData {
-    var editMode: Bool
-    var dayIndex: Int
+    struct VStack2: View {
+        let events: [Event]
+        let side: Side
+
+        var body: some View {
+            VStack(spacing: 120) {
+                if events.count.isMultiple(of: 2) {
+                    Spacer().frame(height: 0)
+                }
+                ForEach(events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
+                    EventBox(event: events[index], side: side)
+                }
+            }
+            .frame(maxWidth: .infinity)
+        }
+    }
 }
 
 func generateDay() -> Day {
@@ -196,7 +153,7 @@ func generateDay() -> Day {
     
     let meetingEvent = Event(title: "Meeting", iconName: "calendar", color: .blue, isCompleted: false)
     let lunchEvent = Event(title: "Lunch with Bob", iconName: "food", color: .green, isCompleted: false)
-    let events = [meetingEvent, meetingEvent, meetingEvent, meetingEvent, lunchEvent]
+    let events = [meetingEvent, meetingEvent, lunchEvent]
     
     let day = Day(date: date, weather: weather, events: events)
     return day

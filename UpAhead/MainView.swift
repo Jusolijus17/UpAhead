@@ -10,9 +10,8 @@ import Combine
 
 struct MainView: View {
     @StateObject var timelineData: TimelineData
-    
     @State private var dragOffset: CGFloat = 0
-    @State var editData: EditData = EditData(editMode: false, dayIndex: 0)
+    //@State var editData: EditData = EditData(editMode: false, dayIndex: 0)
     
     var body: some View {
         NavigationView {
@@ -25,7 +24,7 @@ struct MainView: View {
                             ZStack {
                                 VStack(spacing: 0) {
                                     ForEach(0..<timelineData.days.count, id: \.self) { i in
-                                        DayRect(day: $timelineData.days[i], index: i, titleSide: i.isMultiple(of: 2) ? .left : .right, editData: $editData)
+                                        DayRect(day: $timelineData.days[i], index: i, titleSide: i.isMultiple(of: 2) ? .left : .right, editData: $timelineData.editData)
                                             .id("day\(timelineData.days.count - i)")
                                             .frame(height: timelineData.days[i].height)
                                     }
@@ -61,6 +60,19 @@ struct MainView: View {
                                 .background(Color.red)
                                 .cornerRadius(10)
                         }
+                        
+                        Button {
+                            timelineData.toggleEditMode()
+                        } label: {
+                            Text("Edit")
+                                .font(.system(size: 20, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.gray)
+                                .cornerRadius(10)
+                        }
+
 
                         Button(action: {
                             if timelineData.currentDayIndex < timelineData.days.count {
@@ -84,36 +96,36 @@ struct MainView: View {
                 }
                 
                 VStack {
-                    if editData.editMode {
-                        VStack {
-                            Spacer()
-                            CreateEventView(editMode: $editData.editMode, day: $timelineData.days[editData.dayIndex])
-                                .offset(y: max(dragOffset, 0))
-                                .gesture(
-                                    DragGesture()
-                                        .onChanged { value in
-                                            dragOffset = value.translation.height
-                                        }
-                                        .onEnded { value in
-                                            let threshold = UIScreen.main.bounds.height * 0.2
-                                            if value.translation.height > threshold {
-                                                withAnimation {
-                                                    editData.editMode = false
-                                                    dragOffset = 0
-                                                }
-                                            } else {
-                                                withAnimation {
-                                                    dragOffset = 0
-                                                }
-                                            }
-                                        }
-                                )
-                        }
-                        .transition(.move(edge: .bottom))
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 5)
-                        .ignoresSafeArea()
-                    }
+//                    if timelineData.editData.editMode {
+//                        VStack {
+//                            Spacer()
+//                            CreateEventView(editMode: $timelineData.editData.editMode, day: $timelineData.days[timelineData.editData.dayIndex])
+//                                .offset(y: max(dragOffset, 0))
+//                                .gesture(
+//                                    DragGesture()
+//                                        .onChanged { value in
+//                                            dragOffset = value.translation.height
+//                                        }
+//                                        .onEnded { value in
+//                                            let threshold = UIScreen.main.bounds.height * 0.2
+//                                            if value.translation.height > threshold {
+//                                                withAnimation {
+//                                                    timelineData.editData.editMode = false
+//                                                    dragOffset = 0
+//                                                }
+//                                            } else {
+//                                                withAnimation {
+//                                                    dragOffset = 0
+//                                                }
+//                                            }
+//                                        }
+//                                )
+//                        }
+//                        .transition(.move(edge: .bottom))
+//                        .padding(.horizontal, 5)
+//                        .padding(.bottom, 5)
+//                        .ignoresSafeArea()
+//                    }
                 }
                 
             }

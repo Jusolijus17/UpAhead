@@ -7,13 +7,20 @@
 
 import SwiftUI
 
+struct EditData {
+    var editMode: Bool
+    var dayIndex: Int
+}
+
 class TimelineData: ObservableObject {
     @Published var days: [Day]
     @Published var currentDayIndex: Int
+    @Published var editData: EditData
     
     init(days: [Day], currentDayIndex: Int) {
         self.days = days
         self.currentDayIndex = currentDayIndex
+        self.editData = EditData(editMode: false, dayIndex: 0)
     }
     
     var trajectHeight: CGFloat {
@@ -30,5 +37,12 @@ class TimelineData: ObservableObject {
             height += day.height
         }
         return height
+    }
+    
+    func toggleEditMode() {
+        for i in 0..<days.count {
+            days[i].editMode.toggle()
+        }
+        editData.editMode.toggle()
     }
 }

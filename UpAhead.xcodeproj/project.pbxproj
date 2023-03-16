@@ -21,6 +21,7 @@
 		3DD5C02429B2F0DD002FFF12 /* DayRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02329B2F0DD002FFF12 /* DayRect.swift */; };
 		3DD5C02629B4FF8A002FFF12 /* TrajectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02529B4FF8A002FFF12 /* TrajectView.swift */; };
 		3DD5C02A29B5A147002FFF12 /* WeatherStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02929B5A147002FFF12 /* WeatherStruct.swift */; };
+		3DD607C929C2B7F300DF95C7 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD607C829C2B7F300DF95C7 /* Test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		3DD5C02329B2F0DD002FFF12 /* DayRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRect.swift; sourceTree = "<group>"; };
 		3DD5C02529B4FF8A002FFF12 /* TrajectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectView.swift; sourceTree = "<group>"; };
 		3DD5C02929B5A147002FFF12 /* WeatherStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherStruct.swift; sourceTree = "<group>"; };
+		3DD607C829C2B7F300DF95C7 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				3DD5C02929B5A147002FFF12 /* WeatherStruct.swift */,
 				3DC088FB29B82037005233DF /* EventBox.swift */,
 				3D11D98C29B9753700E6FC33 /* CreateEventView.swift */,
+				3DD607C829C2B7F300DF95C7 /* Test.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 				3DCAA28B29B6D6E100799E87 /* DayStruct.swift in Sources */,
 				3DD5C02A29B5A147002FFF12 /* WeatherStruct.swift in Sources */,
 				3DD5C01B29B118EB002FFF12 /* TimelineData.swift in Sources */,
+				3DD607C929C2B7F300DF95C7 /* Test.swift in Sources */,
 				3DD5C02629B4FF8A002FFF12 /* TrajectView.swift in Sources */,
 				3DC088FC29B82037005233DF /* EventBox.swift in Sources */,
 				3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */,
