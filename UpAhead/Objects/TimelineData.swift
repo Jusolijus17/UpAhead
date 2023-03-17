@@ -28,7 +28,7 @@ class TimelineData: ObservableObject {
         for index in (0..<currentDayIndex).reversed() {
             height += days[days.count - index - 1].height
         }
-        return height - 10
+        return height
     }
     
     var totalHeight: CGFloat {
@@ -41,7 +41,7 @@ class TimelineData: ObservableObject {
     
     func toggleEditMode() {
         for i in 0..<days.count {
-            days[i].editMode.toggle()
+            days[i].toggleEditMode()
         }
         editData.editMode.toggle()
     }

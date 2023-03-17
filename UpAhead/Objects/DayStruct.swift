@@ -15,14 +15,26 @@ struct Day {
     var editMode: Bool = false
     var height: CGFloat {
         var height: CGFloat = events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
-        if editMode && events.count > 0 {
-            height += 100
-        }
+//        if editMode && events.count > 0 {
+//            height += 100
+//        }
         return height
     }
     
     mutating func addEvent(_ event: Event) {
         events.append(event)
+    }
+    
+    mutating func toggleEditMode() {
+        if editMode {
+            if !events.isEmpty {
+                events.removeLast()
+            }
+        } else {
+            events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false))
+        }
+        editMode.toggle()
+        
     }
 }
 
@@ -33,22 +45,20 @@ struct Event {
     let isCompleted: Bool
 }
 
-func getEvents(amount: Int, random: Bool) -> [Event] {
+func getEvents(amount: Int) -> [Event] {
     let event1 = Event(title: "Meeting with Client A", iconName: "briefcase.fill", color: .blue, isCompleted: false)
     let event2 = Event(title: "Lunch with Colleagues", iconName: "cart.fill", color: .green, isCompleted: true)
     let event3 = Event(title: "Fitness Class", iconName: "figure.walk.circle.fill", color: .orange, isCompleted: false)
     
-    var events = [event1, event2, event3]
+    let events: [Event] = [event1, event2, event3]
     
-    if random {
-        events.shuffle()
+    var eventArray: [Event] = []
+    
+    for i in 0..<amount {
+        eventArray.append(events[i % 3])
     }
     
-    if amount < events.count {
-        events = Array(events.prefix(amount))
-    }
-    
-    return events
+    return eventArray
 }
 
 func getWeather(for date: Date) -> WeatherData {

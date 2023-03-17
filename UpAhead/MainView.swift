@@ -28,8 +28,8 @@ struct MainView: View {
                                             .id("day\(timelineData.days.count - i)")
                                             .frame(height: timelineData.days[i].height)
                                     }
-                                    Spacer()
-                                        .id("day\(0)")
+                                    Spacer().frame(height: 0)
+                                        .id("bottom")
                                 }
                                 
                                 TrajectView()
@@ -37,7 +37,12 @@ struct MainView: View {
                         }
                         .onChange(of: timelineData.currentDayIndex) { newValue in
                             withAnimation {
-                                proxy.scrollTo("day\(newValue)", anchor: .bottom)
+//                                proxy.scrollTo("day\(newValue + 1)", anchor: .bottom)
+                                if newValue != 0 {
+                                    proxy.scrollTo("mark\(timelineData.days.count - newValue)", anchor: .bottom)
+                                } else {
+                                    proxy.scrollTo("bottom", anchor: .bottom)
+                                }
                             }
                         }
                     }
@@ -153,7 +158,7 @@ func generateWeek() -> [Day] {
     for i in 0..<7 {
         let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
         let weather = getWeather(for: date)
-        let events: [Event] = getEvents(amount: i % 5, random: true)
+        let events: [Event] = getEvents(amount: i)
         let day = Day(date: date, weather: weather, events: events)
         days.append(day)
     }

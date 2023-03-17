@@ -21,38 +21,63 @@ struct TrajectView: View {
         }
     }
     
+//    var body: some View {
+//        ZStack {
+//            GeometryReader { geometry in
+//                RoundedRectangle(cornerRadius: 15)
+//                    .foregroundColor(Color(hex: "E5E5E5"))
+//                VStack(spacing: 0) {
+//                    ForEach(0..<timelineData.days.count, id: \.self) { i in
+//                        RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $timelineData.days[i], index: i)
+//                            .frame(width: 41, height: CGFloat(timelineData.days[i].height))
+//                    }
+//                }
+//                .offset(x: -6)
+//
+//                VStack {
+//
+//                    RoundedRectangle(cornerRadius: 12.5)
+//                        .foregroundColor(.blue)
+//                        .overlay(
+//                            VStack {
+//                                DirectionPointer(radius: geometry.size.width * 0.8)
+//                                    .id("direction")
+//                            }
+//                        )
+//                        .frame(width: geometry.size.width - 10, height: timelineData.trajectHeight, alignment: .bottom)
+//                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 0))
+//                }
+//            }
+//            .frame(width: 30, height: timelineData.totalHeight)
+//            .padding()
+//        }
+//    }
+    
     var body: some View {
-        ZStack {
-            GeometryReader { geometry in
-                RoundedRectangle(cornerRadius: 15)
-                    .foregroundColor(Color(hex: "E5E5E5"))
-                VStack(spacing: 0) {
-                    ForEach(0..<timelineData.days.count, id: \.self) { i in
-                        RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $timelineData.days[i])
-                            .frame(width: 41, height: CGFloat(timelineData.days[i].height))
-                    }
-                }
-                .offset(x: -6)
-                
-                VStack {
-                    if validatedDay != timelineData.days.count {
-                        Spacer()
-                    }
-                    RoundedRectangle(cornerRadius: 12.5)
-                        .foregroundColor(.blue)
-                        .overlay(
-                            VStack {
-                                DirectionPointer(radius: geometry.size.width * 0.8)
-                                    .offset(x: 0, y: -geometry.size.width * 0.4)
-                                Spacer()
-                            }
-                        )
-                        .frame(width: geometry.size.width - 10, height: timelineData.trajectHeight)
-                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 0))
+        ZStack(alignment: .bottom) {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(Color(hex: "E5E5E5"))
+            
+            VStack(spacing: 0) {
+                ForEach(timelineData.days.indices, id: \.self) { i in
+                    RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $timelineData.days[i], index: i)
+                        .frame(height: timelineData.days[i].height)
                 }
             }
-            .frame(width: 30, height: timelineData.totalHeight)
+            .frame(width: 30)
+            
+            ZStack(alignment: .top) {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(.blue)
+                    .padding(.vertical, 5)
+                    .frame(width: 20, height: timelineData.trajectHeight)
+                
+                DirectionPointer(radius: 25)
+            }
+            .frame(width: 30)
         }
+        .frame(width: 30)
+        
     }
 }
 
@@ -67,35 +92,28 @@ func calculateRectHeight(days: [Day], currentDayIndex: Int) -> CGFloat {
 struct RoadSection: View {
     let titleSide: Side
     @Binding var day: Day
-    @State private var eventCount: Int = 0
+    let index: Int
     
     var body: some View {
         VStack(spacing: 0) {
             TimeMark(side: titleSide)
                 .foregroundColor(.gray)
-                .frame(height: 40, alignment: .center)
-            if eventCount == 1 {
+                .frame(height: 50)
+                .id("mark\(index)")
+            if day.events.count != 0 {
+                VStack(spacing: 0) {
+                    Spacer()
+                    ForEach(day.events.indices, id: \.self) { i in
+                        TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
+                            .foregroundColor(day.events[i].color)
+                            .frame(height: 100)
+                    }
+                    Spacer()
+                }
+            } else {
                 Spacer()
             }
-            VStack {
-                ForEach(0..<eventCount, id: \.self) { i in
-                    TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
-                        .foregroundColor(day.events[i].color)
-                        .frame(height: 100)
-                    if i != eventCount - 1 {
-                        Spacer()
-                    }
-                }
-            }
-            .padding()
-            Spacer()
         }
-        .onAppear {
-            eventCount = day.events.count
-        }
-        .onChange(of: $day.events.count, perform: { newValue in
-            eventCount = newValue
-        })
     }
 }
 
@@ -170,10 +188,11 @@ struct DirectionPointer: View {
 
 struct TrajectView_Previews: PreviewProvider {
     static var previews: some View {
+        let timelineData = TimelineData(days: generateWeek(), currentDayIndex: 3)
         ScrollView {
             TrajectView()
                 .frame(maxWidth: .infinity)
-                .environmentObject(TimelineData(days: generateWeek(), currentDayIndex: 0))
+                .environmentObject(TimelineData(days: generateWeek(), currentDayIndex: 4))
         }
     }
 }

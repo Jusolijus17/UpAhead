@@ -61,3 +61,44 @@ struct EventListView_Previews: PreviewProvider {
             .frame(height: 400)
     }
 }
+
+struct TestTraject: View {
+    @State var trajectHeight: CGFloat
+    @Binding var days: [Day]
+    
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(Color(hex: "E5E5E5"))
+            
+            VStack(spacing: 0) {
+                ForEach(days.indices, id: \.self) { i in
+                    RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $days[i], index: i)
+                        .frame(height: days[i].height)
+                }
+            }
+            .frame(width: 30)
+            
+            ZStack(alignment: .top) {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(.blue)
+                    .padding(.vertical, 5)
+                    .frame(width: 20, height: trajectHeight)
+                
+                DirectionPointer(radius: 20)
+            }
+            .frame(width: 30)
+        }
+        .frame(width: 30)
+        
+    }
+}
+
+struct TestTrajectPreview: PreviewProvider {
+    static var previews: some View {
+        ScrollView {
+            TestTraject(trajectHeight: 200, days: .constant(generateWeek()))
+                .frame(maxWidth: .infinity)
+        }
+    }
+}

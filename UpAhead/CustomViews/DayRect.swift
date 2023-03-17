@@ -18,15 +18,17 @@ struct DayRect: View {
             HStack {
                 if titleSide == .left {
                     titleView
+                        .id("title\(index)")
                     Spacer().frame(width: 40)
                     weatherView
                 } else {
                     weatherView
                     Spacer().frame(width: 40)
                     titleView
+                        .id("title\(index)")
                 }
             }
-            EventSection(events: day.events, editMode: $editData.editMode, initialSide: titleSide)
+            EventSection(events: $day.events, initialSide: titleSide)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
@@ -88,7 +90,7 @@ struct TitleView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(side == .left ? .trailing : .leading, 20)
-        .padding(.top, -5)
+        //.padding(.top, -5)
         .onAppear {
             formatter.dateFormat = "MMM d"
         }
@@ -96,30 +98,35 @@ struct TitleView: View {
 }
 
 struct EventSection: View {
-    @State var events: [Event]
-    @Binding var editMode: Bool
+    @Binding var events: [Event]
     let initialSide: Side
 
     var body: some View {
-        HStack {
+        HStack(spacing: 35) {
             if initialSide == .left {
-                VStack1(events: events, side: .left)
-                VStack2(events: events, side: .right)
+                VStack1(events: $events, side: .left)
+                VStack2(events: $events, side: .right)
             } else {
-                VStack2(events: events, side: .left)
-                VStack1(events: events, side: .right)
+                VStack2(events: $events, side: .left)
+                VStack1(events: $events, side: .right)
             }
         }
     }
 
     struct VStack1: View {
-        let events: [Event]
+        @Binding var events: [Event]
         let side: Side
 
         var body: some View {
-            VStack(spacing: 120) {
+            VStack(spacing: 100) {
                 ForEach(events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
-                    EventBox(event: events[index], side: side)
+                    if events[index].title != "AddBox" {
+                        EventBox(event: events[index], side: side)
+                    } else {
+                        AddBox {
+                            
+                        }
+                    }
                 }
                 if events.count.isMultiple(of: 2) {
                     Spacer().frame(height: 0)
@@ -130,16 +137,22 @@ struct EventSection: View {
     }
 
     struct VStack2: View {
-        let events: [Event]
+        @Binding var events: [Event]
         let side: Side
 
         var body: some View {
-            VStack(spacing: 120) {
+            VStack(spacing: 100) {
                 if events.count.isMultiple(of: 2) {
                     Spacer().frame(height: 0)
                 }
                 ForEach(events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
-                    EventBox(event: events[index], side: side)
+                    if events[index].title != "AddBox" {
+                        EventBox(event: events[index], side: side)
+                    } else {
+                        AddBox {
+                            
+                        }
+                    }
                 }
             }
             .frame(maxWidth: .infinity)
@@ -153,9 +166,10 @@ func generateDay() -> Day {
     
     let meetingEvent = Event(title: "Meeting", iconName: "calendar", color: .blue, isCompleted: false)
     let lunchEvent = Event(title: "Lunch with Bob", iconName: "food", color: .green, isCompleted: false)
-    let events = [meetingEvent, meetingEvent, lunchEvent]
+    let events = [meetingEvent, lunchEvent, lunchEvent]
     
-    let day = Day(date: date, weather: weather, events: events)
+    var day = Day(date: date, weather: weather, events: events)
+    //day.toggleEditMode()
     return day
 }
 
@@ -163,7 +177,7 @@ func generateDay() -> Day {
 struct DayRect_Previews: PreviewProvider {
     static var previews: some View {
         let day = generateDay()
-        DayRect(day: .constant(day), index: 0, titleSide: .left, editData: .constant(EditData(editMode: false, dayIndex: 0)))
+        DayRect(day: .constant(day), index: 0, titleSide: .right, editData: .constant(EditData(editMode: true, dayIndex: 0)))
             .background(Color(hex: "394A59"))
             .frame(height: day.height)
     }
