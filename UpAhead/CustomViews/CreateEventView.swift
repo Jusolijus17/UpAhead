@@ -9,11 +9,11 @@ import SwiftUI
 import Combine
 
 struct CreateEventView: View {
+    @EnvironmentObject var timelineData: TimelineData
     @State var selectedIcon: String = "house"
     @State var title: String = ""
     @State private var keyboardHeight: CGFloat = 0
     @State var color: Color = Color.blue
-    @Binding var editMode: Bool
     @Binding var day: Day
     
     var body: some View {
@@ -54,7 +54,7 @@ struct CreateEventView: View {
                     let newEvent = Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
                     day.addEvent(newEvent)
                     withAnimation {
-                        editMode = false
+                        timelineData.editData.toggleEditor()
                     }
                 }
                 }) {
@@ -159,7 +159,7 @@ struct IconPicker: View {
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(editMode: .constant(true), day: .constant(generateDay()))
+        CreateEventView(day: .constant(generateDay()))
             .background(.blue)
     }
 }

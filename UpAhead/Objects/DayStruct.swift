@@ -22,7 +22,7 @@ struct Day {
     }
     
     mutating func addEvent(_ event: Event) {
-        events.append(event)
+        events.insert(event, at: events.count - 1)
     }
     
     mutating func toggleEditMode() {

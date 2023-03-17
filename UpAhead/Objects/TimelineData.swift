@@ -8,8 +8,17 @@
 import SwiftUI
 
 struct EditData {
-    var editMode: Bool
-    var dayIndex: Int
+    var editMode: Bool = false
+    private(set) var toggleEditor: Bool = false
+    private(set) var dayIndex: Int = 0
+    
+    mutating func toggleEditor(forDayIndex: Int = 0) {
+        dayIndex = forDayIndex ?? 0
+        withAnimation {
+            toggleEditor.toggle()
+        }
+        
+    }
 }
 
 class TimelineData: ObservableObject {
@@ -20,7 +29,7 @@ class TimelineData: ObservableObject {
     init(days: [Day], currentDayIndex: Int) {
         self.days = days
         self.currentDayIndex = currentDayIndex
-        self.editData = EditData(editMode: false, dayIndex: 0)
+        self.editData = EditData()
     }
     
     var trajectHeight: CGFloat {

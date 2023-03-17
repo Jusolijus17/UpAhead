@@ -28,7 +28,7 @@ struct DayRect: View {
                         .id("title\(index)")
                 }
             }
-            EventSection(events: $day.events, initialSide: titleSide)
+            EventSection(events: $day.events, initialSide: titleSide, triggerAddEvent: { editData.toggleEditor(forDayIndex: index) })
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
@@ -100,15 +100,16 @@ struct TitleView: View {
 struct EventSection: View {
     @Binding var events: [Event]
     let initialSide: Side
+    var triggerAddEvent: () -> Void
 
     var body: some View {
         HStack(spacing: 35) {
             if initialSide == .left {
-                VStack1(events: $events, side: .left)
-                VStack2(events: $events, side: .right)
+                VStack1(events: $events, side: .left, onAddTap: { triggerAddEvent() })
+                VStack2(events: $events, side: .right, onAddTap: { triggerAddEvent() })
             } else {
-                VStack2(events: $events, side: .left)
-                VStack1(events: $events, side: .right)
+                VStack2(events: $events, side: .left, onAddTap: { triggerAddEvent() })
+                VStack1(events: $events, side: .right, onAddTap: { triggerAddEvent() })
             }
         }
     }
@@ -116,6 +117,7 @@ struct EventSection: View {
     struct VStack1: View {
         @Binding var events: [Event]
         let side: Side
+        var onAddTap: () -> Void
 
         var body: some View {
             VStack(spacing: 100) {
@@ -124,7 +126,7 @@ struct EventSection: View {
                         EventBox(event: events[index], side: side)
                     } else {
                         AddBox {
-                            
+                            onAddTap()
                         }
                     }
                 }
@@ -139,6 +141,7 @@ struct EventSection: View {
     struct VStack2: View {
         @Binding var events: [Event]
         let side: Side
+        var onAddTap: () -> Void
 
         var body: some View {
             VStack(spacing: 100) {
@@ -150,7 +153,7 @@ struct EventSection: View {
                         EventBox(event: events[index], side: side)
                     } else {
                         AddBox {
-                            
+                            onAddTap()
                         }
                     }
                 }

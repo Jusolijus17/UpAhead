@@ -12,10 +12,11 @@ struct MainView: View {
     @StateObject var timelineData: TimelineData
     @State private var dragOffset: CGFloat = 0
     //@State var editData: EditData = EditData(editMode: false, dayIndex: 0)
+    @State var toggleEditor: Bool = false
     
     var body: some View {
         NavigationView {
-            ZStack {
+            ZStack(alignment: .bottom) {
                 Color(hex: "394A59")
                     .ignoresSafeArea()
                 VStack {
@@ -73,7 +74,7 @@ struct MainView: View {
                                 .font(.system(size: 20, weight: .semibold, design: .rounded))
                                 .foregroundColor(.white)
                                 .padding()
-                                .frame(maxWidth: .infinity)
+                                .frame(maxWidth: 75)
                                 .background(Color.gray)
                                 .cornerRadius(10)
                         }
@@ -101,38 +102,46 @@ struct MainView: View {
                 }
                 
                 VStack {
-//                    if timelineData.editData.editMode {
-//                        VStack {
-//                            Spacer()
-//                            CreateEventView(editMode: $timelineData.editData.editMode, day: $timelineData.days[timelineData.editData.dayIndex])
-//                                .offset(y: max(dragOffset, 0))
-//                                .gesture(
-//                                    DragGesture()
-//                                        .onChanged { value in
-//                                            dragOffset = value.translation.height
-//                                        }
-//                                        .onEnded { value in
-//                                            let threshold = UIScreen.main.bounds.height * 0.2
-//                                            if value.translation.height > threshold {
-//                                                withAnimation {
-//                                                    timelineData.editData.editMode = false
-//                                                    dragOffset = 0
-//                                                }
-//                                            } else {
-//                                                withAnimation {
-//                                                    dragOffset = 0
-//                                                }
-//                                            }
-//                                        }
-//                                )
-//                        }
-//                        .transition(.move(edge: .bottom))
-//                        .padding(.horizontal, 5)
-//                        .padding(.bottom, 5)
-//                        .ignoresSafeArea()
-//                    }
+                    if toggleEditor {
+                        VStack {
+                            Spacer()
+                            CreateEventView(day: $timelineData.days[timelineData.editData.dayIndex])
+                                .offset(y: max(dragOffset, 0))
+                                .gesture(
+                                    DragGesture()
+                                        .onChanged { value in
+                                            dragOffset = value.translation.height
+                                        }
+                                        .onEnded { value in
+                                            let threshold = UIScreen.main.bounds.height * 0.2
+                                            if value.translation.height > threshold {
+                                                withAnimation {
+                                                    timelineData.editData.toggleEditor()
+                                                    dragOffset = 0
+                                                }
+                                            } else {
+                                                withAnimation {
+                                                    dragOffset = 0
+                                                }
+                                            }
+                                        }
+                                )
+                        }
+                        .transition(.move(edge: .bottom))
+                        .padding(.horizontal, 5)
+                        .padding(.bottom, 5)
+                        .ignoresSafeArea()
+                    }
                 }
                 
+            }
+            .onAppear {
+                toggleEditor = timelineData.editData.toggleEditor
+            }
+            .onChange(of: timelineData.editData.toggleEditor) { newValue in
+                withAnimation {
+                    toggleEditor = newValue
+                }
             }
             
         }
