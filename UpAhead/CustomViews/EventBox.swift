@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct EventBox: View {
-    let event: Event
+    @Binding var event: Event
     let side: Side
     
-    var content: some View {
+    var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(event.color)
@@ -25,23 +25,21 @@ struct EventBox: View {
                     .foregroundColor(Color.white)
                     .multilineTextAlignment(.center)
             }
+            .blur(radius: event.isCompleted ? 5 : 0)
+            
+            if event.isCompleted {
+                Image(systemName: "checkmark.circle")
+                    .font(.system(size: 55))
+                    .foregroundColor(event.color == .green ? .blue : .green)
+            }
         }
         .frame(width: 100, height: 100)
-    }
-    
-    var body: some View {
-        HStack(spacing: 0) {
-            side == .right ? content : nil
-            if event.isCompleted {
-                Image(systemName: "checkmark.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .foregroundColor(.green)
-                    .frame(width: 20)
-                    .padding(side == .left ? .trailing : .leading, 5)
-                    .padding(side == .right ? .trailing : .leading, -25)
+        .onTapGesture(count: 2) {
+            withAnimation {
+                event.toggleComplete()
             }
-            side == .left ? content : nil
+            let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                impactMed.impactOccurred()
         }
     }
 }
@@ -67,11 +65,11 @@ struct AddBox: View {
 struct EventBox_Previews: PreviewProvider {
     static var previews: some View {
         let dummyEvent = Event(title: "Test", iconName: "plus", color: .blue, isCompleted: true)
-        EventBox(event: dummyEvent, side: .right)
+        EventBox(event: .constant(dummyEvent), side: .right)
             .previewLayout(.fixed(width: 175, height: 150))
         AddBox(onTap: {
             
         })
-            .previewLayout(.fixed(width: 150, height: 150))
+        .previewLayout(.fixed(width: 150, height: 150))
     }
 }

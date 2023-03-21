@@ -13,7 +13,7 @@ struct EditData {
     private(set) var dayIndex: Int = 0
     
     mutating func toggleEditor(forDayIndex: Int = 0) {
-        dayIndex = forDayIndex ?? 0
+        dayIndex = forDayIndex
         withAnimation {
             toggleEditor.toggle()
         }
@@ -49,8 +49,10 @@ class TimelineData: ObservableObject {
     }
     
     func toggleEditMode() {
-        for i in 0..<days.count {
-            days[i].toggleEditMode()
+        if editData.editMode == true {
+            for i in 0..<days.count {
+                days[i].toggleEditMode(state: false)
+            }
         }
         editData.editMode.toggle()
     }

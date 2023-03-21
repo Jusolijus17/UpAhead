@@ -15,14 +15,22 @@ struct DayRect: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
+            HStack(spacing: 0) {
                 if titleSide == .left {
                     titleView
                         .id("title\(index)")
                     Spacer().frame(width: 40)
-                    weatherView
+                    HStack(spacing: 10) {
+                        weatherView
+                        editData.editMode ? EditButton(day: $day) : nil
+                    }
+                    .frame(maxWidth: .infinity)
                 } else {
-                    weatherView
+                    HStack(spacing: 10) {
+                        editData.editMode ? EditButton(day: $day) : nil
+                        weatherView
+                    }
+                    .frame(maxWidth: .infinity)
                     Spacer().frame(width: 40)
                     titleView
                         .id("title\(index)")
@@ -46,6 +54,24 @@ struct DayRect: View {
     }
 }
 
+struct EditButton: View {
+    @Binding var day: Day
+    var body: some View {
+        Button {
+            withAnimation {
+                day.toggleEditMode()
+            }
+        } label: {
+            Text("Edit")
+                .font(.system(size: 20))
+                .padding(5)
+                .foregroundColor(.black)
+                .background(.gray)
+                .cornerRadius(10)
+        }
+    }
+}
+
 
 struct WeatherView: View {
     let weather: WeatherData
@@ -57,18 +83,18 @@ struct WeatherView: View {
                 if side == .right {
                     Image(systemName: symbolName)
                         .symbolRenderingMode(.multicolor)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+//                        .frame(maxWidth: .infinity, alignment: .trailing)
                 } else {
                     Image(systemName: symbolName)
                         .symbolRenderingMode(.multicolor)
                 }
             }
             Text("\(String(format: "%.1f", weather.main.temp)) °C")
-                .frame(maxWidth: side == .left ? .infinity : nil, alignment: side == .right ? .trailing : .leading)
+//                .frame(maxWidth: side == .left ? .infinity : nil, alignment: side == .right ? .trailing : .leading)
                 .font(.system(size: 20, design: .rounded))
                 .foregroundColor(.white)
         }
-        .padding(side == .right ? .trailing : .leading, 10)
+        //.padding(side == .right ? .trailing : .leading, 10)
     }
 }
 
@@ -90,7 +116,6 @@ struct TitleView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(side == .left ? .trailing : .leading, 20)
-        //.padding(.top, -5)
         .onAppear {
             formatter.dateFormat = "MMM d"
         }
@@ -103,7 +128,7 @@ struct EventSection: View {
     var triggerAddEvent: () -> Void
 
     var body: some View {
-        HStack(spacing: 35) {
+        HStack(spacing: 25) {
             if initialSide == .left {
                 VStack1(events: $events, side: .left, onAddTap: { triggerAddEvent() })
                 VStack2(events: $events, side: .right, onAddTap: { triggerAddEvent() })
@@ -123,7 +148,7 @@ struct EventSection: View {
             VStack(spacing: 100) {
                 ForEach(events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
                     if events[index].title != "AddBox" {
-                        EventBox(event: events[index], side: side)
+                        EventBox(event: $events[index], side: side)
                     } else {
                         AddBox {
                             onAddTap()
@@ -150,7 +175,7 @@ struct EventSection: View {
                 }
                 ForEach(events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
                     if events[index].title != "AddBox" {
-                        EventBox(event: events[index], side: side)
+                        EventBox(event: $events[index], side: side)
                     } else {
                         AddBox {
                             onAddTap()
@@ -172,7 +197,7 @@ func generateDay() -> Day {
     let events = [meetingEvent, lunchEvent, lunchEvent]
     
     var day = Day(date: date, weather: weather, events: events)
-    //day.toggleEditMode()
+    day.toggleEditMode()
     return day
 }
 

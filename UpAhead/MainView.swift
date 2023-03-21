@@ -11,7 +11,6 @@ import Combine
 struct MainView: View {
     @StateObject var timelineData: TimelineData
     @State private var dragOffset: CGFloat = 0
-    //@State var editData: EditData = EditData(editMode: false, dayIndex: 0)
     @State var toggleEditor: Bool = false
     
     var body: some View {
@@ -23,84 +22,37 @@ struct MainView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             ZStack {
-                                VStack(spacing: 0) {
-                                    ForEach(0..<timelineData.days.count, id: \.self) { i in
-                                        DayRect(day: $timelineData.days[i], index: i, titleSide: i.isMultiple(of: 2) ? .left : .right, editData: $timelineData.editData)
-                                            .id("day\(timelineData.days.count - i)")
-                                            .frame(height: timelineData.days[i].height)
+                                GeometryReader { geo in
+                                    VStack(spacing: 0) {
+                                        ForEach(0..<timelineData.days.count, id: \.self) { i in
+                                            DayRect(day: $timelineData.days[i], index: i, titleSide: i.isMultiple(of: 2) ? .left : .right, editData: $timelineData.editData)
+                                                .id("day\(timelineData.days.count - i)")
+                                                .frame(height: timelineData.days[i].height)
+                                        }
+                                        Spacer().frame(height: 0)
+                                            .id("bottom")
                                     }
-                                    Spacer().frame(height: 0)
-                                        .id("bottom")
                                 }
                                 
                                 TrajectView()
                             }
                         }
                         .onChange(of: timelineData.currentDayIndex) { newValue in
-                            withAnimation {
-//                                proxy.scrollTo("day\(newValue + 1)", anchor: .bottom)
-                                if newValue != 0 {
-                                    proxy.scrollTo("mark\(timelineData.days.count - newValue)", anchor: .bottom)
-                                } else {
-                                    proxy.scrollTo("bottom", anchor: .bottom)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                withAnimation {
+                                    if newValue != 0 {
+                                        proxy.scrollTo("mark\(timelineData.days.count - newValue)", anchor: .bottom)
+                                    } else {
+                                        proxy.scrollTo("bottom", anchor: .bottom)
+                                    }
                                 }
                             }
                         }
                     }
-                    
-                    HStack {
-                        Button(action: {
-                            if timelineData.currentDayIndex > 0 {
-                                withAnimation {
-                                    timelineData.currentDayIndex -= 1
-                                }
-                                let generator = UINotificationFeedbackGenerator()
-                                generator.notificationOccurred(.error)
-                            }
-                        }) {
-                            Text("Skip Stop")
-                                .font(.system(size: 20, weight: .semibold, design: .rounded))
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.red)
-                                .cornerRadius(10)
-                        }
-                        
-                        Button {
-                            timelineData.toggleEditMode()
-                        } label: {
-                            Text("Edit")
-                                .font(.system(size: 20, weight: .semibold, design: .rounded))
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: 75)
-                                .background(Color.gray)
-                                .cornerRadius(10)
-                        }
 
-
-                        Button(action: {
-                            if timelineData.currentDayIndex < timelineData.days.count {
-                                withAnimation {
-                                    timelineData.currentDayIndex += 1
-                                }
-                                let generator = UINotificationFeedbackGenerator()
-                                generator.notificationOccurred(.success)
-                            }
-                        }) {
-                            Text("Next Stop")
-                                .font(.system(size: 20, weight: .semibold, design: .rounded))
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.green)
-                                .cornerRadius(10)
-                        }
-                    }
-                    .padding(.horizontal, 15)
+                    BottomButtons()
                 }
-                
+
                 VStack {
                     if toggleEditor {
                         VStack {
@@ -133,7 +85,7 @@ struct MainView: View {
                         .ignoresSafeArea()
                     }
                 }
-                
+
             }
             .onAppear {
                 toggleEditor = timelineData.editData.toggleEditor
@@ -143,7 +95,7 @@ struct MainView: View {
                     toggleEditor = newValue
                 }
             }
-            
+
         }
         .environmentObject(timelineData)
         .navigationBarBackButtonHidden(true)
@@ -151,13 +103,62 @@ struct MainView: View {
     
 }
 
-struct BounceDisable: ViewModifier {
-    init() {
-        UIScrollView.appearance().bounces = false
-    }
-    
-    func body(content: Content) -> some View {
-        return content
+struct BottomButtons: View {
+    @EnvironmentObject var timelineData: TimelineData
+    var body: some View {
+        HStack {
+            Button(action: {
+                if timelineData.currentDayIndex > 0 {
+                    withAnimation {
+                        timelineData.currentDayIndex -= 1
+                    }
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.error)
+                }
+            }) {
+                Text("Skip Stop")
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.red)
+                    .cornerRadius(10)
+            }
+            
+            Button {
+                withAnimation {
+                    timelineData.toggleEditMode()
+                }
+            } label: {
+                Text("Edit")
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: 75)
+                    .background(Color.gray)
+                    .cornerRadius(10)
+            }
+            
+            
+            Button(action: {
+                if timelineData.currentDayIndex < timelineData.days.count {
+                    withAnimation {
+                        timelineData.currentDayIndex += 1
+                    }
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                }
+            }) {
+                Text("Next Stop")
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.green)
+                    .cornerRadius(10)
+            }
+        }
+        .padding(.horizontal, 15)
     }
 }
 

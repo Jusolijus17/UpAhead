@@ -14,26 +14,33 @@ struct Day {
     var events: [Event]
     var editMode: Bool = false
     var height: CGFloat {
-        var height: CGFloat = events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
-//        if editMode && events.count > 0 {
-//            height += 100
-//        }
-        return height
+        return events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
     }
     
     mutating func addEvent(_ event: Event) {
         events.insert(event, at: events.count - 1)
     }
     
-    mutating func toggleEditMode() {
-        if editMode {
-            if !events.isEmpty {
-                events.removeLast()
+    mutating func toggleEditMode(state: Bool? = nil) {
+        if state == nil {
+            if editMode {
+                if !events.isEmpty {
+                    events.removeLast()
+                }
+            } else {
+                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false))
             }
-        } else {
-            events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false))
+            editMode.toggle()
+        } else if state != nil && editMode != state {
+            if state == false {
+                if !events.isEmpty {
+                    events.removeLast()
+                }
+            } else {
+                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false))
+            }
+            editMode.toggle()
         }
-        editMode.toggle()
         
     }
 }
@@ -42,7 +49,11 @@ struct Event {
     let title: String
     let iconName: String
     let color: Color
-    let isCompleted: Bool
+    var isCompleted: Bool
+    
+    mutating func toggleComplete() {
+        self.isCompleted.toggle()
+    }
 }
 
 func getEvents(amount: Int) -> [Event] {
