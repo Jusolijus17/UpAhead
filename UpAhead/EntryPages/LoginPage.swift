@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginPage: View {
     // Variables pour stocker les données entrées par l'utilisateur
-    @State private var username = ""
+    @State private var email = ""
     @State private var password = ""
     
     var body: some View {
@@ -29,37 +30,64 @@ struct LoginPage: View {
 
                 Group {
                     // Formulaire de connexion
-                    TextField("Nom d'utilisateur", text: $username)
+                    TextField("Email address", text: $email)
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(5.0)
                         .padding(.bottom, 20)
 
-                    SecureField("Mot de passe", text: $password)
+                    SecureField("Password", text: $password)
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(5.0)
                         .padding(.bottom, 20)
-
+                    
+                    Button {
+                        connectUser()
+                    } label: {
+                        Text("Connect")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.green)
+                            .cornerRadius(15.0)
+                    }
+                }
+                .offset(y: -75/2)
+                
+                Spacer()
+                
+                HStack {
+                    
                     NavigationLink(
                         destination: MainView(timelineData: TimelineData(days: generateWeek(), currentDayIndex: 3)),
                         label: {
-                            Text("Se connecter")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(width: 220, height: 60)
-                                .background(Color.blue)
-                                .cornerRadius(15.0)
-                        })
-                }
-                .offset(y: -75/2)
+                            Text("Skip for now")
+                                .foregroundColor(.blue)
+                        }
+                    )
+                    
+                    Spacer()
+                    
+                    NavigationLink(
+                        destination: SignUpView(),
+                        label: {
+                            Text("Create account")
+                                .foregroundColor(.blue)
+                        }
+                    )
 
-                Spacer()
+                    
+                }
 
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity) // Ajout d'une contrainte de taille maximale
         }
+    }
+    
+    private func connectUser() {
+        // Connect user here
     }
 }
 
