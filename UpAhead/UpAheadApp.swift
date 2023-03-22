@@ -22,7 +22,8 @@ struct UpAheadApp: App {
     var body: some Scene {
         WindowGroup {
             if let _ = Auth.auth().currentUser {
-                MainView(timelineData: TimelineData(days: generateWeek(), currentDayIndex: 3))
+                //MainView(timelineData: TimelineData(days: generateWeek(), currentDayIndex: 3))
+                LoginPage()
             } else {
                 LoginPage()
             }

@@ -70,7 +70,7 @@ struct LoginPage: View {
                     Spacer()
                     
                     NavigationLink(
-                        destination: SignUpView(),
+                        destination: CustomSignUp(signUpData: SignUpData(numberOfSteps: 4)),
                         label: {
                             Text("Create account")
                                 .foregroundColor(.blue)

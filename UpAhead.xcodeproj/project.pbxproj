@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D0BBD0C29CB4FDE00ABCF96 /* SignUpData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */; };
 		3D11D98D29B9753700E6FC33 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D11D98C29B9753700E6FC33 /* CreateEventView.swift */; };
 		3D3FF4A429CAA50000272532 /* SignUpTraject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3FF4A329CAA50000272532 /* SignUpTraject.swift */; };
 		3D5A57FD29C949F300820D7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpData.swift; sourceTree = "<group>"; };
 		3D11D98C29B9753700E6FC33 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
 		3D3FF4A329CAA50000272532 /* SignUpTraject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTraject.swift; sourceTree = "<group>"; };
 		3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			children = (
 				3DCAA28A29B6D6E100799E87 /* DayStruct.swift */,
 				3DD5C01A29B118EB002FFF12 /* TimelineData.swift */,
+				3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 				3DD607C929C2B7F300DF95C7 /* Test.swift in Sources */,
 				3DD5C02629B4FF8A002FFF12 /* TrajectView.swift in Sources */,
 				3DC088FC29B82037005233DF /* EventBox.swift in Sources */,
+				3D0BBD0C29CB4FDE00ABCF96 /* SignUpData.swift in Sources */,
 				3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */,
 				3D11D98D29B9753700E6FC33 /* CreateEventView.swift in Sources */,
 				3DD5C00F29B1187B002FFF12 /* MainView.swift in Sources */,

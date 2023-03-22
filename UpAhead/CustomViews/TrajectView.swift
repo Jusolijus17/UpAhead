@@ -156,11 +156,11 @@ struct DirectionPointer: View {
 
 struct TrajectView_Previews: PreviewProvider {
     static var previews: some View {
-        let timelineData = TimelineData(days: generateWeek(), currentDayIndex: 3)
+        let timelineData = TimelineData(days: generateWeek(), currentDayIndex: 4)
         ScrollView {
             TrajectView()
                 .frame(maxWidth: .infinity)
-                .environmentObject(TimelineData(days: generateWeek(), currentDayIndex: 4))
+                .environmentObject(timelineData)
         }
     }
 }
