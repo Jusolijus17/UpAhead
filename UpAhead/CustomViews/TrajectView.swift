@@ -21,38 +21,6 @@ struct TrajectView: View {
         }
     }
     
-//    var body: some View {
-//        ZStack {
-//            GeometryReader { geometry in
-//                RoundedRectangle(cornerRadius: 15)
-//                    .foregroundColor(Color(hex: "E5E5E5"))
-//                VStack(spacing: 0) {
-//                    ForEach(0..<timelineData.days.count, id: \.self) { i in
-//                        RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $timelineData.days[i], index: i)
-//                            .frame(width: 41, height: CGFloat(timelineData.days[i].height))
-//                    }
-//                }
-//                .offset(x: -6)
-//
-//                VStack {
-//
-//                    RoundedRectangle(cornerRadius: 12.5)
-//                        .foregroundColor(.blue)
-//                        .overlay(
-//                            VStack {
-//                                DirectionPointer(radius: geometry.size.width * 0.8)
-//                                    .id("direction")
-//                            }
-//                        )
-//                        .frame(width: geometry.size.width - 10, height: timelineData.trajectHeight, alignment: .bottom)
-//                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 0))
-//                }
-//            }
-//            .frame(width: 30, height: timelineData.totalHeight)
-//            .padding()
-//        }
-//    }
-    
     var body: some View {
         ZStack(alignment: .bottom) {
             RoundedRectangle(cornerRadius: 15)

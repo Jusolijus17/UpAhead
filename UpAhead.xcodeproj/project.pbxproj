@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D11D98D29B9753700E6FC33 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D11D98C29B9753700E6FC33 /* CreateEventView.swift */; };
+		3D3FF4A429CAA50000272532 /* SignUpTraject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3FF4A329CAA50000272532 /* SignUpTraject.swift */; };
 		3D5A57FD29C949F300820D7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */; };
 		3D5A580029C94B2D00820D7A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3D5A57FF29C94B2D00820D7A /* FirebaseAnalytics */; };
 		3D5A580229C94B2D00820D7A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3D5A580129C94B2D00820D7A /* FirebaseAuth */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		3D11D98C29B9753700E6FC33 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
+		3D3FF4A329CAA50000272532 /* SignUpTraject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTraject.swift; sourceTree = "<group>"; };
 		3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3DB7340A29C95DBA009C1923 /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
 		3DC088FB29B82037005233DF /* EventBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBox.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				3DC088FB29B82037005233DF /* EventBox.swift */,
 				3D11D98C29B9753700E6FC33 /* CreateEventView.swift */,
 				3DD607C829C2B7F300DF95C7 /* Test.swift */,
+				3D3FF4A329CAA50000272532 /* SignUpTraject.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 				3DD5C02429B2F0DD002FFF12 /* DayRect.swift in Sources */,
 				3DB7340B29C95DBA009C1923 /* SignUpPage.swift in Sources */,
 				3DD5C02029B12FA3002FFF12 /* Extensions.swift in Sources */,
+				3D3FF4A429CAA50000272532 /* SignUpTraject.swift in Sources */,
 				3DCAA28B29B6D6E100799E87 /* DayStruct.swift in Sources */,
 				3DD5C02A29B5A147002FFF12 /* WeatherStruct.swift in Sources */,
 				3DD5C01B29B118EB002FFF12 /* TimelineData.swift in Sources */,
