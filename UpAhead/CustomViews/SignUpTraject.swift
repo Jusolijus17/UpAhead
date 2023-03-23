@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignUpTraject: View {
     @EnvironmentObject var signUpData: SignUpData
+    @State var showSuccess: Bool = false
     
     var completedTraject: CGFloat {
         var height: CGFloat = 0
@@ -39,7 +40,7 @@ struct SignUpTraject: View {
                 
                 VStack(spacing: 0) {
                     ForEach(0..<signUpData.numberOfSteps, id: \.self) { index in
-                        FieldMark()
+                        FieldMark(step: signUpData.numberOfSteps - index)
                             .frame(height: stepHeight)
                     }
                 }
@@ -54,10 +55,17 @@ struct SignUpTraject: View {
                             .padding(.vertical, 5)
                             .frame(width: 20, height: completedTraject)
                         
-                        DirectionPointer(radius: 25)
+                        DirectionPointer(radius: 25, successMark: $showSuccess)
                             .id("pointer")
                     }
                     .frame(width: 30)
+                }
+            }
+            .onChange(of: signUpData.signUpSucces) { newValue in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation {
+                        showSuccess = true
+                    }
                 }
             }
         }
@@ -67,7 +75,9 @@ struct SignUpTraject: View {
 
 struct FieldMark: View {
     @EnvironmentObject var signUpData: SignUpData
-    @State var markWidth: CGFloat = .infinity
+    @State var markWidth: CGFloat = 5
+    @State var markColor: Color = .gray
+    @State var step: Int
     
     var body: some View {
         HStack(spacing: 0) {
@@ -78,16 +88,34 @@ struct FieldMark: View {
                 .frame(maxWidth: 12)
         }
         .offset(x: -9, y: 25)
+        .frame(maxWidth: .infinity, alignment: .trailing)
         .padding(.leading)
-        .foregroundColor(signUpData.isEditing ? .white : .gray)
-        .onChange(of: signUpData.currentStep) { newValue in
-            withAnimation {
-                markWidth = 10
+        .foregroundColor(markColor)
+        .onChange(of: signUpData.stepCompleted) { completed in
+            if completed == step {
+                animate()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                withAnimation {
-                    markWidth = .infinity
+        }
+        .onChange(of: signUpData.isEditing) { editing in
+            markColor = editing ? .white : .gray
+        }
+        .onChange(of: signUpData.currentStep) { newStep in
+            let delay = step == 1 ? 0.5 : 1
+            if newStep == step {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    withAnimation {
+                        markWidth = .infinity
+                    }
                 }
+            }
+        }
+    }
+    
+    private func animate() {
+        markColor = .green
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            withAnimation {
+                markWidth = 5
             }
         }
     }

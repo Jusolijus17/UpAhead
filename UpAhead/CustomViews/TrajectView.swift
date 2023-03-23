@@ -126,6 +126,18 @@ struct TimeMark: View {
 
 struct DirectionPointer: View {
     let radius: CGFloat
+    @Binding var successMark: Bool
+    
+    init(radius: CGFloat, successMark: Binding<Bool>) {
+        self.radius = radius
+        self._successMark = successMark
+    }
+    
+    init(radius: CGFloat, successMark: Bool = false) {
+        self.radius = radius
+        self._successMark = Binding.constant(successMark)
+    }
+    
     var body: some View {
         ZStack {
             GeometryReader { geometry in
@@ -136,11 +148,11 @@ struct DirectionPointer: View {
                 let padding = (geometry.size.width * 0.15) / 2
                 
                 Circle()
-                    .foregroundColor(.blue)
+                    .foregroundColor(successMark ? .green : .blue)
                     .frame(width: geometry.size.width * 0.85)
                     .padding(EdgeInsets(top: padding, leading: padding, bottom: 0, trailing: 0))
                     .overlay(
-                        Image(systemName: "location.north.fill")
+                        Image(systemName: successMark ? "checkmark" : "location.north.fill")
                             .font(.system(size: geometry.size.width * 0.6))
                             .foregroundColor(.white)
                             .offset(x: geometry.size.width * 0.05, y: geometry.size.width * 0.05)

@@ -114,23 +114,42 @@ import FirebaseAuth
 
 struct CustomSignUp: View {
     @StateObject var signUpData: SignUpData
+    @State var showTitle: Bool = true
     
     var body: some View {
-        NavigationView {
-            GeometryReader { geo in
+        var titleText: String = signUpData.signUpSucces ? "Welcome \(signUpData.userData.name)" : "Create an account"
+        GeometryReader { geo in
+            NavigationView {
                 let trajectHeight: CGFloat = geo.size.height * CGFloat(signUpData.numberOfSteps)
                 ZStack {
                     Color(hex: "394A59")
                         .ignoresSafeArea()
                     
-                    VStack {
-                        Text("Create an account")
-                            .font(.system(size: 35, weight: .semibold, design: .rounded))
-                            .foregroundColor(.white)
-                        Spacer()
+                    if showTitle {
+                        VStack {
+                            signUpData.signUpSucces ? Spacer() : nil
+                            Text(titleText)
+                                .font(.system(size: 35, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white)
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                    
+                    if !signUpData.signUpSucces {
+                        SignUpStep(onNext: {
+                            if signUpData.currentStep <= signUpData.numberOfSteps + 1 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    hideKeyboard()
+                                    withAnimation {
+                                        signUpData.currentStep += 1
+                                    }
+                                }
+                            }
+                        })
+                        .frame(maxWidth: .infinity)
+                    }
                     
                     ScrollViewReader { proxy in
                         ScrollView(showsIndicators: false) {
@@ -142,29 +161,34 @@ struct CustomSignUp: View {
                         .onAppear {
                             proxy.scrollTo("pointer", anchor: .trailing)
                         }
-                        .onChange(of: signUpData.currentStep) { _ in
+                        .onChange(of: signUpData.currentStep) { newValue in
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 withAnimation {
-                                    proxy.scrollTo("pointer", anchor: .trailing)
+                                    if newValue == signUpData.numberOfSteps + 1 {
+                                        signUpData.signUpSucces = true
+                                        proxy.scrollTo("pointer")
+                                    } else if newValue != 1 {
+                                        proxy.scrollTo("pointer", anchor: .trailing)
+                                    } else {
+                                        proxy.scrollTo("pointer")
+                                    }
                                 }
                             }
                         }
                     }
-                    
-                    // Email
-                    SignUpStep(onNext: {
-                        if signUpData.currentStep <= signUpData.numberOfSteps + 1 {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation {
-                                    signUpData.currentStep += 1
-                                }
-                            }
-                        }
-                    })
+                    .allowsHitTesting(false)
                 }
                 .onAppear {
                     signUpData.trajectHeight = trajectHeight
+                    signUpData.currentStep = 1
                 }
+                .onChange(of: signUpData.signUpSucces, perform: { newValue in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation {
+                            showTitle = false
+                        }
+                    }
+                })
                 .onTapGesture {
                     hideKeyboard()
                 }
@@ -173,10 +197,6 @@ struct CustomSignUp: View {
         }
         .navigationBarBackButtonHidden()
         .navigationBarHidden(true)
-    }
-    
-    private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
@@ -195,11 +215,13 @@ struct SignUpStep: View {
             VStack {
                 Spacer(minLength: geo.size.height / 2 - 40)
                 
-                CustomTextField(text: $text, fieldType: $currentField)
-                    .padding(.leading, 25)
+                if !signUpData.signUpSucces {
+                    CustomTextField(text: $text, fieldType: $currentField)
+                        .padding(.leading, 25)
+                }
                 
                 Spacer()
-
+                
                 if let error = signUpData.error {
                     Text(error)
                         .font(.system(size: 22, design: .rounded))
@@ -209,21 +231,23 @@ struct SignUpStep: View {
                         .padding(.trailing, 40)
                     Spacer(minLength: geo.size.height / 3)
                 }
-
+                
                 Button {
                     if let error = validateInput(field: currentField) {
                         signUpData.error = error
                     } else {
                         signUpData.addDataFor(field: currentField, data: text)
-                        currentFieldIndex += 1
-                        if currentFieldIndex < fields.count {
-                            currentField = fields[currentFieldIndex]
+                        signUpData.error = nil
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            if currentFieldIndex < fields.count - 1 {
+                                currentFieldIndex += 1
+                                currentField = fields[currentFieldIndex]
+                            }
+                            withAnimation {
+                                text = ""
+                            }
+                            onNext()
                         }
-                        withAnimation {
-                            signUpData.error = nil
-                            text = ""
-                        }
-                        onNext()
                     }
                 } label: {
                     Text("Next stop")
@@ -234,6 +258,7 @@ struct SignUpStep: View {
                         .cornerRadius(15)
                 }
             }
+            .frame(maxWidth: .infinity)
         }
     }
     
@@ -259,6 +284,38 @@ struct SignUpStep: View {
         case .name:
             return text == "" ? "How should we call you?" : nil
         }
+    }
+}
+
+struct TestView: View {
+    @State private var isAnimating = false
+    @State private var isComplete = false
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .trim(from: 0, to: isComplete ? 1 : 0)
+                .stroke(Color.blue, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+                .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                .animation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: false))
+                .onAppear() {
+                    isAnimating = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        isComplete = true
+                    }
+                }
+            
+            if isComplete {
+                Path { path in
+                    path.move(to: CGPoint(x: 80, y: 150))
+                    path.addLine(to: CGPoint(x: 150, y: 220))
+                    path.addLine(to: CGPoint(x: 260, y: 100))
+                }
+                .stroke(Color.blue, style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+                .animation(Animation.easeInOut(duration: 0.5).delay(1.5))
+            }
+        }
+        .frame(width: 300, height: 300)
     }
 }
 
@@ -299,16 +356,16 @@ struct CustomTextField: View {
                         }
                 }
             }
-            .font(.system(size: 24))
-            .foregroundColor(.white)
-            .accentColor(.white)
-            .textInputAutocapitalization(TextInputAutocapitalization.never)
-            .autocorrectionDisabled()
-            .placeholder(when: text.isEmpty) {
-                Text(placeholder)
-                    .foregroundColor(.white.opacity(0.5))
-                    .font(.system(size: 30))
-            }
+                .font(.system(size: 24))
+                .foregroundColor(.white)
+                .accentColor(.white)
+                .textInputAutocapitalization(TextInputAutocapitalization.never)
+                .autocorrectionDisabled()
+                .placeholder(when: text.isEmpty) {
+                    Text(signUpData.stepCompleted == 4 ? "" : placeholder)
+                        .foregroundColor(.white.opacity(0.5))
+                        .font(.system(size: 30))
+                }
         )
     }
     
@@ -324,6 +381,10 @@ struct CustomTextField: View {
             placeholder = "What's your name?"
         }
     }
+}
+
+func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 }
 
 struct SignUpView_Previews: PreviewProvider {

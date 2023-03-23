@@ -27,10 +27,12 @@ class SignUpData: ObservableObject {
     
     // Other info
     @Published var isEditing: Bool = false
-    @Published var currentStep: Int = 1
+    @Published var currentStep: Int = 0
     @Published var numberOfSteps: Int
     @Published var trajectHeight: CGFloat = 0
     @Published var error: String?
+    @Published var stepCompleted: Int = 0
+    @Published var signUpSucces: Bool = false
     
     init(numberOfSteps: Int) {
         self.numberOfSteps = numberOfSteps
@@ -39,15 +41,19 @@ class SignUpData: ObservableObject {
     func addDataFor(field: SignUpField, data: String) {
         switch field {
         case .email :
+            stepCompleted = 1
             userData.email = data
             break
         case .password :
+            stepCompleted = 2
             userData.password = data
             break
         case .confirmPassword :
+            stepCompleted = 3
             userData.confirmedPassword = data
             break
         case .name :
+            stepCompleted = 4
             userData.name = data
             break
         }
