@@ -37,6 +37,13 @@ struct MainView: View {
                                 TrajectView()
                             }
                         }
+                        .onAppear {
+                            if timelineData.currentDayIndex != 0 {
+                                proxy.scrollTo("mark\(timelineData.days.count - timelineData.currentDayIndex)", anchor: .bottom)
+                            } else {
+                                proxy.scrollTo("bottom", anchor: .bottom)
+                            }
+                        }
                         .onChange(of: timelineData.currentDayIndex) { newValue in
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 withAnimation {
@@ -162,22 +169,8 @@ struct BottomButtons: View {
     }
 }
 
-func generateWeek() -> [Day] {
-    let today = Date()
-    var days: [Day] = []
-    for i in 0..<7 {
-        let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
-        let weather = getWeather(for: date)
-        let events: [Event] = getEvents(amount: i)
-        let day = Day(date: date, weather: weather, events: events)
-        days.append(day)
-    }
-    return days
-}
-
-
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(timelineData: TimelineData(days: generateWeek(), currentDayIndex: 3))
+        MainView(timelineData: TimelineData(days: generateDummyWeek(), currentDayIndex: 3))
     }
 }

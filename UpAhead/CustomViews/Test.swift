@@ -21,7 +21,7 @@ struct ContentView: View {
                 .ignoresSafeArea()
                 
                 TrajectView()
-                    .environmentObject(TimelineData(days: generateWeek(), currentDayIndex: 3))
+                    .environmentObject(TimelineData(days: generateDummyWeek(), currentDayIndex: 3))
             }
             .ignoresSafeArea()
         }

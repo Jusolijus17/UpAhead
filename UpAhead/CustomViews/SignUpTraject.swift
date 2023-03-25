@@ -9,12 +9,12 @@ import SwiftUI
 
 struct SignUpTraject: View {
     @EnvironmentObject var signUpData: SignUpData
-    @State var showSuccess: Bool = false
+    @EnvironmentObject var state: AnimationState
     
     var completedTraject: CGFloat {
         var height: CGFloat = 0
         let stepHeight: CGFloat = signUpData.trajectHeight / CGFloat(signUpData.numberOfSteps)
-        for i in 0...signUpData.currentStep {
+        for i in 0...state.currentCursorStep {
             if i == 1 {
                 height += stepHeight / 2
             } else if i != 0 && i <= signUpData.numberOfSteps {
@@ -36,15 +36,18 @@ struct SignUpTraject: View {
                     RoundedRectangle(cornerRadius: 15)
                         .foregroundColor(Color(hex: "E5E5E5"))
                         .frame(maxWidth: 30)
+                    state.titleText == "" ? Spacer() : nil
                 }
                 
-                VStack(spacing: 0) {
-                    ForEach(0..<signUpData.numberOfSteps, id: \.self) { index in
-                        FieldMark(step: signUpData.numberOfSteps - index)
-                            .frame(height: stepHeight)
+                if !state.showSuccess {
+                    VStack(spacing: 0) {
+                        ForEach(0..<signUpData.numberOfSteps, id: \.self) { _ in
+                            FieldMark()
+                                .frame(height: stepHeight)
+                        }
                     }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
                 
                 HStack {
                     Spacer()
@@ -55,17 +58,12 @@ struct SignUpTraject: View {
                             .padding(.vertical, 5)
                             .frame(width: 20, height: completedTraject)
                         
-                        DirectionPointer(radius: 25, successMark: $showSuccess)
+                        DirectionPointer(radius: 25, successMark: $state.showCheckMark)
                             .id("pointer")
                     }
                     .frame(width: 30)
-                }
-            }
-            .onChange(of: signUpData.signUpSucces) { newValue in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    withAnimation {
-                        showSuccess = true
-                    }
+                    
+                    state.titleText == "" ? Spacer() : nil
                 }
             }
         }
@@ -75,14 +73,12 @@ struct SignUpTraject: View {
 
 struct FieldMark: View {
     @EnvironmentObject var signUpData: SignUpData
-    @State var markWidth: CGFloat = 5
-    @State var markColor: Color = .gray
-    @State var step: Int
+    @EnvironmentObject var state: AnimationState
     
     var body: some View {
         HStack(spacing: 0) {
             Rectangle()
-                .frame(maxWidth: markWidth, maxHeight: 1.5)
+                .frame(maxWidth: state.lineWidth, maxHeight: 1.5)
             
             Circle()
                 .frame(maxWidth: 12)
@@ -90,40 +86,14 @@ struct FieldMark: View {
         .offset(x: -9, y: 25)
         .frame(maxWidth: .infinity, alignment: .trailing)
         .padding(.leading)
-        .foregroundColor(markColor)
-        .onChange(of: signUpData.stepCompleted) { completed in
-            if completed == step {
-                animate()
-            }
-        }
-        .onChange(of: signUpData.isEditing) { editing in
-            markColor = editing ? .white : .gray
-        }
-        .onChange(of: signUpData.currentStep) { newStep in
-            let delay = step == 1 ? 0.5 : 1
-            if newStep == step {
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    withAnimation {
-                        markWidth = .infinity
-                    }
-                }
-            }
-        }
-    }
-    
-    private func animate() {
-        markColor = .green
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            withAnimation {
-                markWidth = 5
-            }
-        }
+        .foregroundColor(state.lineColor)
     }
 }
 
 struct SignUpTraject_Previews: PreviewProvider {
     static var previews: some View {
         let signUpData = SignUpData(numberOfSteps: 4)
+        let state = AnimationState()
         
         GeometryReader { geo in
             let trajectHeight: CGFloat = geo.size.height * CGFloat(signUpData.numberOfSteps)
@@ -132,6 +102,7 @@ struct SignUpTraject_Previews: PreviewProvider {
                     SignUpTraject()
                         .frame(height: UIScreen.main.bounds.height * CGFloat(signUpData.numberOfSteps))
                         .environmentObject(signUpData)
+                        .environmentObject(state)
                         .onAppear {
                             signUpData.trajectHeight = trajectHeight
                         }

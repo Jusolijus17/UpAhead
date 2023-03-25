@@ -168,7 +168,7 @@ struct DirectionPointer: View {
 
 struct TrajectView_Previews: PreviewProvider {
     static var previews: some View {
-        let timelineData = TimelineData(days: generateWeek(), currentDayIndex: 4)
+        let timelineData = TimelineData(days: generateDummyWeek(), currentDayIndex: 4)
         ScrollView {
             TrajectView()
                 .frame(maxWidth: .infinity)

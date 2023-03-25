@@ -60,7 +60,7 @@ struct LoginPage: View {
                 HStack {
                     
                     NavigationLink(
-                        destination: MainView(timelineData: TimelineData(days: generateWeek(), currentDayIndex: 3)),
+                        destination: MainView(timelineData: TimelineData(days: generateDummyWeek(), currentDayIndex: 3)),
                         label: {
                             Text("Skip for now")
                                 .foregroundColor(.blue)

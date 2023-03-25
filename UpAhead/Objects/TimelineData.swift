@@ -26,7 +26,7 @@ class TimelineData: ObservableObject {
     @Published var currentDayIndex: Int
     @Published var editData: EditData
     
-    init(days: [Day], currentDayIndex: Int) {
+    init(days: [Day] = generateEmptyWeek(), currentDayIndex: Int = 0) {
         self.days = days
         self.currentDayIndex = currentDayIndex
         self.editData = EditData()
@@ -56,4 +56,30 @@ class TimelineData: ObservableObject {
         }
         editData.editMode.toggle()
     }
+}
+
+func generateEmptyWeek() -> [Day] {
+    let today = Date()
+    var days: [Day] = []
+    for i in 0..<7 {
+        let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
+        let weather = getWeather(for: date)
+        let events: [Event] = []
+        let day = Day(date: date, weather: weather, events: events)
+        days.append(day)
+    }
+    return days
+}
+
+func generateDummyWeek() -> [Day] {
+    let today = Date()
+    var days: [Day] = []
+    for i in 0..<7 {
+        let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
+        let weather = getWeather(for: date)
+        let events: [Event] = getEvents(amount: i)
+        let day = Day(date: date, weather: weather, events: events)
+        days.append(day)
+    }
+    return days
 }
