@@ -12,7 +12,7 @@ struct SignUpTraject: View {
     @EnvironmentObject var state: AnimationState
     
     var completedTraject: CGFloat {
-        var height: CGFloat = 0
+        var height: CGFloat = 50
         let stepHeight: CGFloat = signUpData.trajectHeight / CGFloat(signUpData.numberOfSteps)
         for i in 0...state.currentCursorStep {
             if i == 1 {
@@ -20,7 +20,7 @@ struct SignUpTraject: View {
             } else if i != 0 && i <= signUpData.numberOfSteps {
                 height += stepHeight
             } else if i > signUpData.numberOfSteps {
-                height = signUpData.trajectHeight
+                height = signUpData.trajectHeight + 50
             }
         }
         return height
@@ -56,7 +56,7 @@ struct SignUpTraject: View {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundColor(.blue)
                             .padding(.vertical, 5)
-                            .frame(width: 20, height: completedTraject)
+                            .frame(width: 20, height: state.currentCursorStep != 0 ? completedTraject - 50 : completedTraject)
                         
                         DirectionPointer(radius: 25, successMark: $state.showCheckMark)
                             .id("pointer")
@@ -110,6 +110,10 @@ struct SignUpTraject_Previews: PreviewProvider {
                 .onAppear {
                     proxy.scrollTo("pointer")
                     signUpData.currentStep = 1
+                    withAnimation {
+                        state.currentCursorStep = 1
+                    }
+                    
                 }
                 .onChange(of: signUpData.currentStep) { newValue in
                     proxy.scrollTo("pointer")

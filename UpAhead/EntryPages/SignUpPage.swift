@@ -90,12 +90,6 @@ struct CustomSignUp: View {
                                 }
                                 .allowsHitTesting(false)
                             }
-                            
-//                            NavigationLink(destination: MainView(timelineData: TimelineData()), isActive: $state.showMainView) {
-//                                EmptyView()
-//                            }
-//                            .hidden()
-//                            .transition(.opacity.animation(.easeInOut(duration: 1.0)))
                         }
                         .onAppear {
                             signUpData.trajectHeight = trajectHeight

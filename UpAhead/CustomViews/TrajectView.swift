@@ -21,6 +21,8 @@ struct TrajectView: View {
         }
     }
     
+    @State var indicatorHeight: CGFloat = 0
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             RoundedRectangle(cornerRadius: 15)
@@ -38,7 +40,7 @@ struct TrajectView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor(.blue)
                     .padding(.vertical, 5)
-                    .frame(width: 20, height: timelineData.trajectHeight)
+                    .frame(width: 20, height: timelineData.currentDayIndex != 0 ? timelineData.trajectHeight - 50 : timelineData.trajectHeight)
                 
                 DirectionPointer(radius: 25)
             }

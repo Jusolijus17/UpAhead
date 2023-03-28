@@ -33,7 +33,7 @@ class TimelineData: ObservableObject {
     }
     
     var trajectHeight: CGFloat {
-        var height: CGFloat = 0
+        var height: CGFloat = 50
         for index in (0..<currentDayIndex).reversed() {
             height += days[days.count - index - 1].height
         }
