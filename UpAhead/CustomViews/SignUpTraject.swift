@@ -11,63 +11,43 @@ struct SignUpTraject: View {
     @EnvironmentObject var signUpData: SignUpData
     @EnvironmentObject var state: AnimationState
     
-    var completedTraject: CGFloat {
-        var height: CGFloat = 50
-        let stepHeight: CGFloat = signUpData.trajectHeight / CGFloat(signUpData.numberOfSteps)
-        for i in 0...state.currentCursorStep {
-            if i == 1 {
-                height += stepHeight / 2
-            } else if i != 0 && i <= signUpData.numberOfSteps {
-                height += stepHeight
-            } else if i > signUpData.numberOfSteps {
-                height = signUpData.trajectHeight + 50
-            }
-        }
-        return height
-    }
-    
     var body: some View {
-        let stepHeight: CGFloat = signUpData.trajectHeight / CGFloat(signUpData.numberOfSteps)
-        
         GeometryReader { geo in
+            let multiplier: CGFloat = (CGFloat(state.currentCursorStep) * 2 - 1) / (CGFloat(signUpData.numberOfSteps) * 2)
+            let currentHeight: CGFloat = geo.size.height * multiplier
+            let normalizedHeight: CGFloat = state.currentCursorStep > signUpData.numberOfSteps ? geo.size.height - 10 : currentHeight
+            let stepHeight: CGFloat = geo.size.height / CGFloat(signUpData.numberOfSteps)
             ZStack(alignment: .bottom) {
-                HStack {
-                    Spacer()
-                    RoundedRectangle(cornerRadius: 15)
-                        .foregroundColor(Color(hex: "E5E5E5"))
-                        .frame(maxWidth: 30)
-                    state.titleText == "" ? Spacer() : nil
-                }
+                Capsule()
+                    .foregroundColor(.gray.opacity(0.3))
+                    .frame(width: 30)
+                    .frame(maxWidth: .infinity, alignment: state.titleText != "" ? .trailing : .center)
                 
                 if !state.showSuccess {
                     VStack(spacing: 0) {
-                        ForEach(0..<signUpData.numberOfSteps, id: \.self) { _ in
+                        ForEach(0..<signUpData.numberOfSteps, id: \.self) { i in
                             FieldMark()
                                 .frame(height: stepHeight)
                         }
                     }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 
-                HStack {
-                    Spacer()
+                ZStack(alignment: .top) {
+                    Capsule()
+                        .foregroundColor(.blue)
+                        .frame(width: 20, height: normalizedHeight <= 40 ? 40 : normalizedHeight)
+                        .padding(.vertical, 5)
                     
-                    ZStack(alignment: .top) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.blue)
-                            .padding(.vertical, 5)
-                            .frame(width: 20, height: state.currentCursorStep != 0 ? completedTraject - 50 : completedTraject)
-                        
-                        DirectionPointer(radius: 25, successMark: $state.showCheckMark)
-                            .id("pointer")
-                    }
-                    .frame(width: 30)
                     
-                    state.titleText == "" ? Spacer() : nil
+                    DirectionPointer(successMark: $state.showCheckMark)
+                        .id("pointer")
+                        .frame(width: 50)
                 }
+                .offset(x: state.titleText != "" ? 10 : 0)
+                .frame(maxWidth: .infinity, alignment: state.titleText != "" ? .trailing : .center)
             }
         }
-        .padding()
+        .padding(20)
     }
 }
 
@@ -83,42 +63,33 @@ struct FieldMark: View {
             Circle()
                 .frame(maxWidth: 12)
         }
-        .offset(x: -9, y: 25)
+        .offset(y: 25)
         .frame(maxWidth: .infinity, alignment: .trailing)
-        .padding(.leading)
+        .padding(.leading, 5)
+        .padding(.trailing, 9)
         .foregroundColor(state.lineColor)
     }
 }
 
 struct SignUpTraject_Previews: PreviewProvider {
     static var previews: some View {
-        let signUpData = SignUpData(numberOfSteps: 4)
-        let state = AnimationState()
-        
-        GeometryReader { geo in
-            let trajectHeight: CGFloat = geo.size.height * CGFloat(signUpData.numberOfSteps)
-            ScrollViewReader { proxy in
-                ScrollView {
-                    SignUpTraject()
-                        .frame(height: UIScreen.main.bounds.height * CGFloat(signUpData.numberOfSteps))
-                        .environmentObject(signUpData)
-                        .environmentObject(state)
-                        .onAppear {
-                            signUpData.trajectHeight = trajectHeight
-                        }
-                }
-                .onAppear {
-                    proxy.scrollTo("pointer")
-                    signUpData.currentStep = 1
-                    withAnimation {
-                        state.currentCursorStep = 1
-                    }
-                    
-                }
-                .onChange(of: signUpData.currentStep) { newValue in
-                    proxy.scrollTo("pointer")
+        let screenHeight: CGFloat = UIScreen.main.bounds.height
+        let signUpData: SignUpData = SignUpData(numberOfSteps: 4)
+        let state: AnimationState = AnimationState()
+        ScrollViewReader { proxy in
+            ScrollView {
+                SignUpTraject()
+                    .frame(height: screenHeight * CGFloat(signUpData.numberOfSteps) - 20)
+                    .environmentObject(signUpData)
+                    .environmentObject(state)
+            }
+            .onAppear {
+                proxy.scrollTo("pointer")
+                withAnimation {
+                    state.currentCursorStep = 1
                 }
             }
+            .ignoresSafeArea()
         }
     }
 }

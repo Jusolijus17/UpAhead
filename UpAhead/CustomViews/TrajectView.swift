@@ -42,7 +42,7 @@ struct TrajectView: View {
                     .padding(.vertical, 5)
                     .frame(width: 20, height: timelineData.currentDayIndex != 0 ? timelineData.trajectHeight - 50 : timelineData.trajectHeight)
                 
-                DirectionPointer(radius: 25)
+                DirectionPointer()
             }
             .frame(width: 30)
         }
@@ -127,45 +127,72 @@ struct TimeMark: View {
 }
 
 struct DirectionPointer: View {
-    let radius: CGFloat
     @Binding var successMark: Bool
     
-    init(radius: CGFloat, successMark: Binding<Bool>) {
-        self.radius = radius
+    init(successMark: Binding<Bool>) {
         self._successMark = successMark
     }
     
-    init(radius: CGFloat, successMark: Bool = false) {
-        self.radius = radius
+    init(successMark: Bool = false) {
         self._successMark = Binding.constant(successMark)
     }
     
     var body: some View {
         ZStack {
-            GeometryReader { geometry in
-                Circle()
-                    .foregroundColor(.white)
-                    .shadow(radius: 5)
-                
-                let padding = (geometry.size.width * 0.15) / 2
-                
-                Circle()
-                    .foregroundColor(successMark ? .green : .blue)
-                    .frame(width: geometry.size.width * 0.85)
-                    .padding(EdgeInsets(top: padding, leading: padding, bottom: 0, trailing: 0))
-                    .overlay(
-                        Image(systemName: successMark ? "checkmark" : "location.north.fill")
-                            .font(.system(size: geometry.size.width * 0.6))
-                            .foregroundColor(.white)
-                            .offset(x: geometry.size.width * 0.05, y: geometry.size.width * 0.05)
-                    )
-                
-                
-            }
-            .frame(width: radius * 2, height: radius * 2)
+            Circle()
+                .foregroundColor(.white)
+                .shadow(radius: 5)
+            Circle()
+                .padding(4)
+                .foregroundColor(successMark ? .green : .blue)
+            Image(systemName: successMark ? "checkmark" : "location.north.fill")
+                .font(.system(size: 28))
+                .foregroundColor(.white)
         }
+        .frame(width: 50)
     }
 }
+
+//struct DirectionPointer: View {
+//    let radius: CGFloat
+//    @Binding var successMark: Bool
+//
+//    init(radius: CGFloat, successMark: Binding<Bool>) {
+//        self.radius = radius
+//        self._successMark = successMark
+//    }
+//
+//    init(radius: CGFloat, successMark: Bool = false) {
+//        self.radius = radius
+//        self._successMark = Binding.constant(successMark)
+//    }
+//
+//    var body: some View {
+//        ZStack {
+//            GeometryReader { geometry in
+//                Circle()
+//                    .foregroundColor(.white)
+//                    .shadow(radius: 5)
+//
+//                let padding = (geometry.size.width * 0.15) / 2
+//
+//                Circle()
+//                    .foregroundColor(successMark ? .green : .blue)
+//                    .frame(width: geometry.size.width * 0.85)
+//                    .padding(EdgeInsets(top: padding, leading: padding, bottom: 0, trailing: 0))
+//                    .overlay(
+//                        Image(systemName: successMark ? "checkmark" : "location.north.fill")
+//                            .font(.system(size: geometry.size.width * 0.6))
+//                            .foregroundColor(.white)
+//                            .offset(x: geometry.size.width * 0.05, y: geometry.size.width * 0.05)
+//                    )
+//
+//
+//            }
+//            .frame(width: radius * 2, height: radius * 2)
+//        }
+//    }
+//}
 
 
 struct TrajectView_Previews: PreviewProvider {

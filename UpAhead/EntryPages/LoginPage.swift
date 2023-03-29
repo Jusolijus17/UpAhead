@@ -84,6 +84,7 @@ struct LoginPage: View {
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity) // Ajout d'une contrainte de taille maximale
         }
+        .navigationBarBackButtonHidden()
     }
     
     private func connectUser() {

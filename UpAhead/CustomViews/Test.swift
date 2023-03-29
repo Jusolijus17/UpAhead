@@ -30,14 +30,66 @@ struct ContentView: View {
 }
 
 struct RoadView: View {
+    @EnvironmentObject var signUpData: SignUpData
+    @EnvironmentObject var state: AnimationState
+    
     var body: some View {
-        // Your road view implementation here
-        Text("Road view")
+        GeometryReader { geo in
+            let multiplier: CGFloat = (CGFloat(state.currentCursorStep) * 2 - 1) / (CGFloat(signUpData.numberOfSteps) * 2)
+            let currentHeight: CGFloat = geo.size.height * multiplier
+            let normalizedHeight: CGFloat = state.currentCursorStep > signUpData.numberOfSteps ? geo.size.height - 10 : currentHeight
+            let stepHeight: CGFloat = geo.size.height / CGFloat(signUpData.numberOfSteps)
+            ZStack(alignment: .bottom) {
+                Capsule()
+                    .foregroundColor(.gray.opacity(0.3))
+                    .frame(width: 30)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                
+                VStack(spacing: 0) {
+                    ForEach(0..<signUpData.numberOfSteps, id: \.self) { i in
+                        FieldMark()
+                            .frame(height: stepHeight)
+                    }
+                }
+                
+                ZStack(alignment: .top) {
+                    Capsule()
+                        .foregroundColor(.blue)
+                        .frame(width: 20, height: normalizedHeight <= 40 ? 40 : normalizedHeight)
+                        .padding(.vertical, 5)
+                    
+                    
+                    DirectionPointer()
+                        .id("pointer")
+                        .frame(width: 50)
+                }
+                .offset(x: 10)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            .padding(.horizontal)
+        }
     }
 }
 
 struct Test_Preview: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let screenHeight: CGFloat = UIScreen.main.bounds.height
+        let signUpData: SignUpData = SignUpData(numberOfSteps: 4)
+        let state: AnimationState = AnimationState()
+        ScrollViewReader { proxy in
+            ScrollView {
+                RoadView()
+                    .frame(height: screenHeight * CGFloat(signUpData.numberOfSteps))
+                    .environmentObject(signUpData)
+                    .environmentObject(state)
+            }
+            .onAppear {
+                proxy.scrollTo("pointer")
+                withAnimation {
+                    state.currentCursorStep = 1
+                }
+            }
+            .ignoresSafeArea()
+        }
     }
 }

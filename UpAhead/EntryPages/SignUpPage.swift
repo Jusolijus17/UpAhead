@@ -39,9 +39,7 @@ struct CustomSignUp: View {
             }
             
             if state.mainViewOpacity != 1.1 {
-                GeometryReader { geo in
                     NavigationView {
-                        let trajectHeight: CGFloat = geo.size.height * CGFloat(signUpData.numberOfSteps)
                         ZStack {
                             Color(hex: "394A59")
                                 .ignoresSafeArea()
@@ -59,19 +57,22 @@ struct CustomSignUp: View {
                             if !state.showSuccess {
                                 SignUpStep(onNext: {
                                     if signUpData.currentStep <= signUpData.numberOfSteps + 1 {
-                                        animateView()
+                                        nextStep()
                                     }
+                                }, onBack: {
+                                    previousStep()
                                 })
                                 .frame(maxWidth: .infinity)
                             }
                             
-                            HStack {
+                            GeometryReader { geo in
+                                let trajectHeight: CGFloat = geo.size.height * CGFloat(signUpData.numberOfSteps)
                                 ScrollViewReader { proxy in
                                     ScrollView(showsIndicators: false) {
                                         SignUpTraject()
-                                            .frame(height: geo.size.height * CGFloat(signUpData.numberOfSteps))
-                                            .ignoresSafeArea()
+                                            .frame(height: UIScreen.main.bounds.height * CGFloat(signUpData.numberOfSteps) - 20)
                                     }
+                                    .ignoresSafeArea()
                                     .scrollDisabled(true)
                                     .onAppear {
                                         proxy.scrollTo("pointer", anchor: .trailing)
@@ -89,12 +90,12 @@ struct CustomSignUp: View {
                                     }
                                 }
                                 .allowsHitTesting(false)
+                                .onAppear {
+                                    signUpData.trajectHeight = trajectHeight
+                                    signUpData.currentStep = 1
+                                    initialAnimation()
+                                }
                             }
-                        }
-                        .onAppear {
-                            signUpData.trajectHeight = trajectHeight
-                            signUpData.currentStep = 1
-                            initialAnimation()
                         }
                         .onTapGesture {
                             hideKeyboard()
@@ -104,8 +105,8 @@ struct CustomSignUp: View {
                     .environmentObject(state)
                     .navigationBarBackButtonHidden()
                     .navigationBarHidden(true)
-                }
-                .opacity(1.0 - state.mainViewOpacity)
+                    .opacity(1.0 - state.mainViewOpacity)
+                
             }
         }
         .ignoresSafeArea(.keyboard)
@@ -118,7 +119,7 @@ struct CustomSignUp: View {
         }
     }
     
-    private func animateView() {
+    private func nextStep() {
         let fieldTypes: [SignUpField] = [.email, .password, .confirmPassword, .name]
         state.lineColor = .green
         state.placeholder = ""
@@ -158,6 +159,44 @@ struct CustomSignUp: View {
                 signUpData.signUpSucces = true
                 animateIntro()
             }
+        }
+    }
+    
+    private func previousStep() {
+        let fieldTypes: [SignUpField] = [.email, .password, .confirmPassword, .name]
+        state.placeholder = ""
+        signUpData.error = ""
+        
+        withAnimation {
+            if state.currentCursorStep != 4 {
+                state.currentCursorStep -= 1
+            } else {
+                state.currentCursorStep -= 2
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            withAnimation {
+                state.shouldScroll.toggle()
+                state.textFieldtext = getUserData()
+                state.fieldType = fieldTypes[state.currentCursorStep - 1]
+            }
+            state.placeholder = updatePlaceholder()
+        }
+    }
+    
+    private func getUserData() -> String {
+        switch state.currentCursorStep {
+        case 1:
+            return signUpData.userData.email
+        case 2:
+            return signUpData.userData.password
+        case 3:
+            return signUpData.userData.confirmedPassword
+        case 4:
+            return signUpData.userData.name
+        default:
+            return ""
         }
     }
     
@@ -214,6 +253,7 @@ struct SignUpStep: View {
     @EnvironmentObject var state: AnimationState
     
     var onNext: () -> Void
+    var onBack: () -> Void
     
     var body: some View {
         GeometryReader { geo in
@@ -237,21 +277,43 @@ struct SignUpStep: View {
                     Spacer(minLength: geo.size.height / 3)
                 }
                 
-                Button {
-                    if let error = validateInput() {
-                        signUpData.error = error
-                    } else {
-                        signUpData.addDataFor(field: state.fieldType, data: state.textFieldtext)
-                        signUpData.error = nil
-                        onNext()
+                
+                VStack {
+                    NavigationLink(destination: LoginPage()) {
+                        Text("or Sign In here.")
                     }
-                } label: {
-                    Text("Next stop")
-                        .font(.system(size: 25))
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(.green)
-                        .cornerRadius(15)
+
+                    HStack {
+                        if state.currentCursorStep > 1 {
+                            Button {
+                                onBack()
+                            } label: {
+                                Text("Back")
+                                    .font(.system(size: 25))
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(.red)
+                                    .cornerRadius(15)
+                            }
+                        }
+
+                        Button {
+                            if let error = validateInput() {
+                                signUpData.error = error
+                            } else {
+                                signUpData.addDataFor(field: state.fieldType, data: state.textFieldtext)
+                                signUpData.error = nil
+                                onNext()
+                            }
+                        } label: {
+                            Text("Next stop")
+                                .font(.system(size: 25))
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(.green)
+                                .cornerRadius(15)
+                    }
+                    }
                 }
             }
             .frame(maxWidth: .infinity)
