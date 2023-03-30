@@ -25,21 +25,33 @@ struct LoginPage: View {
                 Text("UpAhead!")
                     .font(.title)
                     .fontWeight(.bold)
+                    .foregroundColor(.white)
 
                 Spacer()
 
                 Group {
                     // Formulaire de connexion
-                    TextField("Email address", text: $email)
+                    TextField("", text: $email)
+                        .placeholder(when: email.isEmpty) {
+                            Text("Email address")
+                                .foregroundColor(.white.opacity(0.5))
+                                .font(.system(size: 20))
+                        }
                         .padding()
                         .background(Color.gray.opacity(0.2))
-                        .cornerRadius(5.0)
+                        .cornerRadius(10)
                         .padding(.bottom, 20)
+                        
 
-                    SecureField("Password", text: $password)
+                    SecureField("", text: $password)
+                        .placeholder(when: password.isEmpty) {
+                            Text("Password")
+                                .foregroundColor(.white.opacity(0.5))
+                                .font(.system(size: 20))
+                        }
                         .padding()
                         .background(Color.gray.opacity(0.2))
-                        .cornerRadius(5.0)
+                        .cornerRadius(10)
                         .padding(.bottom, 20)
                     
                     Button {
@@ -62,8 +74,14 @@ struct LoginPage: View {
                     NavigationLink(
                         destination: MainView(timelineData: TimelineData(days: generateDummyWeek(), currentDayIndex: 3)),
                         label: {
-                            Text("Skip for now")
-                                .foregroundColor(.blue)
+                            HStack(spacing: 2) {
+                                Image(systemName: "clock")
+                                    .foregroundColor(.orange)
+                                
+                                Text("Skip for now")
+                                    .foregroundColor(.orange)
+                                    .fontWeight(.semibold)
+                            }
                         }
                     )
                     
@@ -72,8 +90,15 @@ struct LoginPage: View {
                     NavigationLink(
                         destination: CustomSignUp(signUpData: SignUpData(numberOfSteps: 4)),
                         label: {
-                            Text("Create account")
-                                .foregroundColor(.blue)
+                            
+                            HStack(spacing: 2) {
+                                Text("Create account")
+                                    .foregroundColor(.orange)
+                                    .fontWeight(.semibold)
+                                
+                                Image(systemName: "chevron.right.circle.fill")
+                                    .foregroundColor(.orange)
+                            }
                         }
                     )
 
@@ -83,8 +108,10 @@ struct LoginPage: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity) // Ajout d'une contrainte de taille maximale
+            .background(Color(hex: "394A59"))
         }
         .navigationBarBackButtonHidden()
+        .animation(Animation.spring())
     }
     
     private func connectUser() {

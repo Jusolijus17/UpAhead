@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SpriteKit
 
 struct DayRect: View {
     @Binding var day: Day
@@ -14,31 +15,81 @@ struct DayRect: View {
     @Binding var editData: EditData
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 0) {
-                if titleSide == .left {
-                    titleView
-                        .id("title\(index)")
-                    Spacer().frame(width: 40)
-                    HStack(spacing: 10) {
-                        weatherView
-                        editData.editMode ? EditButton(day: $day) : nil
+        
+        ZStack {
+            weatherEffect
+            
+            VStack(spacing: 0) {
+                Rectangle()
+                    .frame(height: 2)
+                    .foregroundColor(.gray.opacity(0.3))
+                
+                HStack(spacing: 0) {
+                    if titleSide == .left {
+                        titleView
+                            .id("title\(index)")
+                        Spacer().frame(width: 40)
+                        HStack(spacing: 10) {
+                            weatherView
+                            editData.editMode ? EditButton(day: $day) : nil
+                        }
+                        .frame(maxWidth: .infinity)
+                    } else {
+                        HStack(spacing: 10) {
+                            editData.editMode ? EditButton(day: $day) : nil
+                            weatherView
+                        }
+                        .frame(maxWidth: .infinity)
+                        Spacer().frame(width: 40)
+                        titleView
+                            .id("title\(index)")
                     }
-                    .frame(maxWidth: .infinity)
-                } else {
-                    HStack(spacing: 10) {
-                        editData.editMode ? EditButton(day: $day) : nil
-                        weatherView
-                    }
-                    .frame(maxWidth: .infinity)
-                    Spacer().frame(width: 40)
-                    titleView
-                        .id("title\(index)")
                 }
+                EventSection(events: $day.events, weather: day.weather, initialSide: titleSide, triggerAddEvent: { editData.toggleEditor(forDayIndex: index) })
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            EventSection(events: $day.events, initialSide: titleSide, triggerAddEvent: { editData.toggleEditor(forDayIndex: index) })
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(weatherLandingBottomEffect)
         }
+        .background(getBackground())
+    }
+    
+    private var weatherEffect: some View {
+        var view: AnyView = AnyView(EmptyView())
+        if let weatherType = getWeatherType() {
+            if weatherType == .rain {
+                view = AnyView(
+                    SpriteView(scene: RainFall(), options: [.allowsTransparency])
+                        .allowsHitTesting(false)
+                )
+            }
+        }
+        return view
+    }
+    
+    private var weatherLandingEffect: some View {
+        var view: AnyView = AnyView(EmptyView())
+        if let weatherType = getWeatherType() {
+            if weatherType == .rain {
+                view = AnyView(
+                    SpriteView(scene: RainFallLanding(), options: [.allowsTransparency])
+                        .allowsHitTesting(false)
+                )
+            }
+        }
+        return view
+    }
+    
+    private var weatherLandingBottomEffect: some View {
+        var view: AnyView = AnyView(EmptyView())
+        if let weatherType = getWeatherType() {
+            if weatherType == .rain {
+                view = AnyView(
+                    SpriteView(scene: RainFallLandingBottom(), options: [.allowsTransparency])
+                        .allowsHitTesting(false)
+                )
+            }
+        }
+        return view
     }
     
     private var titleView: some View {
@@ -51,6 +102,64 @@ struct DayRect: View {
         } else {
             return AnyView(Text("").frame(maxWidth: .infinity, alignment: .trailing))
         }
+    }
+    
+    private func getBackground() -> some View {
+        if let weatherType = getWeatherType() {
+            switch weatherType {
+            case .sun:
+                return AnyView(SunnyDayGradient())
+            case .rain:
+                return AnyView(RainyDayGradient())
+            case .snow:
+                return AnyView(EmptyView())
+            case .cloud:
+                return AnyView(CloudyDayGradient())
+            }
+        }
+        return AnyView(EmptyView())
+    }
+    
+    private func getWeatherType() -> WeatherType? {
+        if let weather = day.weather {
+            if let weatherType = weatherTypeMapping[weather.weather[0].description] {
+                return weatherType
+            }
+        }
+        return nil
+    }
+}
+
+struct RainyDayGradient: View {
+    var body: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [Color.gray.opacity(0.6), Color(hex: "394A59")]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .background(.white)
+    }
+}
+
+struct SunnyDayGradient: View {
+    var body: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [Color.blue.opacity(0.85), Color.blue.opacity(0.3)]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .background(.white)
+    }
+}
+
+struct CloudyDayGradient: View {
+    var body: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [Color.gray, Color(hex: "394A59")]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .background(.white)
     }
 }
 
@@ -124,68 +233,82 @@ struct TitleView: View {
 
 struct EventSection: View {
     @Binding var events: [Event]
+    var weather: WeatherData?
     let initialSide: Side
     var triggerAddEvent: () -> Void
 
     var body: some View {
         HStack(spacing: 25) {
             if initialSide == .left {
-                VStack1(events: $events, side: .left, onAddTap: { triggerAddEvent() })
-                VStack2(events: $events, side: .right, onAddTap: { triggerAddEvent() })
+                VStack1(side: .left)
+                VStack2(side: .right)
             } else {
-                VStack2(events: $events, side: .left, onAddTap: { triggerAddEvent() })
-                VStack1(events: $events, side: .right, onAddTap: { triggerAddEvent() })
+                VStack2(side: .left)
+                VStack1(side: .right)
             }
         }
     }
-
-    struct VStack1: View {
-        @Binding var events: [Event]
-        let side: Side
-        var onAddTap: () -> Void
-
-        var body: some View {
-            VStack(spacing: 100) {
-                ForEach(events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
-                    if events[index].title != "AddBox" {
-                        EventBox(event: $events[index], side: side)
-                    } else {
-                        AddBox {
-                            onAddTap()
-                        }
-                    }
-                }
-                if events.count.isMultiple(of: 2) {
-                    Spacer().frame(height: 0)
-                }
-            }
-            .frame(maxWidth: .infinity)
-        }
-    }
-
-    struct VStack2: View {
-        @Binding var events: [Event]
-        let side: Side
-        var onAddTap: () -> Void
-
-        var body: some View {
-            VStack(spacing: 100) {
-                if events.count.isMultiple(of: 2) {
-                    Spacer().frame(height: 0)
-                }
-                ForEach(events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
-                    if events[index].title != "AddBox" {
-                        EventBox(event: $events[index], side: side)
-                    } else {
-                        AddBox {
-                            onAddTap()
-                        }
+    
+    func VStack1(side: Side) -> some View {
+        return VStack(spacing: 100) {
+            ForEach(events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
+                if events[index].title != "AddBox" {
+                    EventBox(event: $events[index], side: side)
+                        .overlay(weatherLandingEffect)
+                } else {
+                    AddBox {
+                        triggerAddEvent()
                     }
                 }
             }
-            .frame(maxWidth: .infinity)
+            if events.count.isMultiple(of: 2) {
+                Spacer().frame(height: 0)
+            }
         }
+        .frame(maxWidth: .infinity)
     }
+    
+    func VStack2(side: Side) -> some View {
+        VStack(spacing: 100) {
+            if events.count.isMultiple(of: 2) {
+                Spacer().frame(height: 0)
+            }
+            ForEach(events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
+                if events[index].title != "AddBox" {
+                    EventBox(event: $events[index], side: side)
+                        .overlay(weatherLandingEffect)
+                } else {
+                    AddBox {
+                        triggerAddEvent()
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var weatherLandingEffect: some View {
+        var view: AnyView = AnyView(EmptyView())
+        if let weatherType = getWeatherType() {
+            if weatherType == .rain {
+                view = AnyView(
+                    SpriteView(scene: RainFallLanding(), options: [.allowsTransparency])
+                        .allowsHitTesting(false)
+                )
+            }
+        }
+        return view
+    }
+    
+    private func getWeatherType() -> WeatherType? {
+        if let weather = weather {
+            if let weatherType = weatherTypeMapping[weather.weather[0].description] {
+                return weatherType
+            }
+        }
+        return nil
+    }
+    
 }
 
 func generateDay() -> Day {
@@ -206,7 +329,7 @@ struct DayRect_Previews: PreviewProvider {
     static var previews: some View {
         let day = generateDay()
         DayRect(day: .constant(day), index: 0, titleSide: .right, editData: .constant(EditData(editMode: true, dayIndex: 0)))
-            .background(Color(hex: "394A59"))
+            //.background(Color(hex: "394A59"))
             .frame(height: day.height)
     }
 }

@@ -19,6 +19,25 @@ let weatherSymbolMapping: [String: String] = [
     "mist": "cloud.fog.fill"
 ]
 
+let weatherTypeMapping: [String: WeatherType] = [
+    "clear sky": .sun,
+    "few clouds": .cloud,
+    "scattered clouds": .cloud,
+    "broken clouds": .cloud,
+    "shower rain": .rain,
+    "rain": .rain,
+    "thunderstorm": .rain,
+    "snow": .snow,
+    "mist": .rain
+]
+
+enum WeatherType {
+    case rain
+    case sun
+    case snow
+    case cloud
+}
+
 struct WeatherData: Codable {
     let weather: [Weather]
     let main: Main
