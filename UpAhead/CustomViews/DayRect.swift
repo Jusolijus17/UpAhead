@@ -13,6 +13,9 @@ struct DayRect: View {
     let index: Int
     let titleSide: Side
     @Binding var editData: EditData
+    @ObservedObject var weatherModel: WeatherModel
+    
+    @State var background: AnyView = AnyView(Color.accentColor)
     
     var body: some View {
         
@@ -20,10 +23,6 @@ struct DayRect: View {
             weatherEffect
             
             VStack(spacing: 0) {
-                Rectangle()
-                    .frame(height: 2)
-                    .foregroundColor(.gray.opacity(0.3))
-                
                 HStack(spacing: 0) {
                     if titleSide == .left {
                         titleView
@@ -45,50 +44,59 @@ struct DayRect: View {
                             .id("title\(index)")
                     }
                 }
-                EventSection(events: $day.events, weather: day.weather, initialSide: titleSide, triggerAddEvent: { editData.toggleEditor(forDayIndex: index) })
+                EventSection(events: $day.events, weatherForecasts: weatherModel, index: index, initialSide: titleSide, triggerAddEvent: { editData.toggleEditor(forDayIndex: index) })
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .overlay(weatherLandingBottomEffect)
         }
-        .background(getBackground())
+        .background(background)
+        .cornerRadius(30)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .shadow(radius: 10)
+        .onReceive(weatherModel.$dailyForecasts) { forecasts in
+            if let forecasts = forecasts {
+                background = getBackground(forecast: forecasts[index])
+            }
+        }
     }
     
     private var weatherEffect: some View {
         var view: AnyView = AnyView(EmptyView())
-        if let weatherType = getWeatherType() {
-            if weatherType == .rain {
-                view = AnyView(
-                    SpriteView(scene: RainFall(), options: [.allowsTransparency])
-                        .allowsHitTesting(false)
-                )
-            }
-        }
+//        if let weatherType = getWeatherType() {
+//            if weatherType == .rain {
+//                view = AnyView(
+//                    SpriteView(scene: RainFall(), options: [.allowsTransparency])
+//                        .allowsHitTesting(false)
+//                )
+//            }
+//        }
         return view
     }
     
     private var weatherLandingEffect: some View {
         var view: AnyView = AnyView(EmptyView())
-        if let weatherType = getWeatherType() {
-            if weatherType == .rain {
-                view = AnyView(
-                    SpriteView(scene: RainFallLanding(), options: [.allowsTransparency])
-                        .allowsHitTesting(false)
-                )
-            }
-        }
+//        if let weatherType = getWeatherType() {
+//            if weatherType == .rain {
+//                view = AnyView(
+//                    SpriteView(scene: RainFallLanding(), options: [.allowsTransparency])
+//                        .allowsHitTesting(false)
+//                )
+//            }
+//        }
         return view
     }
     
     private var weatherLandingBottomEffect: some View {
         var view: AnyView = AnyView(EmptyView())
-        if let weatherType = getWeatherType() {
-            if weatherType == .rain {
-                view = AnyView(
-                    SpriteView(scene: RainFallLandingBottom(), options: [.allowsTransparency])
-                        .allowsHitTesting(false)
-                )
-            }
-        }
+//        if let weatherType = getWeatherType() {
+//            if weatherType == .rain {
+//                view = AnyView(
+//                    SpriteView(scene: RainFallLandingBottom(), options: [.allowsTransparency])
+//                        .allowsHitTesting(false)
+//                )
+//            }
+//        }
         return view
     }
     
@@ -97,15 +105,11 @@ struct DayRect: View {
     }
     
     private var weatherView: some View {
-        if let weather = day.weather {
-            return AnyView(WeatherView(weather: weather, side: titleSide))
-        } else {
-            return AnyView(Text("").frame(maxWidth: .infinity, alignment: .trailing))
-        }
+        return AnyView(WeatherView(weatherForecasts: weatherModel, index: index, side: titleSide))
     }
     
-    private func getBackground() -> some View {
-        if let weatherType = getWeatherType() {
+    private func getBackground(forecast: DailyForecast) -> AnyView {
+        if let weatherType = getWeatherType(forecast: forecast) {
             switch weatherType {
             case .sun:
                 return AnyView(SunnyDayGradient())
@@ -120,11 +124,9 @@ struct DayRect: View {
         return AnyView(EmptyView())
     }
     
-    private func getWeatherType() -> WeatherType? {
-        if let weather = day.weather {
-            if let weatherType = weatherTypeMapping[weather.weather[0].description] {
-                return weatherType
-            }
+    private func getWeatherType(forecast: DailyForecast) -> WeatherType? {
+        if let weatherType = weatherTypeMapping[forecast.weather[0].description] {
+            return weatherType
         }
         return nil
     }
@@ -154,12 +156,16 @@ struct SunnyDayGradient: View {
 
 struct CloudyDayGradient: View {
     var body: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [Color.gray, Color(hex: "394A59")]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .background(.white)
+        ZStack {
+            Image("cloud-background")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+            
+            Rectangle()
+                .foregroundColor(.secondary)
+                .background(.ultraThinMaterial)
+                .opacity(0.95)
+        }
     }
 }
 
@@ -183,27 +189,26 @@ struct EditButton: View {
 
 
 struct WeatherView: View {
-    let weather: WeatherData
+    @ObservedObject var weatherForecasts: WeatherModel
+    let index: Int
     let side: Side
+    
+    @State var symbolName: String = ""
     
     var body: some View {
         HStack {
-            if let symbolName = weatherSymbolMapping[weather.weather[0].description] {
-                if side == .right {
-                    Image(systemName: symbolName)
-                        .symbolRenderingMode(.multicolor)
-//                        .frame(maxWidth: .infinity, alignment: .trailing)
-                } else {
-                    Image(systemName: symbolName)
-                        .symbolRenderingMode(.multicolor)
-                }
-            }
-            Text("\(String(format: "%.1f", weather.main.temp)) °C")
-//                .frame(maxWidth: side == .left ? .infinity : nil, alignment: side == .right ? .trailing : .leading)
+            Image(systemName: symbolName)
+                .symbolRenderingMode(.multicolor)
+            
+            Text("\(String(format: "%.1f", weatherForecasts.dailyForecasts?[index].temp.day ?? "-.-")) °C")
                 .font(.system(size: 20, design: .rounded))
                 .foregroundColor(.white)
         }
-        //.padding(side == .right ? .trailing : .leading, 10)
+        .onReceive(weatherForecasts.$dailyForecasts) { forecasts in
+            if let forecasts = forecasts {
+                symbolName = weatherSymbolMapping[forecasts[index].weather[0].description] ?? ""
+            }
+        }
     }
 }
 
@@ -233,7 +238,8 @@ struct TitleView: View {
 
 struct EventSection: View {
     @Binding var events: [Event]
-    var weather: WeatherData?
+    @ObservedObject var weatherForecasts: WeatherModel
+    let index: Int
     let initialSide: Side
     var triggerAddEvent: () -> Void
 
@@ -289,22 +295,20 @@ struct EventSection: View {
     
     private var weatherLandingEffect: some View {
         var view: AnyView = AnyView(EmptyView())
-        if let weatherType = getWeatherType() {
-            if weatherType == .rain {
-                view = AnyView(
-                    SpriteView(scene: RainFallLanding(), options: [.allowsTransparency])
-                        .allowsHitTesting(false)
-                )
-            }
-        }
+//        if let weatherType = getWeatherType() {
+//            if weatherType == .rain {
+//                view = AnyView(
+//                    SpriteView(scene: RainFallLanding(), options: [.allowsTransparency])
+//                        .allowsHitTesting(false)
+//                )
+//            }
+//        }
         return view
     }
     
-    private func getWeatherType() -> WeatherType? {
-        if let weather = weather {
-            if let weatherType = weatherTypeMapping[weather.weather[0].description] {
-                return weatherType
-            }
+    private func getWeatherType(forecast: DailyForecast) -> WeatherType? {
+        if let weatherType = weatherTypeMapping[forecast.weather[0].description] {
+            return weatherType
         }
         return nil
     }
@@ -313,13 +317,12 @@ struct EventSection: View {
 
 func generateDay() -> Day {
     let date = Date()
-    let weather = WeatherData(weather: [Weather(id: 800, main: "Clear", description: "clear sky")], main: Main(temp: 20.0))
     
     let meetingEvent = Event(title: "Meeting", iconName: "calendar", color: .blue, isCompleted: false)
     let lunchEvent = Event(title: "Lunch with Bob", iconName: "food", color: .green, isCompleted: false)
     let events = [meetingEvent, lunchEvent, lunchEvent]
     
-    var day = Day(date: date, weather: weather, events: events)
+    var day = Day(date: date, events: events)
     day.toggleEditMode()
     return day
 }
@@ -328,7 +331,7 @@ func generateDay() -> Day {
 struct DayRect_Previews: PreviewProvider {
     static var previews: some View {
         let day = generateDay()
-        DayRect(day: .constant(day), index: 0, titleSide: .right, editData: .constant(EditData(editMode: true, dayIndex: 0)))
+        DayRect(day: .constant(day), index: 0, titleSide: .right, editData: .constant(EditData(editMode: true, dayIndex: 0)), weatherModel: WeatherModel())
             //.background(Color(hex: "394A59"))
             .frame(height: day.height)
     }

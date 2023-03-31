@@ -25,11 +25,16 @@ class TimelineData: ObservableObject {
     @Published var days: [Day]
     @Published var currentDayIndex: Int
     @Published var editData: EditData
+    @ObservedObject var weatherModel = WeatherModel()
     
-    init(days: [Day] = generateEmptyWeek(), currentDayIndex: Int = 0) {
-        self.days = days
+    init(days: [Day] = [], currentDayIndex: Int = 0) {
         self.currentDayIndex = currentDayIndex
         self.editData = EditData()
+        self.days = days
+        if self.days.count == 0 {
+            self.days = generateEmptyWeek()
+        }
+        weatherModel.fetchWeatherForecast()
     }
     
     var trajectHeight: CGFloat {
@@ -56,19 +61,18 @@ class TimelineData: ObservableObject {
         }
         editData.editMode.toggle()
     }
-}
-
-func generateEmptyWeek() -> [Day] {
-    let today = Date()
-    var days: [Day] = []
-    for i in 0..<7 {
-        let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
-        let weather = getWeather(for: date)
-        let events: [Event] = []
-        let day = Day(date: date, weather: weather, events: events)
-        days.append(day)
+    
+    private func generateEmptyWeek() -> [Day] {
+        let today = Date()
+        var days: [Day] = []
+        for i in 0..<7 {
+            let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
+            let events: [Event] = []
+            let day = Day(date: date, events: events)
+            days.append(day)
+        }
+        return days
     }
-    return days
 }
 
 func generateDummyWeek() -> [Day] {
@@ -76,9 +80,8 @@ func generateDummyWeek() -> [Day] {
     var days: [Day] = []
     for i in 0..<7 {
         let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
-        let weather = getWeather(for: date)
         let events: [Event] = getEvents(amount: i)
-        let day = Day(date: date, weather: weather, events: events)
+        let day = Day(date: date, events: events)
         days.append(day)
     }
     return days

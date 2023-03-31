@@ -10,7 +10,6 @@ import SwiftUI
 
 struct Day {
     let date: Date
-    let weather: WeatherData?
     var events: [Event]
     var editMode: Bool = false
     var height: CGFloat {
@@ -72,14 +71,14 @@ func getEvents(amount: Int) -> [Event] {
     return eventArray
 }
 
-func getWeather(for date: Date) -> WeatherData {
-    // Return a dummy WeatherData object with dummy weather data
-    let dummyWeatherConditions = ["clear sky", "few clouds", "scattered clouds", "broken clouds", "shower rain", "rain", "thunderstorm", "snow", "mist"]
-    let randomCondition = dummyWeatherConditions.randomElement()!
-    let dummyWeather = Weather(id: 800, main: "Clear", description: randomCondition)
-    let dummyMain = Main(temp: Double.random(in: 15.0...30.0))
-    return WeatherData(weather: [dummyWeather], main: dummyMain)
-}
+//func getWeather(for date: Date) -> WeatherData {
+//    // Return a dummy WeatherData object with dummy weather data
+//    let dummyWeatherConditions = ["clear sky", "few clouds", "scattered clouds", "broken clouds", "shower rain", "rain", "thunderstorm", "snow", "mist"]
+//    let randomCondition = dummyWeatherConditions.randomElement()!
+//    let dummyWeather = Weather(id: 800, main: "Clear", description: randomCondition)
+//    let dummyMain = Main(temp: Double.random(in: 15.0...30.0))
+//    return WeatherData(weather: [dummyWeather], main: dummyMain)
+//}
 
 func getProjects(for date: Date) -> [String] {
     // Generate a random list of project strings
