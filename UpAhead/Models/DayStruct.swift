@@ -20,6 +20,10 @@ struct Day {
         events.insert(event, at: events.count - 1)
     }
     
+    mutating func deleteEvent(index: Int) {
+        events.remove(at: index)
+    }
+    
     mutating func toggleEditMode(state: Bool? = nil) {
         if state == nil {
             if editMode {

@@ -27,6 +27,7 @@ struct TrajectView: View {
         ZStack(alignment: .bottom) {
             RoundedRectangle(cornerRadius: 15)
                 .foregroundColor(Color(hex: "E5E5E5"))
+                .padding([.top, .bottom], 5)
             
             VStack(spacing: 0) {
                 ForEach(timelineData.days.indices, id: \.self) { i in
@@ -39,7 +40,7 @@ struct TrajectView: View {
             ZStack(alignment: .top) {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor(.blue)
-                    .padding(.vertical, 5)
+                    .padding(.vertical, 10)
                     .frame(width: 20, height: timelineData.currentDayIndex != 0 ? timelineData.trajectHeight - 50 : timelineData.trajectHeight)
                 
                 DirectionPointer()
@@ -152,48 +153,6 @@ struct DirectionPointer: View {
         .frame(width: 50)
     }
 }
-
-//struct DirectionPointer: View {
-//    let radius: CGFloat
-//    @Binding var successMark: Bool
-//
-//    init(radius: CGFloat, successMark: Binding<Bool>) {
-//        self.radius = radius
-//        self._successMark = successMark
-//    }
-//
-//    init(radius: CGFloat, successMark: Bool = false) {
-//        self.radius = radius
-//        self._successMark = Binding.constant(successMark)
-//    }
-//
-//    var body: some View {
-//        ZStack {
-//            GeometryReader { geometry in
-//                Circle()
-//                    .foregroundColor(.white)
-//                    .shadow(radius: 5)
-//
-//                let padding = (geometry.size.width * 0.15) / 2
-//
-//                Circle()
-//                    .foregroundColor(successMark ? .green : .blue)
-//                    .frame(width: geometry.size.width * 0.85)
-//                    .padding(EdgeInsets(top: padding, leading: padding, bottom: 0, trailing: 0))
-//                    .overlay(
-//                        Image(systemName: successMark ? "checkmark" : "location.north.fill")
-//                            .font(.system(size: geometry.size.width * 0.6))
-//                            .foregroundColor(.white)
-//                            .offset(x: geometry.size.width * 0.05, y: geometry.size.width * 0.05)
-//                    )
-//
-//
-//            }
-//            .frame(width: radius * 2, height: radius * 2)
-//        }
-//    }
-//}
-
 
 struct TrajectView_Previews: PreviewProvider {
     static var previews: some View {

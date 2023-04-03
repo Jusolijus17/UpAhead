@@ -9,7 +9,10 @@ import SwiftUI
 
 struct EventBox: View {
     @Binding var event: Event
+    @Binding var isEditing: Bool
     let side: Side
+    
+    var deleteEvent: (() -> Void)?
     
     var body: some View {
         ZStack {
@@ -32,14 +35,37 @@ struct EventBox: View {
                     .font(.system(size: 55))
                     .foregroundColor(event.color == .green ? .blue : .green)
             }
+            
+            if isEditing {
+                Button {
+                    guard let deleteEvent = deleteEvent else { return }
+                    deleteEvent()
+                } label: {
+                    DeleteButton()
+                        .frame(width: 25)
+                        .position(x: 0, y: 0)
+                }
+            }
         }
+        .shouldWiggle($isEditing)
         .frame(width: 100, height: 100)
         .onTapGesture(count: 2) {
             withAnimation {
                 event.toggleComplete()
             }
             let impactMed = UIImpactFeedbackGenerator(style: .medium)
-                impactMed.impactOccurred()
+            impactMed.impactOccurred()
+        }
+    }
+}
+
+struct DeleteButton: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(.gray)
+            
+            Image(systemName: "xmark")
         }
     }
 }
@@ -65,7 +91,7 @@ struct AddBox: View {
 struct EventBox_Previews: PreviewProvider {
     static var previews: some View {
         let dummyEvent = Event(title: "Test", iconName: "plus", color: .blue, isCompleted: true)
-        EventBox(event: .constant(dummyEvent), side: .right)
+        EventBox(event: .constant(dummyEvent), isEditing: .constant(true), side: .right, deleteEvent: {})
             .previewLayout(.fixed(width: 175, height: 150))
         AddBox(onTap: {
             

@@ -30,7 +30,8 @@ struct CreateEventView: View {
                 .font(.largeTitle)
                 .bold()
             
-            EventBox(event: Binding.constant(Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)), side: .left)
+            let event = Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
+            EventBox(event: .constant(event), isEditing: .constant(false), side: .left)
             
             Group {
                 TextField("Enter a title", text: $title)

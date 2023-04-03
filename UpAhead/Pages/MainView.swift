@@ -25,7 +25,9 @@ struct MainView: View {
                                 GeometryReader { geo in
                                     VStack(spacing: 0) {
                                         ForEach(0..<timelineData.days.count, id: \.self) { i in
-                                            DayRect(day: $timelineData.days[i], index: i, titleSide: i.isMultiple(of: 2) ? .left : .right, editData: $timelineData.editData, weatherModel: timelineData.weatherModel)
+                                            let titleSide: Side = i.isMultiple(of: 2) ? .left : .right
+                                            let model = DayView.ViewModel(index: i, titleSide: titleSide, weatherModel: timelineData.weatherModel)
+                                            DayView(model: model, day: $timelineData.days[i], editData: $timelineData.editData)
                                                 .id("day\(timelineData.days.count - i)")
                                                 .frame(height: timelineData.days[i].height)
                                         }

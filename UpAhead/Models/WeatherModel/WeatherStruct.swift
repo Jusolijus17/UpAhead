@@ -8,37 +8,6 @@
 import Foundation
 import CoreLocation
 
-let weatherSymbolMapping: [String: String] = [
-    "clear sky": "sun.max.fill",
-    "few clouds": "cloud.sun.fill",
-    "scattered clouds": "cloud.fill",
-    "broken clouds": "smoke.fill",
-    "shower rain": "cloud.drizzle.fill",
-    "rain": "cloud.rain.fill",
-    "thunderstorm": "cloud.bolt.rain.fill",
-    "snow": "cloud.snow.fill",
-    "mist": "cloud.fog.fill"
-]
-
-let weatherTypeMapping: [String: WeatherType] = [
-    "clear sky": .sun,
-    "few clouds": .cloud,
-    "scattered clouds": .cloud,
-    "broken clouds": .cloud,
-    "shower rain": .rain,
-    "rain": .rain,
-    "thunderstorm": .rain,
-    "snow": .snow,
-    "mist": .rain
-]
-
-enum WeatherType {
-    case rain
-    case sun
-    case snow
-    case cloud
-}
-
 struct WeatherForecast: Codable {
     let daily: [DailyForecast]
 }
@@ -51,6 +20,9 @@ struct DailyForecast: Codable {
 
 struct Temperature: Codable {
     let day: Double
+    let night: Double
+    let min: Double
+    let max: Double
 }
 
 struct Weather: Codable {

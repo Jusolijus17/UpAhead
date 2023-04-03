@@ -15,8 +15,9 @@ struct ContentView: View {
     var body: some View {
         ScrollView {
             ZStack {
-                List(0..<daysOfWeek.count) { index in
-                    DayRect(day: .constant(generateDay()), index: index, titleSide: .left, editData: .constant(EditData()), weatherModel: WeatherModel())
+                List(0..<daysOfWeek.count, id: \.self) { index in
+                    let model = DayView.ViewModel(index: index, titleSide: .left, weatherModel: WeatherModel())
+                    DayView(model: model, day: .constant(generateDay()), editData: .constant(EditData()))
                 }
                 .ignoresSafeArea()
                 

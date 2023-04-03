@@ -12,7 +12,6 @@
 		3D09399529D5140B009C159E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D09399329D5140B009C159E /* Assets.xcassets */; };
 		3D09399729D51A5C009C159E /* RainFallLanding.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3D09399629D51A5C009C159E /* RainFallLanding.sks */; };
 		3D0BBD0C29CB4FDE00ABCF96 /* SignUpData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */; };
-		3D0BBD1029CBFDA800ABCF96 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BBD0F29CBFDA800ABCF96 /* LoadingView.swift */; };
 		3D11D98D29B9753700E6FC33 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D11D98C29B9753700E6FC33 /* CreateEventView.swift */; };
 		3D3FF4A429CAA50000272532 /* SignUpTraject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3FF4A329CAA50000272532 /* SignUpTraject.swift */; };
 		3D41439D29CD5B490088B25E /* AnimationSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D41439C29CD5B490088B25E /* AnimationSequence.swift */; };
@@ -20,9 +19,13 @@
 		3D5A57FD29C949F300820D7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */; };
 		3D5A580029C94B2D00820D7A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3D5A57FF29C94B2D00820D7A /* FirebaseAnalytics */; };
 		3D5A580229C94B2D00820D7A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3D5A580129C94B2D00820D7A /* FirebaseAuth */; };
+		3D99D41829D76B5A0056BF6B /* Mappings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D99D41729D76B5A0056BF6B /* Mappings.swift */; };
+		3D99D41A29D78CCF0056BF6B /* WeatherEffectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D99D41929D78CCF0056BF6B /* WeatherEffectManager.swift */; };
 		3DB7340B29C95DBA009C1923 /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB7340A29C95DBA009C1923 /* SignUpPage.swift */; };
 		3DC088FC29B82037005233DF /* EventBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC088FB29B82037005233DF /* EventBox.swift */; };
 		3DCAA28B29B6D6E100799E87 /* DayStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCAA28A29B6D6E100799E87 /* DayStruct.swift */; };
+		3DD544C529DA670800C6118A /* DayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD544C429DA670800C6118A /* DayViewModel.swift */; };
+		3DD544C729DA7E7F00C6118A /* WiggleAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD544C629DA7E7F00C6118A /* WiggleAnimation.swift */; };
 		3DD5C00D29B1187B002FFF12 /* UpAheadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C00C29B1187B002FFF12 /* UpAheadApp.swift */; };
 		3DD5C00F29B1187B002FFF12 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C00E29B1187B002FFF12 /* MainView.swift */; };
 		3DD5C01129B1187C002FFF12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DD5C01029B1187C002FFF12 /* Assets.xcassets */; };
@@ -31,10 +34,12 @@
 		3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C01C29B12F6A002FFF12 /* SignView.swift */; };
 		3DD5C02029B12FA3002FFF12 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C01F29B12FA3002FFF12 /* Extensions.swift */; };
 		3DD5C02229B2DDA4002FFF12 /* LoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02129B2DDA4002FFF12 /* LoginPage.swift */; };
-		3DD5C02429B2F0DD002FFF12 /* DayRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02329B2F0DD002FFF12 /* DayRect.swift */; };
+		3DD5C02429B2F0DD002FFF12 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02329B2F0DD002FFF12 /* DayView.swift */; };
 		3DD5C02629B4FF8A002FFF12 /* TrajectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02529B4FF8A002FFF12 /* TrajectView.swift */; };
 		3DD5C02A29B5A147002FFF12 /* WeatherStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5C02929B5A147002FFF12 /* WeatherStruct.swift */; };
 		3DD607C929C2B7F300DF95C7 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD607C829C2B7F300DF95C7 /* Test.swift */; };
+		3DEB0CFB29D7665D00A3A5AC /* Backgrounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEB0CFA29D7665D00A3A5AC /* Backgrounds.swift */; };
+		3DEB0CFF29D766EF00A3A5AC /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEB0CFE29D766EF00A3A5AC /* EventSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,15 +48,18 @@
 		3D09399329D5140B009C159E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D09399629D51A5C009C159E /* RainFallLanding.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RainFallLanding.sks; sourceTree = "<group>"; };
 		3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpData.swift; sourceTree = "<group>"; };
-		3D0BBD0F29CBFDA800ABCF96 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		3D11D98C29B9753700E6FC33 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
 		3D3FF4A329CAA50000272532 /* SignUpTraject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTraject.swift; sourceTree = "<group>"; };
 		3D41439C29CD5B490088B25E /* AnimationSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationSequence.swift; sourceTree = "<group>"; };
 		3D41439E29CD5C500088B25E /* AnimationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConfiguration.swift; sourceTree = "<group>"; };
 		3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3D99D41729D76B5A0056BF6B /* Mappings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mappings.swift; sourceTree = "<group>"; };
+		3D99D41929D78CCF0056BF6B /* WeatherEffectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherEffectManager.swift; sourceTree = "<group>"; };
 		3DB7340A29C95DBA009C1923 /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
 		3DC088FB29B82037005233DF /* EventBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBox.swift; sourceTree = "<group>"; };
 		3DCAA28A29B6D6E100799E87 /* DayStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayStruct.swift; sourceTree = "<group>"; };
+		3DD544C429DA670800C6118A /* DayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewModel.swift; sourceTree = "<group>"; };
+		3DD544C629DA7E7F00C6118A /* WiggleAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiggleAnimation.swift; sourceTree = "<group>"; };
 		3DD5C00929B1187B002FFF12 /* UpAhead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UpAhead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DD5C00C29B1187B002FFF12 /* UpAheadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpAheadApp.swift; sourceTree = "<group>"; };
 		3DD5C00E29B1187B002FFF12 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -61,10 +69,12 @@
 		3DD5C01C29B12F6A002FFF12 /* SignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignView.swift; sourceTree = "<group>"; };
 		3DD5C01F29B12FA3002FFF12 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3DD5C02129B2DDA4002FFF12 /* LoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPage.swift; sourceTree = "<group>"; };
-		3DD5C02329B2F0DD002FFF12 /* DayRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRect.swift; sourceTree = "<group>"; };
+		3DD5C02329B2F0DD002FFF12 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		3DD5C02529B4FF8A002FFF12 /* TrajectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrajectView.swift; sourceTree = "<group>"; };
 		3DD5C02929B5A147002FFF12 /* WeatherStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherStruct.swift; sourceTree = "<group>"; };
 		3DD607C829C2B7F300DF95C7 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		3DEB0CFA29D7665D00A3A5AC /* Backgrounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backgrounds.swift; sourceTree = "<group>"; };
+		3DEB0CFE29D766EF00A3A5AC /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +90,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3D09399129D513B3009C159E /* Animations */ = {
+		3D09399129D513B3009C159E /* SpriteKit */ = {
 			isa = PBXGroup;
 			children = (
 				3D09398F29D513AE009C159E /* RainAnimation.swift */,
@@ -88,7 +98,16 @@
 				3D09399329D5140B009C159E /* Assets.xcassets */,
 				3D09399629D51A5C009C159E /* RainFallLanding.sks */,
 			);
-			path = Animations;
+			path = SpriteKit;
+			sourceTree = "<group>";
+		};
+		3D99D41629D76B3D0056BF6B /* WeatherModel */ = {
+			isa = PBXGroup;
+			children = (
+				3DD5C02929B5A147002FFF12 /* WeatherStruct.swift */,
+				3D99D41729D76B5A0056BF6B /* Mappings.swift */,
+			);
+			path = WeatherModel;
 			sourceTree = "<group>";
 		};
 		3DB7340C29C95DC3009C1923 /* EntryPages */ = {
@@ -100,16 +119,17 @@
 			path = EntryPages;
 			sourceTree = "<group>";
 		};
-		3DCD296329BD23250064A171 /* Objects */ = {
+		3DCD296329BD23250064A171 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3D99D41629D76B3D0056BF6B /* WeatherModel */,
 				3DCAA28A29B6D6E100799E87 /* DayStruct.swift */,
 				3DD5C01A29B118EB002FFF12 /* TimelineData.swift */,
 				3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */,
-				3D41439C29CD5B490088B25E /* AnimationSequence.swift */,
-				3D41439E29CD5C500088B25E /* AnimationConfiguration.swift */,
+				3DEB0D0229D767AE00A3A5AC /* Animations */,
+				3DD544C429DA670800C6118A /* DayViewModel.swift */,
 			);
-			path = Objects;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		3DD5C00029B1187B002FFF12 = {
@@ -131,16 +151,13 @@
 		3DD5C00B29B1187B002FFF12 /* UpAhead */ = {
 			isa = PBXGroup;
 			children = (
-				3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */,
+				3DEB0D0329D767FE00A3A5AC /* AppData */,
 				3DB7340C29C95DC3009C1923 /* EntryPages */,
-				3DD5C00C29B1187B002FFF12 /* UpAheadApp.swift */,
-				3DD5C00E29B1187B002FFF12 /* MainView.swift */,
-				3DD5C01029B1187C002FFF12 /* Assets.xcassets */,
-				3DD5C01F29B12FA3002FFF12 /* Extensions.swift */,
+				3DEB0D0429D7681400A3A5AC /* Pages */,
 				3DD5C01229B1187C002FFF12 /* Preview Content */,
-				3DD5C01E29B12F77002FFF12 /* CustomViews */,
-				3DCD296329BD23250064A171 /* Objects */,
-				3D09399129D513B3009C159E /* Animations */,
+				3DD5C01E29B12F77002FFF12 /* Views */,
+				3DCD296329BD23250064A171 /* Models */,
+				3D09399129D513B3009C159E /* SpriteKit */,
 			);
 			path = UpAhead;
 			sourceTree = "<group>";
@@ -153,20 +170,74 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		3DD5C01E29B12F77002FFF12 /* CustomViews */ = {
+		3DD5C01E29B12F77002FFF12 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3DEB0CF929D7664B00A3A5AC /* DayView */,
+				3DEB0D0029D7676600A3A5AC /* Trajects */,
+				3DEB0D0129D7678600A3A5AC /* Events */,
+				3DD607C829C2B7F300DF95C7 /* Test.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3DEB0CF929D7664B00A3A5AC /* DayView */ = {
+			isa = PBXGroup;
+			children = (
+				3DD5C02329B2F0DD002FFF12 /* DayView.swift */,
+				3DEB0CFA29D7665D00A3A5AC /* Backgrounds.swift */,
+				3DEB0CFE29D766EF00A3A5AC /* EventSection.swift */,
+			);
+			path = DayView;
+			sourceTree = "<group>";
+		};
+		3DEB0D0029D7676600A3A5AC /* Trajects */ = {
+			isa = PBXGroup;
+			children = (
+				3DD5C02529B4FF8A002FFF12 /* TrajectView.swift */,
+				3D3FF4A329CAA50000272532 /* SignUpTraject.swift */,
+			);
+			path = Trajects;
+			sourceTree = "<group>";
+		};
+		3DEB0D0129D7678600A3A5AC /* Events */ = {
 			isa = PBXGroup;
 			children = (
 				3DD5C01C29B12F6A002FFF12 /* SignView.swift */,
-				3DD5C02329B2F0DD002FFF12 /* DayRect.swift */,
-				3DD5C02529B4FF8A002FFF12 /* TrajectView.swift */,
-				3DD5C02929B5A147002FFF12 /* WeatherStruct.swift */,
 				3DC088FB29B82037005233DF /* EventBox.swift */,
 				3D11D98C29B9753700E6FC33 /* CreateEventView.swift */,
-				3DD607C829C2B7F300DF95C7 /* Test.swift */,
-				3D3FF4A329CAA50000272532 /* SignUpTraject.swift */,
-				3D0BBD0F29CBFDA800ABCF96 /* LoadingView.swift */,
 			);
-			path = CustomViews;
+			path = Events;
+			sourceTree = "<group>";
+		};
+		3DEB0D0229D767AE00A3A5AC /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				3D41439C29CD5B490088B25E /* AnimationSequence.swift */,
+				3D41439E29CD5C500088B25E /* AnimationConfiguration.swift */,
+				3D99D41929D78CCF0056BF6B /* WeatherEffectManager.swift */,
+				3DD544C629DA7E7F00C6118A /* WiggleAnimation.swift */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		3DEB0D0329D767FE00A3A5AC /* AppData */ = {
+			isa = PBXGroup;
+			children = (
+				3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */,
+				3DD5C00C29B1187B002FFF12 /* UpAheadApp.swift */,
+				3DD5C01029B1187C002FFF12 /* Assets.xcassets */,
+				3DD5C01F29B12FA3002FFF12 /* Extensions.swift */,
+			);
+			path = AppData;
+			sourceTree = "<group>";
+		};
+		3DEB0D0429D7681400A3A5AC /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				3DD5C00E29B1187B002FFF12 /* MainView.swift */,
+			);
+			path = Pages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,12 +321,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DEB0CFF29D766EF00A3A5AC /* EventSection.swift in Sources */,
 				3D09399029D513AE009C159E /* RainAnimation.swift in Sources */,
+				3D99D41829D76B5A0056BF6B /* Mappings.swift in Sources */,
+				3DEB0CFB29D7665D00A3A5AC /* Backgrounds.swift in Sources */,
 				3DD5C02229B2DDA4002FFF12 /* LoginPage.swift in Sources */,
-				3DD5C02429B2F0DD002FFF12 /* DayRect.swift in Sources */,
+				3DD5C02429B2F0DD002FFF12 /* DayView.swift in Sources */,
 				3DB7340B29C95DBA009C1923 /* SignUpPage.swift in Sources */,
 				3DD5C02029B12FA3002FFF12 /* Extensions.swift in Sources */,
-				3D0BBD1029CBFDA800ABCF96 /* LoadingView.swift in Sources */,
 				3D3FF4A429CAA50000272532 /* SignUpTraject.swift in Sources */,
 				3DCAA28B29B6D6E100799E87 /* DayStruct.swift in Sources */,
 				3DD5C02A29B5A147002FFF12 /* WeatherStruct.swift in Sources */,
@@ -263,10 +336,13 @@
 				3DD607C929C2B7F300DF95C7 /* Test.swift in Sources */,
 				3DD5C02629B4FF8A002FFF12 /* TrajectView.swift in Sources */,
 				3DC088FC29B82037005233DF /* EventBox.swift in Sources */,
+				3DD544C729DA7E7F00C6118A /* WiggleAnimation.swift in Sources */,
 				3D0BBD0C29CB4FDE00ABCF96 /* SignUpData.swift in Sources */,
 				3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */,
+				3DD544C529DA670800C6118A /* DayViewModel.swift in Sources */,
 				3D41439F29CD5C500088B25E /* AnimationConfiguration.swift in Sources */,
 				3D11D98D29B9753700E6FC33 /* CreateEventView.swift in Sources */,
+				3D99D41A29D78CCF0056BF6B /* WeatherEffectManager.swift in Sources */,
 				3D41439D29CD5B490088B25E /* AnimationSequence.swift in Sources */,
 				3DD5C00F29B1187B002FFF12 /* MainView.swift in Sources */,
 				3DD5C00D29B1187B002FFF12 /* UpAheadApp.swift in Sources */,
