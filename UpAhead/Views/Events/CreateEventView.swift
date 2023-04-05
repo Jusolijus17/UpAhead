@@ -9,11 +9,8 @@ import SwiftUI
 import Combine
 
 struct CreateEventView: View {
+    @StateObject var model = ViewModel()
     @EnvironmentObject var timelineData: TimelineData
-    @State var selectedIcon: String = "house"
-    @State var title: String = ""
-    @State private var keyboardHeight: CGFloat = 0
-    @State var color: Color = Color.blue
     @Binding var day: Day
     
     var body: some View {
@@ -30,30 +27,29 @@ struct CreateEventView: View {
                 .font(.largeTitle)
                 .bold()
             
-            let event = Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
-            EventBox(event: .constant(event), isEditing: .constant(false), side: .left)
+            
+            EventBox(event: .constant(model.getEvent()), isEditing: .constant(false), side: .left)
             
             Group {
-                TextField("Enter a title", text: $title)
+                TextField("Enter a title", text: $model.title)
                     .padding()
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
                     .onReceive(Publishers.keyboardHeight) { keyboardHeight in
                         withAnimation {
-                            self.keyboardHeight = keyboardHeight
+                            self.model.keyboardHeight = keyboardHeight
                         }
                     }
             }
             .padding(.horizontal, 30)
             
-            ColorPickerView(selectedColor: $color)
+            ColorPickerView()
             
-            IconPicker(selectedIcon: $selectedIcon)
+            IconPicker()
             
             Button(action: {
-                if title != "" {
-                    let newEvent = Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
-                    day.addEvent(newEvent)
+                if model.title != "" {
+                    day.addEvent(model.getEvent())
                     withAnimation {
                         timelineData.editData.toggleEditor()
                     }
@@ -69,6 +65,7 @@ struct CreateEventView: View {
                     .padding(.horizontal, 30)
             }
         }
+        .environmentObject(model)
         .padding(.bottom, 30)
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(50)
@@ -76,15 +73,14 @@ struct CreateEventView: View {
 }
 
 struct ColorPickerView: View {
-    let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink, .gray, .black, .white]
-    @Binding var selectedColor: Color
+    @EnvironmentObject var model: CreateEventView.ViewModel
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
-                ForEach(colors, id: \.self) { color in
+                ForEach(model.colors, id: \.self) { color in
                     Button(action: {
-                        self.selectedColor = color
+                        self.model.color = color
                     }) {
                         Circle()
                             .fill(color)
@@ -92,7 +88,7 @@ struct ColorPickerView: View {
                             .overlay(
                                 Circle()
                                     .stroke(Color.white, lineWidth: 3)
-                                    .opacity(selectedColor == color ? 1 : 0)
+                                    .opacity(model.color == color ? 1 : 0)
                             )
                     }
                 }
@@ -105,46 +101,19 @@ struct ColorPickerView: View {
 
 
 struct IconPicker: View {
-    @Binding var selectedIcon: String
-    
-    let symbols = [
-        "house",
-        "person",
-        "car",
-        "star",
-        "flag",
-        "music.note",
-        "film",
-        "book",
-        "doc",
-        "folder",
-        "paperplane",
-        "pencil",
-        "trash",
-        "heart",
-        "moon.stars",
-        "sun.max",
-        "globe",
-        "gear",
-        "wrench",
-        "clock",
-        "bolt",
-        "battery.100",
-        "waveform",
-        "antenna.radiowaves.left.and.right"
-    ]
+    @EnvironmentObject var model: CreateEventView.ViewModel
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHGrid(rows: Array(repeating: GridItem(.flexible()), count: 3), spacing: 10) {
-                ForEach(symbols, id: \.self) { symbolName in
+                ForEach(model.symbols, id: \.self) { symbolName in
                     Button(action: {
-                        self.selectedIcon = symbolName
+                        self.model.selectedIcon = symbolName
                     }) {
                         Image(systemName: symbolName)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .foregroundColor(symbolName == selectedIcon ? .blue : .gray)
+                            .foregroundColor(symbolName == model.selectedIcon ? .blue : .gray)
                             .frame(width: 40, height: 40)
                     }
                 }
@@ -155,12 +124,12 @@ struct IconPicker: View {
     }
 }
 
-
-
-
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(day: .constant(generateDay()))
-            .background(.blue)
+        ZStack(alignment: .bottom) {
+            Color.accentColor
+            CreateEventView(day: .constant(generateDay()))
+        }
+        .ignoresSafeArea()
     }
 }

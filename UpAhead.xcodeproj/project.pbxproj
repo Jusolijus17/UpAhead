@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D07F29629DD1A01002F2CB3 /* CreateEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D07F29529DD1A01002F2CB3 /* CreateEventViewModel.swift */; };
 		3D09399029D513AE009C159E /* RainAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09398F29D513AE009C159E /* RainAnimation.swift */; };
 		3D09399429D5140B009C159E /* RainFall.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3D09399229D5140B009C159E /* RainFall.sks */; };
 		3D09399529D5140B009C159E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D09399329D5140B009C159E /* Assets.xcassets */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D07F29529DD1A01002F2CB3 /* CreateEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewModel.swift; sourceTree = "<group>"; };
 		3D09398F29D513AE009C159E /* RainAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainAnimation.swift; sourceTree = "<group>"; };
 		3D09399229D5140B009C159E /* RainFall.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RainFall.sks; sourceTree = "<group>"; };
 		3D09399329D5140B009C159E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */,
 				3DEB0D0229D767AE00A3A5AC /* Animations */,
 				3DD544C429DA670800C6118A /* DayViewModel.swift */,
+				3D07F29529DD1A01002F2CB3 /* CreateEventViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				3DC088FC29B82037005233DF /* EventBox.swift in Sources */,
 				3DD544C729DA7E7F00C6118A /* WiggleAnimation.swift in Sources */,
 				3D0BBD0C29CB4FDE00ABCF96 /* SignUpData.swift in Sources */,
+				3D07F29629DD1A01002F2CB3 /* CreateEventViewModel.swift in Sources */,
 				3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */,
 				3DD544C529DA670800C6118A /* DayViewModel.swift in Sources */,
 				3D41439F29CD5C500088B25E /* AnimationConfiguration.swift in Sources */,

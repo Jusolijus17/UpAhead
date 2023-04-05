@@ -9,63 +9,48 @@ import SwiftUI
 
 struct TrajectView: View {
     @EnvironmentObject var timelineData: TimelineData
-    var validatedDay: Int {
-        get {
-            if timelineData.currentDayIndex < 0 {
-                return 0
-            } else if timelineData.currentDayIndex > timelineData.days.count {
-                return timelineData.days.count
-            } else {
-                return timelineData.currentDayIndex
-            }
-        }
-    }
-    
-    @State var indicatorHeight: CGFloat = 0
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            RoundedRectangle(cornerRadius: 15)
-                .foregroundColor(Color(hex: "E5E5E5"))
+            Capsule()
+                .fill(.secondary)
+                .background(.ultraThinMaterial)
+                .cornerRadius(15)
+                .opacity(0.95)
                 .padding([.top, .bottom], 5)
             
             VStack(spacing: 0) {
                 ForEach(timelineData.days.indices, id: \.self) { i in
-                    RoadSection(titleSide: i.isMultiple(of: 2) ? .left : .right, day: $timelineData.days[i], index: i)
+                    RoadSection(index: i)
                         .frame(height: timelineData.days[i].height)
                 }
             }
             .frame(width: 30)
             
             ZStack(alignment: .top) {
+                let currentHeight: CGFloat = timelineData.currentDayIndex != 0 ? timelineData.trajectHeight - 50 : timelineData.trajectHeight
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor(.blue)
                     .padding(.vertical, 10)
-                    .frame(width: 20, height: timelineData.currentDayIndex != 0 ? timelineData.trajectHeight - 50 : timelineData.trajectHeight)
+                    .frame(width: 20, height: currentHeight)
                 
                 DirectionPointer()
             }
             .frame(width: 30)
         }
         .frame(width: 30)
+        .environmentObject(timelineData)
         
     }
 }
 
-func calculateRectHeight(days: [Day], currentDayIndex: Int) -> CGFloat {
-    var height: CGFloat = -10
-    for day in days[0..<currentDayIndex] {
-        height += day.height
-    }
-    return height
-}
-
 struct RoadSection: View {
-    let titleSide: Side
-    @Binding var day: Day
+    @EnvironmentObject var timelineData: TimelineData
     let index: Int
     
     var body: some View {
+        let day = timelineData.days[index]
+        let titleSide: Side = index.isMultiple(of: 2) ? .left : .right
         VStack(spacing: 0) {
             TimeMark(side: titleSide)
                 .foregroundColor(.gray)

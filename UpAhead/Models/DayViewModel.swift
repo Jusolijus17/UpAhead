@@ -25,11 +25,11 @@ extension DayView {
         }
         
         func updateWeather(forecasts: [DailyForecast]?) {
-            guard let forecasts = forecasts else { return }
-            symbolName = weatherSymbolMapping[forecasts[index].weather[0].description] ?? ""
-            let minTemp = forecasts[index].temp.min
-            let maxTemp = forecasts[index].temp.max
-            temperature = "\(Int(maxTemp.rounded())) / \(Int(minTemp.rounded())) °C"
+            guard let forecasts = forecasts?.reversed() else { return }
+            self.symbolName = weatherSymbolMapping[forecasts[forecasts.index(forecasts.startIndex, offsetBy: index)].weather[0].description] ?? ""
+            let minTemp = forecasts[forecasts.index(forecasts.startIndex, offsetBy: index)].temp.min
+            let maxTemp = forecasts[forecasts.index(forecasts.startIndex, offsetBy: index)].temp.max
+            self.temperature = "\(Int(maxTemp.rounded())) / \(Int(minTemp.rounded())) °C"
         }
     }
 }

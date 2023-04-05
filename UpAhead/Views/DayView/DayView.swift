@@ -36,6 +36,9 @@ struct DayView: View {
                             .id("title\(model.index)")
                     }
                 }
+                .padding(.bottom, 5)
+                .background(.orange.opacity(0.8))
+                
                 EventSection(day: $day) {
                     editData.toggleEditor(forDayIndex: model.index)
                 }
@@ -43,7 +46,7 @@ struct DayView: View {
             }
         }
         .environmentObject(model)
-        .background(Color.accentColor)
+        .background(Color(UIColor.systemGray5))
         .cornerRadius(40)
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
@@ -55,6 +58,8 @@ struct EditButton: View {
     @Binding var day: Day
     var body: some View {
         Button {
+            let impactMed = UIImpactFeedbackGenerator(style: .medium)
+            impactMed.impactOccurred()
             withAnimation {
                 day.toggleEditMode()
             }
@@ -65,7 +70,7 @@ struct EditButton: View {
                 Image(systemName: "slider.horizontal.below.square.and.square.filled")
             }
             .padding(10)
-            .background(.orange)
+            .background(.red)
             .cornerRadius(10)
             .foregroundColor(.white)
         }
@@ -134,7 +139,11 @@ struct DayRect_Previews: PreviewProvider {
         let model = DayView.ViewModel(index: 3, titleSide: .left, weatherModel: weatherModel)
         let day = generateDay()
         let editData = EditData()
-        DayView(model: model, day: .constant(day), editData: .constant(editData))
-            .frame(height: day.height)
+        ZStack {
+            Color.accentColor
+                .ignoresSafeArea()
+            DayView(model: model, day: .constant(day), editData: .constant(editData))
+                .frame(height: day.height)
+        }
     }
 }
