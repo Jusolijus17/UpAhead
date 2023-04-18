@@ -5,23 +5,55 @@
 //  Created by Justin Lefrançois on 2023-03-06.
 //
 
-import Foundation
 import SwiftUI
 
 struct Day {
     let date: Date
+    let weekDay: WeekDay
     var events: [Event]
     var editMode: Bool = false
+    
     var height: CGFloat {
         return events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
     }
     
+    var completedEvent: Int {
+        return events.filter({ $0.isCompleted }).count
+    }
+    
+    var dayCompleted: Bool {
+        return completedEvent == events.count
+    }
+    
+    var completionPourcent: Double {
+        if events.count != 0 {
+            return Double(completedEvent) / Double(events.count) * 100.0
+        } else {
+            return 0
+        }
+    }
+    
+    init(date: Date, events: [Event]) {
+        self.date = date
+        self.weekDay = WeekDay.fromString(date.weekday) ?? .monday
+        self.events = []
+        for event in events {
+            self.addEvent(event)
+        }
+    }
+    
     mutating func addEvent(_ event: Event) {
-        events.insert(event, at: events.count - 1)
+        var event = Event(title: event.title, iconName: event.iconName, color: event.color, isCompleted: event.isCompleted)
+        event.setIndex(events.count)
+        events.append(event)
     }
     
     mutating func deleteEvent(index: Int) {
         events.remove(at: index)
+    }
+    
+    mutating func reorganizeEvents() {
+        events.sort { $0.isCompleted == false && $1.isCompleted == true }
     }
     
     mutating func toggleEditMode(state: Bool? = nil) {
@@ -31,7 +63,7 @@ struct Day {
                     events.removeLast()
                 }
             } else {
-                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false))
+                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false, index: events.count))
             }
             editMode.toggle()
         } else if state != nil && editMode != state {
@@ -40,7 +72,7 @@ struct Day {
                     events.removeLast()
                 }
             } else {
-                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false))
+                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false, index: events.count))
             }
             editMode.toggle()
         }
@@ -48,14 +80,20 @@ struct Day {
     }
 }
 
-struct Event {
+struct Event: Hashable, Identifiable {
+    let id = UUID()
     let title: String
     let iconName: String
     let color: Color
     var isCompleted: Bool
+    private(set) var index: Int = 0
     
     mutating func toggleComplete() {
         self.isCompleted.toggle()
+    }
+    
+    mutating func setIndex(_ index: Int) {
+        self.index = index
     }
 }
 
@@ -74,15 +112,6 @@ func getEvents(amount: Int) -> [Event] {
     
     return eventArray
 }
-
-//func getWeather(for date: Date) -> WeatherData {
-//    // Return a dummy WeatherData object with dummy weather data
-//    let dummyWeatherConditions = ["clear sky", "few clouds", "scattered clouds", "broken clouds", "shower rain", "rain", "thunderstorm", "snow", "mist"]
-//    let randomCondition = dummyWeatherConditions.randomElement()!
-//    let dummyWeather = Weather(id: 800, main: "Clear", description: randomCondition)
-//    let dummyMain = Main(temp: Double.random(in: 15.0...30.0))
-//    return WeatherData(weather: [dummyWeather], main: dummyMain)
-//}
 
 func getProjects(for date: Date) -> [String] {
     // Generate a random list of project strings

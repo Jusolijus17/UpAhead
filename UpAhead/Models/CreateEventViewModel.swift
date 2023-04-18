@@ -45,13 +45,11 @@ extension CreateEventView {
         ]
         
         func getEmptyEvent() -> Event {
-            let event = Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
-            return event
+            return Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
         }
         
         func getEvent() -> Event {
-            let newEvent = Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
-            return newEvent
+            return Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
         }
     }
 }

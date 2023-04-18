@@ -18,6 +18,9 @@ extension DayView {
         @Published private(set) var symbolName: String = ""
         @Published private(set) var temperature: String = "-/- °C"
         
+        let weekColor: Color = Color.orange.opacity(0.8)
+        let weekendColor: Color = Color.blue.opacity(0.65)
+        
         init(index: Int, titleSide: Side, weatherModel: WeatherModel) {
             self.index = index
             self.titleSide = titleSide
@@ -30,6 +33,12 @@ extension DayView {
             let minTemp = forecasts[forecasts.index(forecasts.startIndex, offsetBy: index)].temp.min
             let maxTemp = forecasts[forecasts.index(forecasts.startIndex, offsetBy: index)].temp.max
             self.temperature = "\(Int(maxTemp.rounded())) / \(Int(minTemp.rounded())) °C"
+        }
+        
+        func getAlignment(index: Int) -> Alignment {
+            let side1: Alignment = titleSide == .left ? .leading : .trailing
+            let side2: Alignment = titleSide == .left ? .trailing : .leading
+            return index.isMultiple(of: 2) ? side1 : side2
         }
     }
 }

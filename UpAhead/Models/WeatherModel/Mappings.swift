@@ -64,16 +64,6 @@ let weatherSymbolMapping: [String: String] = [
     "overcast clouds": "cloud.fill"
 ]
 
-enum WeatherType {
-    case sun
-    case cloud
-    case rain
-    case thunderstorm
-    case snow
-    case mist
-    case other
-}
-
 let weatherTypeMapping: [String: WeatherType] = [
     "thunderstorm with light rain": .thunderstorm,
     "thunderstorm with rain": .thunderstorm,

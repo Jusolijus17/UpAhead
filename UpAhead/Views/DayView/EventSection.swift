@@ -6,68 +6,131 @@
 //
 
 import SwiftUI
-import SpriteKit
 
 struct EventSection: View {
     @EnvironmentObject var model: DayView.ViewModel
+    @EnvironmentObject var timelineData: TimelineData
     @Binding var day: Day
     var triggerAddEvent: () -> Void
+    
+    @State var isMoving: Bool = false
 
     var body: some View {
-        HStack(spacing: 25) {
-            if model.titleSide == .left {
-                VStack1(side: .left)
-                VStack2(side: .right)
-            } else {
-                VStack2(side: .left)
-                VStack1(side: .right)
+        let emptyInset = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        ZStack {
+            indicators
+            
+            List {
+                ForEach($day.events) { $event in
+                    let alignment = model.getAlignment(index: event.index)
+                    EventRow(alignment: alignment, event: $event, editMode: $day.editMode)
+                }
+                .onMove(perform: move)
+                .listRowSeparator(.hidden)
+                .listRowInsets(emptyInset)
+                .listRowBackground(EmptyView())
+            }
+            .padding(.vertical)
+            .padding(.horizontal, 40)
+            .listStyle(.plain)
+            .scrollDisabled(true)
+        }
+        .onChange(of: day.events) { newEvents in
+            if !isMoving {
+                print("Reorganizing!")
+                withAnimation {
+                    day.reorganizeEvents()
+                }
             }
         }
     }
     
-    private func VStack1(side: Side) -> some View {
-        return VStack(spacing: 100) {
-            ForEach(day.events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
-                if day.events[index].title != "AddBox" {
-                    EventBox(event: $day.events[index], isEditing: $day.editMode, side: side) {
-                        day.deleteEvent(index: index)
-                    }
-                } else {
-                    AddBox {
-                        triggerAddEvent()
-                    }
-                }
-            }
-            if day.events.count.isMultiple(of: 2) {
-                Spacer().frame(height: 0)
-            }
+    func move(from source: IndexSet, to destination: Int) {
+        withAnimation {
+            day.events.move(fromOffsets: source, toOffset: destination)
         }
-        .frame(maxWidth: .infinity)
+        isMoving = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            isMoving = false
+        }
     }
     
-    private func VStack2(side: Side) -> some View {
-        VStack(spacing: 100) {
-            if day.events.count.isMultiple(of: 2) {
-                Spacer().frame(height: 0)
+    var indicators: AnyView {
+        if timelineData.currentDayIndex == model.index {
+            print("Pourcent: \(day.completionPourcent)")
+            return AnyView(HStack(spacing: 0) {
+                PrecisionIndicator(currentPourcentage: day.completionPourcent, magnification: 0.4)
+                PrecisionIndicator(currentPourcentage: day.completionPourcent, magnification: 0.4, alignement: .trailing)
             }
-            ForEach(day.events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
-                if day.events[index].title != "AddBox" {
-                    EventBox(event: $day.events[index], isEditing: $day.editMode, side: side) {
-                        day.deleteEvent(index: index)
-                    }
-                } else {
-                    AddBox {
-                        triggerAddEvent()
-                    }
-                }
-            }
+            .foregroundColor(.blue))
         }
-        .frame(maxWidth: .infinity)
+        return AnyView(EmptyView())
+    }
+    
+    //    private func VStack1(side: Side) -> some View {
+//        return VStack(spacing: 100) {
+//            ForEach(day.events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
+//                if day.events[index].title != "AddBox" {
+//                    EventBox(event: $day.events[index], isEditing: $day.editMode, side: side) {
+//                        day.deleteEvent(index: index)
+//                    }
+//                } else {
+//                    AddBox {
+//                        triggerAddEvent()
+//                    }
+//                }
+//            }
+//            if day.events.count.isMultiple(of: 2) {
+//                Spacer().frame(height: 0)
+//            }
+//        }
+//        .frame(maxWidth: .infinity)
+//    }
+//
+//    private func VStack2(side: Side) -> some View {
+//        VStack(spacing: 100) {
+//            if day.events.count.isMultiple(of: 2) {
+//                Spacer().frame(height: 0)
+//            }
+//            ForEach(day.events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
+//                if day.events[index].title != "AddBox" {
+//                    EventBox(event: $day.events[index], isEditing: $day.editMode, side: side) {
+//                        day.deleteEvent(index: index)
+//                    }
+//                } else {
+//                    AddBox {
+//                        triggerAddEvent()
+//                    }
+//                }
+//            }
+//        }
+//        .frame(maxWidth: .infinity)
+//    }
+}
+
+struct EventRow: View {
+    var alignment: Alignment
+    @Binding var event: Event
+    @Binding var editMode: Bool
+    
+    var body: some View {
+        HStack {
+            EventBox(event: $event, isEditing: $editMode)
+                .frame(maxWidth: .infinity, alignment: alignment)
+        }
+        .id(event.id)
+        .onDrag {
+            NSItemProvider()
+        } preview: {
+            EventBox(event: $event, isEditing: .constant(false))
+                .contentShape(.dragPreview, RoundedRectangle(cornerRadius: 10, style: .continuous))
+        }
     }
 }
 
 struct EventSection_Preview: PreviewProvider {
     static var previews: some View {
-        DayRect_Previews.previews
+        DayView_Previews.previews
     }
 }

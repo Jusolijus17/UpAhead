@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-enum Side {
-    case left
-    case right
-    
-    var opposite: Side {
-        return self == .left ? .right : .left
-    }
-}
-
 struct SignView: View {
     let text: String
     let side: Side

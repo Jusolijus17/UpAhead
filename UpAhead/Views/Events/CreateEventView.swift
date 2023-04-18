@@ -28,7 +28,7 @@ struct CreateEventView: View {
                 .bold()
             
             
-            EventBox(event: .constant(model.getEvent()), isEditing: .constant(false), side: .left)
+            EventBox(event: .constant(model.getEvent()), isEditing: .constant(false))
             
             Group {
                 TextField("Enter a title", text: $model.title)

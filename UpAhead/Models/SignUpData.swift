@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-enum SignUpField {
-    case email
-    case password
-    case confirmPassword
-    case name
-}
-
 struct UserData {
     var email: String = ""
     var password: String = ""

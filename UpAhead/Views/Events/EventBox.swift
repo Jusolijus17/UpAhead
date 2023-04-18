@@ -10,7 +10,6 @@ import SwiftUI
 struct EventBox: View {
     @Binding var event: Event
     @Binding var isEditing: Bool
-    let side: Side
     
     var deleteEvent: (() -> Void)?
     
@@ -91,7 +90,7 @@ struct AddBox: View {
 struct EventBox_Previews: PreviewProvider {
     static var previews: some View {
         let dummyEvent = Event(title: "Test", iconName: "plus", color: .blue, isCompleted: true)
-        EventBox(event: .constant(dummyEvent), isEditing: .constant(true), side: .right, deleteEvent: {})
+        EventBox(event: .constant(dummyEvent), isEditing: .constant(true), deleteEvent: {})
             .previewLayout(.fixed(width: 175, height: 150))
         AddBox(onTap: {
             

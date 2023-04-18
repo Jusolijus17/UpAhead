@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct EditData {
     var editMode: Bool = false
@@ -17,7 +18,6 @@ struct EditData {
         withAnimation {
             toggleEditor.toggle()
         }
-        
     }
 }
 
@@ -31,10 +31,15 @@ class TimelineData: ObservableObject {
         self.currentDayIndex = currentDayIndex
         self.editData = EditData()
         self.days = days
+        
         if self.days.count == 0 {
             self.days = generateEmptyWeek()
         }
-        weatherModel.fetchWeatherForecast()
+        self.weatherModel.fetchWeatherForecast()
+    }
+    
+    var currentDay: Day {
+        return days[currentDayIndex]
     }
     
     var trajectHeight: CGFloat {
@@ -42,6 +47,7 @@ class TimelineData: ObservableObject {
         for index in (0..<currentDayIndex).reversed() {
             height += days[days.count - index - 1].height
         }
+        height += CGFloat((days[currentDayIndex].completedEvent + 1) * 100)
         return height
     }
     
@@ -62,27 +68,45 @@ class TimelineData: ObservableObject {
         editData.editMode.toggle()
     }
     
+    func updateCurrentDay() {
+        if currentDayIndex < days.count - 1 {
+            currentDayIndex += 1
+        }
+    }
+    
+    func getCurrentDay() -> Day {
+        return days[currentDayIndex]
+    }
+    
     private func generateEmptyWeek() -> [Day] {
-        let today = Date()
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let monday = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today))!
         var days: [Day] = []
-        for i in 0..<7 {
-            let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
+        for i in 1...7 {
+            let date = calendar.date(byAdding: .day, value: 7 - i, to: monday)!
             let events: [Event] = []
             let day = Day(date: date, events: events)
             days.append(day)
         }
         return days
     }
+
 }
 
 func generateDummyWeek() -> [Day] {
-    let today = Date()
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: Date())
+    let daysToAdd = 2 - calendar.component(.weekday, from: today)
+    let monday = calendar.date(byAdding: .day, value: daysToAdd, to: today)!
     var days: [Day] = []
-    for i in 0..<7 {
-        let date = Calendar.current.date(byAdding: .day, value: 7 - i, to: today)!
+    for i in 1...7 {
+        let date = calendar.date(byAdding: .day, value: 7 - i, to: monday)!
         let events: [Event] = getEvents(amount: i)
         let day = Day(date: date, events: events)
         days.append(day)
     }
     return days
 }
+
+

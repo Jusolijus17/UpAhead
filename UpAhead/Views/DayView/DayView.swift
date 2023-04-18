@@ -9,43 +9,41 @@ import SwiftUI
 import SpriteKit
 
 struct DayView: View {
+    @EnvironmentObject var timelineData: TimelineData
     @StateObject var model: ViewModel
     @Binding var day: Day
     @Binding var editData: EditData
     
     var body: some View {
-        
-        ZStack {
-            VStack(spacing: 0) {
-                HStack(spacing: 0) {
-                    if model.titleSide == .left {
-                        TitleView(date: day.date, side: model.titleSide)
-                            .id("title\(model.index)")
-                        Spacer().frame(width: 40)
-                        HStack(spacing: 10) {
-                            editData.editMode ? AnyView(EditButton(day: $day).padding(.top, 10)) : AnyView(WeatherView())
-                        }
-                        .frame(maxWidth: .infinity)
-                    } else {
-                        HStack(spacing: 10) {
-                            editData.editMode ? AnyView(EditButton(day: $day).padding(.top, 10)) : AnyView(WeatherView())
-                        }
-                        .frame(maxWidth: .infinity)
-                        Spacer().frame(width: 40)
-                        TitleView(date: day.date, side: model.titleSide)
-                            .id("title\(model.index)")
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                if model.titleSide == .left {
+                    TitleView(date: day.date, side: model.titleSide)
+                        .id("title\(model.index)")
+                    Spacer().frame(width: 40)
+                    HStack(spacing: 10) {
+                        editData.editMode ? AnyView(CustomEditButton(day: $day)) : AnyView(WeatherView())
                     }
+                    .frame(maxWidth: .infinity)
+                } else {
+                    HStack(spacing: 10) {
+                        editData.editMode ? AnyView(CustomEditButton(day: $day)) : AnyView(WeatherView())
+                    }
+                    .frame(maxWidth: .infinity)
+                    Spacer().frame(width: 40)
+                    TitleView(date: day.date, side: model.titleSide)
+                        .id("title\(model.index)")
                 }
-                .padding(.bottom, 5)
-                .background(.orange.opacity(0.8))
-                
-                EventSection(day: $day) {
-                    editData.toggleEditor(forDayIndex: model.index)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .padding(.bottom, 5)
+            .background(day.weekDay.isWeekend ? model.weekendColor : model.weekColor)
+            
+            EventSection(day: $day) {
+                editData.toggleEditor(forDayIndex: model.index)
             }
         }
         .environmentObject(model)
+        .environmentObject(timelineData)
         .background(Color(UIColor.systemGray5))
         .cornerRadius(40)
         .padding(.horizontal, 10)
@@ -54,8 +52,9 @@ struct DayView: View {
     }
 }
 
-struct EditButton: View {
+struct CustomEditButton: View {
     @Binding var day: Day
+    
     var body: some View {
         Button {
             let impactMed = UIImpactFeedbackGenerator(style: .medium)
@@ -127,23 +126,25 @@ func generateDay() -> Day {
     let lunchEvent = Event(title: "Lunch with Bob", iconName: "food", color: .green, isCompleted: false)
     let events = [meetingEvent, lunchEvent, lunchEvent]
     
-    var day = Day(date: date, events: events)
-    day.toggleEditMode()
+    let day = Day(date: date, events: events)
+    //day.toggleEditMode()
     return day
 }
 
 
-struct DayRect_Previews: PreviewProvider {
+struct DayView_Previews: PreviewProvider {
     static var previews: some View {
         let weatherModel = WeatherModel()
         let model = DayView.ViewModel(index: 3, titleSide: .left, weatherModel: weatherModel)
         let day = generateDay()
         let editData = EditData()
+        let timelineData = TimelineData(currentDayIndex: 3)
         ZStack {
             Color.accentColor
                 .ignoresSafeArea()
             DayView(model: model, day: .constant(day), editData: .constant(editData))
                 .frame(height: day.height)
+                .environmentObject(timelineData)
         }
     }
 }

@@ -34,13 +34,15 @@ struct TrajectView: View {
                     .padding(.vertical, 10)
                     .frame(width: 20, height: currentHeight)
                 
-                DirectionPointer()
+                VStack {
+                    DirectionPointer()
+                    CurrentTime()
+                }
             }
             .frame(width: 30)
         }
         .frame(width: 30)
         .environmentObject(timelineData)
-        
     }
 }
 
@@ -59,9 +61,9 @@ struct RoadSection: View {
             if day.events.count != 0 {
                 VStack(spacing: 0) {
                     Spacer()
-                    ForEach(day.events.indices, id: \.self) { i in
-                        TimeMark(side: i.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
-                            .foregroundColor(day.events[i].color)
+                    ForEach(day.events) { event in
+                        TimeMark(side: event.index.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
+                            .foregroundColor(event.color)
                             .frame(height: 100)
                     }
                     Spacer()
@@ -136,6 +138,37 @@ struct DirectionPointer: View {
                 .foregroundColor(.white)
         }
         .frame(width: 50)
+    }
+}
+
+struct CurrentTime: View {
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var date = Date()
+    
+    var body: some View {
+        Text(convertDate())
+            .font(.system(size: 18, weight: .semibold, design: .rounded))
+            .frame(width: 80)
+            .foregroundColor(Color.accentColor)
+            .padding(5)
+            .background(
+                Capsule()
+                    .fill(.white)
+            )
+            .overlay(
+                Capsule()
+                    .stroke(Color.accentColor, lineWidth: 2.5)
+            )
+            .onReceive(timer) { (input) in
+                self.date = Date()
+            }
+    }
+    
+    func convertDate() -> String {
+        let formater = DateFormatter()
+        formater.timeZone = .current
+        formater.dateFormat = "h:mm:ss"
+        return formater.string(from: self.date)
     }
 }
 

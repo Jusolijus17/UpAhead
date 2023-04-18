@@ -14,6 +14,8 @@
 		3D09399729D51A5C009C159E /* RainFallLanding.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3D09399629D51A5C009C159E /* RainFallLanding.sks */; };
 		3D0BBD0C29CB4FDE00ABCF96 /* SignUpData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */; };
 		3D11D98D29B9753700E6FC33 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D11D98C29B9753700E6FC33 /* CreateEventView.swift */; };
+		3D21949629DF5A1000A638A1 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D21949529DF5A1000A638A1 /* Enums.swift */; };
+		3D21949829DF5FCB00A638A1 /* ProgressManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D21949729DF5FCB00A638A1 /* ProgressManager.swift */; };
 		3D3FF4A429CAA50000272532 /* SignUpTraject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3FF4A329CAA50000272532 /* SignUpTraject.swift */; };
 		3D41439D29CD5B490088B25E /* AnimationSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D41439C29CD5B490088B25E /* AnimationSequence.swift */; };
 		3D41439F29CD5C500088B25E /* AnimationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D41439E29CD5C500088B25E /* AnimationConfiguration.swift */; };
@@ -41,6 +43,7 @@
 		3DD607C929C2B7F300DF95C7 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD607C829C2B7F300DF95C7 /* Test.swift */; };
 		3DEB0CFB29D7665D00A3A5AC /* Backgrounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEB0CFA29D7665D00A3A5AC /* Backgrounds.swift */; };
 		3DEB0CFF29D766EF00A3A5AC /* EventSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEB0CFE29D766EF00A3A5AC /* EventSection.swift */; };
+		3DF900EA29E233C900BFEEAE /* PrecisionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF900E929E233C900BFEEAE /* PrecisionIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +54,8 @@
 		3D09399629D51A5C009C159E /* RainFallLanding.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RainFallLanding.sks; sourceTree = "<group>"; };
 		3D0BBD0B29CB4FDE00ABCF96 /* SignUpData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpData.swift; sourceTree = "<group>"; };
 		3D11D98C29B9753700E6FC33 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
+		3D21949529DF5A1000A638A1 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		3D21949729DF5FCB00A638A1 /* ProgressManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressManager.swift; sourceTree = "<group>"; };
 		3D3FF4A329CAA50000272532 /* SignUpTraject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTraject.swift; sourceTree = "<group>"; };
 		3D41439C29CD5B490088B25E /* AnimationSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationSequence.swift; sourceTree = "<group>"; };
 		3D41439E29CD5C500088B25E /* AnimationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConfiguration.swift; sourceTree = "<group>"; };
@@ -77,6 +82,7 @@
 		3DD607C829C2B7F300DF95C7 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		3DEB0CFA29D7665D00A3A5AC /* Backgrounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backgrounds.swift; sourceTree = "<group>"; };
 		3DEB0CFE29D766EF00A3A5AC /* EventSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSection.swift; sourceTree = "<group>"; };
+		3DF900E929E233C900BFEEAE /* PrecisionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecisionIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +137,8 @@
 				3DEB0D0229D767AE00A3A5AC /* Animations */,
 				3DD544C429DA670800C6118A /* DayViewModel.swift */,
 				3D07F29529DD1A01002F2CB3 /* CreateEventViewModel.swift */,
+				3D21949529DF5A1000A638A1 /* Enums.swift */,
+				3D21949729DF5FCB00A638A1 /* ProgressManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -180,6 +188,7 @@
 				3DEB0D0029D7676600A3A5AC /* Trajects */,
 				3DEB0D0129D7678600A3A5AC /* Events */,
 				3DD607C829C2B7F300DF95C7 /* Test.swift */,
+				3DF900E929E233C900BFEEAE /* PrecisionIndicator.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -324,6 +333,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DF900EA29E233C900BFEEAE /* PrecisionIndicator.swift in Sources */,
 				3DEB0CFF29D766EF00A3A5AC /* EventSection.swift in Sources */,
 				3D09399029D513AE009C159E /* RainAnimation.swift in Sources */,
 				3D99D41829D76B5A0056BF6B /* Mappings.swift in Sources */,
@@ -340,7 +350,9 @@
 				3DD5C02629B4FF8A002FFF12 /* TrajectView.swift in Sources */,
 				3DC088FC29B82037005233DF /* EventBox.swift in Sources */,
 				3DD544C729DA7E7F00C6118A /* WiggleAnimation.swift in Sources */,
+				3D21949629DF5A1000A638A1 /* Enums.swift in Sources */,
 				3D0BBD0C29CB4FDE00ABCF96 /* SignUpData.swift in Sources */,
+				3D21949829DF5FCB00A638A1 /* ProgressManager.swift in Sources */,
 				3D07F29629DD1A01002F2CB3 /* CreateEventViewModel.swift in Sources */,
 				3DD5C01D29B12F6A002FFF12 /* SignView.swift in Sources */,
 				3DD544C529DA670800C6118A /* DayViewModel.swift in Sources */,
