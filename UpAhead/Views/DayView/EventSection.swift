@@ -19,7 +19,7 @@ struct EventSection: View {
         let emptyInset = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         ZStack {
-            indicators
+            //indicators
             
             List {
                 ForEach($day.events) { $event in
@@ -32,7 +32,7 @@ struct EventSection: View {
                 .listRowBackground(EmptyView())
             }
             .padding(.vertical)
-            .padding(.horizontal, 40)
+            .padding(.horizontal, Constants.listHorizontalPadding)
             .listStyle(.plain)
             .scrollDisabled(true)
         }
@@ -58,10 +58,10 @@ struct EventSection: View {
     
     var indicators: AnyView {
         if timelineData.currentDayIndex == model.index {
-            print("Pourcent: \(day.completionPourcent)")
+            print("Pourcent: \(day.completionPercent)")
             return AnyView(HStack(spacing: 0) {
-                PrecisionIndicator(currentPourcentage: day.completionPourcent, magnification: 0.4)
-                PrecisionIndicator(currentPourcentage: day.completionPourcent, magnification: 0.4, alignement: .trailing)
+                PrecisionIndicator(currentPourcentage: day.completionPercent, magnification: 0.4)
+                PrecisionIndicator(currentPourcentage: day.completionPercent, magnification: 0.4, alignement: .trailing)
             }
             .foregroundColor(.blue))
         }

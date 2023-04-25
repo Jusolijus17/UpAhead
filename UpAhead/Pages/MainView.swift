@@ -20,7 +20,7 @@ struct MainView: View {
                 VStack {
                     ZStack(alignment: .top) {
                         Timeline()
-                        TopBar()
+                        ProgressHeader()
                     }
                     BottomButtons()
                 }
@@ -101,13 +101,11 @@ struct BottomButtons: View {
     var body: some View {
         HStack {
             Button(action: {
-                if timelineData.currentDayIndex > 0 {
-                    withAnimation {
-                        timelineData.currentDayIndex -= 1
-                    }
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.notificationOccurred(.error)
+                withAnimation {
+                    timelineData.previousEvent()
                 }
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.error)
             }) {
                 Text("Skip Stop")
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
@@ -134,13 +132,11 @@ struct BottomButtons: View {
             
             
             Button(action: {
-                if timelineData.currentDayIndex < timelineData.days.count {
-                    withAnimation {
-                        timelineData.currentDayIndex += 1
-                    }
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.notificationOccurred(.success)
+                withAnimation {
+                    timelineData.nextEvent()
                 }
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
             }) {
                 Text("Next Stop")
                     .font(.system(size: 20, weight: .semibold, design: .rounded))

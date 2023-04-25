@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
-import SpriteKit
+import ConfettiSwiftUI
 
 struct DayView: View {
     @EnvironmentObject var timelineData: TimelineData
     @StateObject var model: ViewModel
     @Binding var day: Day
     @Binding var editData: EditData
+    @State var confettiCounter: Int = 0
     
     var body: some View {
         VStack(spacing: 0) {
@@ -46,9 +47,15 @@ struct DayView: View {
         .environmentObject(timelineData)
         .background(Color(UIColor.systemGray5))
         .cornerRadius(40)
-        .padding(.horizontal, 10)
+        .padding(.horizontal, Constants.dayViewHorizontalPadding)
         .padding(.vertical, 5)
         .shadow(radius: 10)
+        .confettiCannon(counter: $confettiCounter, num: 50, radius: 400.0)
+        .onChange(of: timelineData.currentDay.isDayCompleted) { newValue in
+            if newValue && timelineData.currentDayIndex == model.index {
+                confettiCounter += 1
+            }
+        }
     }
 }
 

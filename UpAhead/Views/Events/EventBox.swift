@@ -47,7 +47,7 @@ struct EventBox: View {
             }
         }
         .shouldWiggle($isEditing)
-        .frame(width: 100, height: 100)
+        .frame(width: Constants.eventBoxWidth, height: Constants.eventBoxHeight)
         .onTapGesture(count: 2) {
             withAnimation {
                 event.toggleComplete()

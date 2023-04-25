@@ -17,6 +17,7 @@ struct TrajectView: View {
                 .background(.ultraThinMaterial)
                 .cornerRadius(15)
                 .opacity(0.95)
+                .frame(width: Constants.trajectWidth)
                 .padding([.top, .bottom], 5)
             
             VStack(spacing: 0) {
@@ -25,23 +26,20 @@ struct TrajectView: View {
                         .frame(height: timelineData.days[i].height)
                 }
             }
-            .frame(width: 30)
             
             ZStack(alignment: .top) {
                 let currentHeight: CGFloat = timelineData.currentDayIndex != 0 ? timelineData.trajectHeight - 50 : timelineData.trajectHeight
-                RoundedRectangle(cornerRadius: 10)
+                Capsule()
                     .foregroundColor(.blue)
                     .padding(.vertical, 10)
-                    .frame(width: 20, height: currentHeight)
+                    .frame(width: Constants.trajectWidth - 10, height: currentHeight)
                 
                 VStack {
                     DirectionPointer()
                     CurrentTime()
                 }
             }
-            .frame(width: 30)
         }
-        .frame(width: 30)
         .environmentObject(timelineData)
     }
 }
@@ -84,33 +82,36 @@ struct TimeMark: View {
         self.secondaryMark = secondaryMark
     }
     
-    private var rectangleWidth: CGFloat {
-        return secondaryMark ? 50 : 30
+    private func rectangleWidth(geo: GeometryProxy) -> CGFloat {
+        var width: CGFloat = (geo.size.width / 2)
+        width -= circleOffset
+        width -= Constants.listHorizontalPadding
+        width -= Constants.dayViewHorizontalPadding
+        width -= Constants.eventBoxWidth
+        return secondaryMark ? width : 30
     }
     
-    private var circleOffset: CGFloat {
-        return side == .left ? -padding : padding
-    }
-    
-    private var padding: CGFloat {
-        return secondaryMark ? 25 : 15
-    }
+    private var circleOffset: CGFloat = 6
     
     var body: some View {
-        HStack(spacing: 0) {
-            if side == .left {
-                Rectangle()
-                    .frame(width: rectangleWidth, height: 2)
-                Circle()
-                    .frame(width: 12)
-            } else {
-                Circle()
-                    .frame(width: 12)
-                Rectangle()
-                    .frame(width: rectangleWidth, height: 2)
+        GeometryReader { geo in
+            HStack(spacing: 0) {
+                if side == .left {
+                    Rectangle()
+                        .frame(width: rectangleWidth(geo: geo), height: 2)
+                    Circle()
+                        .frame(width: 12)
+                } else {
+                    Circle()
+                        .frame(width: 12)
+                    Rectangle()
+                        .frame(width: rectangleWidth(geo: geo), height: 2)
+                }
             }
+            .padding(side == .left ? .trailing : .leading, (geo.size.width / 2) - circleOffset)
+            .frame(maxWidth: .infinity, alignment: side == .left ? .trailing : .leading)
+            .frame(maxHeight: .infinity)
         }
-        .offset(x: circleOffset)
     }
 }
 

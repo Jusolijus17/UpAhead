@@ -47,7 +47,7 @@ class TimelineData: ObservableObject {
         for index in (0..<currentDayIndex).reversed() {
             height += days[days.count - index - 1].height
         }
-        height += CGFloat((days[currentDayIndex].completedEvent + 1) * 100)
+        height += CGFloat((days[currentDayIndex].completedEventsCount + 1) * 100)
         return height
     }
     
@@ -74,8 +74,12 @@ class TimelineData: ObservableObject {
         }
     }
     
-    func getCurrentDay() -> Day {
-        return days[currentDayIndex]
+    func nextEvent() {
+        days[currentDayIndex].nextEvent()
+    }
+    
+    func previousEvent() {
+        days[currentDayIndex].previousEvent()
     }
     
     private func generateEmptyWeek() -> [Day] {

@@ -17,17 +17,17 @@ struct Day {
         return events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
     }
     
-    var completedEvent: Int {
+    var completedEventsCount: Int {
         return events.filter({ $0.isCompleted }).count
     }
     
-    var dayCompleted: Bool {
-        return completedEvent == events.count
+    var isDayCompleted: Bool {
+        return completedEventsCount == events.count
     }
     
-    var completionPourcent: Double {
+    var completionPercent: Double {
         if events.count != 0 {
-            return Double(completedEvent) / Double(events.count) * 100.0
+            return Double(completedEventsCount) / Double(events.count) * 100.0
         } else {
             return 0
         }
@@ -54,6 +54,20 @@ struct Day {
     
     mutating func reorganizeEvents() {
         events.sort { $0.isCompleted == false && $1.isCompleted == true }
+    }
+    
+    mutating func nextEvent() {
+        if !isDayCompleted {
+            let index = events.count - completedEventsCount - 1
+            events[index].isCompleted = true
+        }
+    }
+    
+    mutating func previousEvent() {
+        if completedEventsCount != 0 {
+            let index = events.count - completedEventsCount
+            events[index].isCompleted = false
+        }
     }
     
     mutating func toggleEditMode(state: Bool? = nil) {
@@ -99,7 +113,7 @@ struct Event: Hashable, Identifiable {
 
 func getEvents(amount: Int) -> [Event] {
     let event1 = Event(title: "Meeting with Client A", iconName: "briefcase.fill", color: .blue, isCompleted: false)
-    let event2 = Event(title: "Lunch with Colleagues", iconName: "cart.fill", color: .green, isCompleted: true)
+    let event2 = Event(title: "Lunch with Colleagues", iconName: "cart.fill", color: .green, isCompleted: false)
     let event3 = Event(title: "Fitness Class", iconName: "figure.walk.circle.fill", color: .orange, isCompleted: false)
     
     let events: [Event] = [event1, event2, event3]

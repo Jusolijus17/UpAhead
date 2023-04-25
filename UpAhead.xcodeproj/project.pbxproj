@@ -22,6 +22,10 @@
 		3D5A57FD29C949F300820D7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */; };
 		3D5A580029C94B2D00820D7A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3D5A57FF29C94B2D00820D7A /* FirebaseAnalytics */; };
 		3D5A580229C94B2D00820D7A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3D5A580129C94B2D00820D7A /* FirebaseAuth */; };
+		3D6C9DE529F75ABE0065C541 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C9DE429F75ABE0065C541 /* Constants.swift */; };
+		3D6C9DE729F766A90065C541 /* ProgressHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C9DE629F766A90065C541 /* ProgressHeader.swift */; };
+		3D6C9DEA29F78A0B0065C541 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3D6C9DE929F78A0B0065C541 /* ConfettiSwiftUI */; };
+		3D6C9DEC29F78D0F0065C541 /* RollingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C9DEB29F78D0F0065C541 /* RollingText.swift */; };
 		3D99D41829D76B5A0056BF6B /* Mappings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D99D41729D76B5A0056BF6B /* Mappings.swift */; };
 		3D99D41A29D78CCF0056BF6B /* WeatherEffectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D99D41929D78CCF0056BF6B /* WeatherEffectManager.swift */; };
 		3DB7340B29C95DBA009C1923 /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB7340A29C95DBA009C1923 /* SignUpPage.swift */; };
@@ -60,6 +64,9 @@
 		3D41439C29CD5B490088B25E /* AnimationSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationSequence.swift; sourceTree = "<group>"; };
 		3D41439E29CD5C500088B25E /* AnimationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConfiguration.swift; sourceTree = "<group>"; };
 		3D5A57FC29C949F200820D7A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3D6C9DE429F75ABE0065C541 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		3D6C9DE629F766A90065C541 /* ProgressHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHeader.swift; sourceTree = "<group>"; };
+		3D6C9DEB29F78D0F0065C541 /* RollingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingText.swift; sourceTree = "<group>"; };
 		3D99D41729D76B5A0056BF6B /* Mappings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mappings.swift; sourceTree = "<group>"; };
 		3D99D41929D78CCF0056BF6B /* WeatherEffectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherEffectManager.swift; sourceTree = "<group>"; };
 		3DB7340A29C95DBA009C1923 /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
@@ -90,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D6C9DEA29F78A0B0065C541 /* ConfettiSwiftUI in Frameworks */,
 				3D5A580029C94B2D00820D7A /* FirebaseAnalytics in Frameworks */,
 				3D5A580229C94B2D00820D7A /* FirebaseAuth in Frameworks */,
 			);
@@ -139,6 +147,7 @@
 				3D07F29529DD1A01002F2CB3 /* CreateEventViewModel.swift */,
 				3D21949529DF5A1000A638A1 /* Enums.swift */,
 				3D21949729DF5FCB00A638A1 /* ProgressManager.swift */,
+				3D6C9DE429F75ABE0065C541 /* Constants.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -189,6 +198,8 @@
 				3DEB0D0129D7678600A3A5AC /* Events */,
 				3DD607C829C2B7F300DF95C7 /* Test.swift */,
 				3DF900E929E233C900BFEEAE /* PrecisionIndicator.swift */,
+				3D6C9DE629F766A90065C541 /* ProgressHeader.swift */,
+				3D6C9DEB29F78D0F0065C541 /* RollingText.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -271,6 +282,7 @@
 			packageProductDependencies = (
 				3D5A57FF29C94B2D00820D7A /* FirebaseAnalytics */,
 				3D5A580129C94B2D00820D7A /* FirebaseAuth */,
+				3D6C9DE929F78A0B0065C541 /* ConfettiSwiftUI */,
 			);
 			productName = UpAhead;
 			productReference = 3DD5C00929B1187B002FFF12 /* UpAhead.app */;
@@ -302,6 +314,7 @@
 			mainGroup = 3DD5C00029B1187B002FFF12;
 			packageReferences = (
 				3D5A57FE29C94B2C00820D7A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				3D6C9DE829F78A0B0065C541 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 			);
 			productRefGroup = 3DD5C00A29B1187B002FFF12 /* Products */;
 			projectDirPath = "";
@@ -338,7 +351,10 @@
 				3D09399029D513AE009C159E /* RainAnimation.swift in Sources */,
 				3D99D41829D76B5A0056BF6B /* Mappings.swift in Sources */,
 				3DEB0CFB29D7665D00A3A5AC /* Backgrounds.swift in Sources */,
+				3D6C9DE529F75ABE0065C541 /* Constants.swift in Sources */,
 				3DD5C02229B2DDA4002FFF12 /* LoginPage.swift in Sources */,
+				3D6C9DE729F766A90065C541 /* ProgressHeader.swift in Sources */,
+				3D6C9DEC29F78D0F0065C541 /* RollingText.swift in Sources */,
 				3DD5C02429B2F0DD002FFF12 /* DayView.swift in Sources */,
 				3DB7340B29C95DBA009C1923 /* SignUpPage.swift in Sources */,
 				3DD5C02029B12FA3002FFF12 /* Extensions.swift in Sources */,
@@ -580,6 +596,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		3D6C9DE829F78A0B0065C541 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -592,6 +616,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3D5A57FE29C94B2C00820D7A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		3D6C9DE929F78A0B0065C541 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3D6C9DE829F78A0B0065C541 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
