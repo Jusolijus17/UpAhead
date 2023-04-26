@@ -58,12 +58,13 @@ struct Timeline: View {
                 ZStack {
                     GeometryReader { geo in
                         VStack(spacing: 0) {
-                            ForEach(0..<timelineData.days.count, id: \.self) { i in
-                                let titleSide: Side = i.isMultiple(of: 2) ? .left : .right
-                                let model = DayView.ViewModel(index: i, titleSide: titleSide, weatherModel: timelineData.weatherModel)
-                                DayView(model: model, day: $timelineData.days[i], editData: $timelineData.editData)
-                                    .id("day\(timelineData.days.count - i)")
-                                    .frame(height: timelineData.days[i].height)
+                            ForEach(timelineData.days.indices, id: \.self) { i in
+                                let index = timelineData.days.count - i - 1
+                                let titleSide: Side = index.isMultiple(of: 2) ? .left : .right
+                                let model = DayView.ViewModel(index: index, titleSide: titleSide, weatherModel: timelineData.weatherModel)
+                                DayView(model: model, day: $timelineData.days[index], editData: $timelineData.editData)
+                                    .id("day\(timelineData.days.count - index)")
+                                    .frame(height: timelineData.days[index].height)
                             }
                             Spacer().frame(height: 0)
                                 .id("bottom")
@@ -203,6 +204,6 @@ struct Editor: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(timelineData: TimelineData(days: generateDummyWeek(), currentDayIndex: 3))
+        MainView(timelineData: TimelineData(days: generateDummyWeek()))
     }
 }

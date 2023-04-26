@@ -22,17 +22,17 @@ struct TrajectView: View {
             
             VStack(spacing: 0) {
                 ForEach(timelineData.days.indices, id: \.self) { i in
-                    RoadSection(index: i)
-                        .frame(height: timelineData.days[i].height)
+                    let index = timelineData.days.count - i - 1
+                    RoadSection(index: index)
+                        .frame(height: timelineData.days[index].height)
                 }
             }
             
             ZStack(alignment: .top) {
-                let currentHeight: CGFloat = timelineData.currentDayIndex != 0 ? timelineData.trajectHeight - 50 : timelineData.trajectHeight
                 Capsule()
                     .foregroundColor(.blue)
                     .padding(.vertical, 10)
-                    .frame(width: Constants.trajectWidth - 10, height: currentHeight)
+                    .frame(width: Constants.trajectWidth - 10, height: timelineData.trajectHeight)
                 
                 VStack {
                     DirectionPointer()
@@ -175,7 +175,7 @@ struct CurrentTime: View {
 
 struct TrajectView_Previews: PreviewProvider {
     static var previews: some View {
-        let timelineData = TimelineData(days: generateDummyWeek(), currentDayIndex: 4)
+        let timelineData = TimelineData(days: generateDummyWeek())
         ScrollView {
             TrajectView()
                 .frame(maxWidth: .infinity)

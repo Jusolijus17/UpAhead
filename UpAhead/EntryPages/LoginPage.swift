@@ -72,7 +72,7 @@ struct LoginPage: View {
                 HStack {
                     
                     NavigationLink(
-                        destination: MainView(timelineData: TimelineData(days: generateDummyWeek(), currentDayIndex: 3)),
+                        destination: MainView(timelineData: TimelineData(days: generateDummyWeek())),
                         label: {
                             HStack(spacing: 2) {
                                 Image(systemName: "clock")

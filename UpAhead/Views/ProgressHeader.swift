@@ -13,10 +13,14 @@ struct ProgressHeader: View {
     
     @State var currentPercent: Int = 0
     
-    var body: some View {
-        let percent = round(timelineData.currentDay.completionPercent)
+    var progression: CGFloat {
+        let percent = round(timelineData.completionPercent)
         let normalizedPercent = percent / 100
         let fillAmount = CGFloat(normalizedPercent * 200)
+        return fillAmount
+    }
+    
+    var body: some View {
         ZStack() {
             ZStack(alignment: .leading) {
                 Capsule()
@@ -25,7 +29,7 @@ struct ProgressHeader: View {
                 Group {
                     Rectangle()
                         .fill(.green)
-                        .frame(width: fillAmount, height: 40)
+                        .frame(width: progression, height: 40)
                 }
                 .frame(width: 200, alignment: .leading)
                 .mask {
@@ -33,9 +37,11 @@ struct ProgressHeader: View {
                         .frame(width: 190, height: 40)
                 }
             }
-            RollingText(font: .system(size: 32, weight: .bold, design: .rounded), value: $currentPercent)
+            let font = Font.system(size: 32, weight: .bold, design: .rounded)
+            RollingText(font: font, value: $currentPercent)
                 .foregroundColor(.white)
                 .opacity(percentState.showCurrentPercent ? 1 : 0)
+            
             if !percentState.showCurrentPercent {
                 Text(Constants.appName)
                     .font(.system(size: 32, weight: .bold, design: .rounded))
@@ -46,7 +52,11 @@ struct ProgressHeader: View {
             }
         }
         .shadow(radius: 10)
-        .onChange(of: timelineData.currentDay.completedEventsCount) { newValue in
+        .onAppear {
+            currentPercent = Int(round(timelineData.completionPercent))
+        }
+        .onChange(of: timelineData.completionPercent) { newValue in
+            currentPercent = Int(round(newValue))
             percentState.showCurrentPercent = true
             let item = DispatchWorkItem {
                 withAnimation {
@@ -56,9 +66,6 @@ struct ProgressHeader: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: item)
             percentState.previousWorkItem?.cancel()
             percentState.previousWorkItem = item
-        }
-        .onChange(of: timelineData.currentDay.completionPercent) { newValue in
-            currentPercent = Int(round(newValue))
         }
         .onTapGesture {
             let impactMed = UIImpactFeedbackGenerator(style: .medium)

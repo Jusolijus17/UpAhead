@@ -36,10 +36,6 @@ struct RollingText: View {
                         .clipped()
                     }
             }
-            .onAppear {
-                animationRange = Array(repeating: 0, count: "\(value)".count)
-                updateText()
-            }
             .onChange(of: value) { newValue in
                 let extra = "\(value)".count - animationRange.count
                 if extra > 0 {
@@ -62,6 +58,12 @@ struct RollingText: View {
             
             Text("%")
                 .font(font)
+        }
+        .onAppear {
+            let value = "\(value)".count
+            let count = value == 0 ? 1 : value
+            animationRange = Array(repeating: 0, count: count)
+            updateText()
         }
     }
     

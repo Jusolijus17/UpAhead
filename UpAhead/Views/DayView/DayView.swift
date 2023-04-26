@@ -145,7 +145,7 @@ struct DayView_Previews: PreviewProvider {
         let model = DayView.ViewModel(index: 3, titleSide: .left, weatherModel: weatherModel)
         let day = generateDay()
         let editData = EditData()
-        let timelineData = TimelineData(currentDayIndex: 3)
+        let timelineData = TimelineData()
         ZStack {
             Color.accentColor
                 .ignoresSafeArea()

@@ -23,18 +23,18 @@ struct EditData {
 
 class TimelineData: ObservableObject {
     @Published var days: [Day]
-    @Published var currentDayIndex: Int
-    @Published var editData: EditData
+    @Published var currentDayIndex: Int = 0
+    @Published var editData: EditData = EditData()
     @ObservedObject var weatherModel = WeatherModel()
     
-    init(days: [Day] = [], currentDayIndex: Int = 0) {
-        self.currentDayIndex = currentDayIndex
-        self.editData = EditData()
+    init(days: [Day] = []) {
         self.days = days
+        self.currentDayIndex = getCurrentDayIndex()
         
         if self.days.count == 0 {
             self.days = generateEmptyWeek()
         }
+        
         self.weatherModel.fetchWeatherForecast()
     }
     
@@ -43,9 +43,9 @@ class TimelineData: ObservableObject {
     }
     
     var trajectHeight: CGFloat {
-        var height: CGFloat = 50
-        for index in (0..<currentDayIndex).reversed() {
-            height += days[days.count - index - 1].height
+        var height: CGFloat = 0
+        for index in (0..<currentDayIndex) {
+            height += days[index].height
         }
         height += CGFloat((days[currentDayIndex].completedEventsCount + 1) * 100)
         return height
@@ -59,6 +59,17 @@ class TimelineData: ObservableObject {
         return height
     }
     
+    var completionPercent: Double {
+        var total: Int = 0
+        var totalCompletedCount: Int = 0
+        for day in days {
+            total += day.events.count
+            totalCompletedCount += day.completedEventsCount
+        }
+        total = total == 0 ? 1 : total
+        return (Double(totalCompletedCount) / Double(total)) * 100
+    }
+    
     func toggleEditMode() {
         if editData.editMode == true {
             for i in 0..<days.count {
@@ -66,12 +77,6 @@ class TimelineData: ObservableObject {
             }
         }
         editData.editMode.toggle()
-    }
-    
-    func updateCurrentDay() {
-        if currentDayIndex < days.count - 1 {
-            currentDayIndex += 1
-        }
     }
     
     func nextEvent() {
@@ -82,8 +87,20 @@ class TimelineData: ObservableObject {
         days[currentDayIndex].previousEvent()
     }
     
-    private func generateEmptyWeek() -> [Day] {
+    private func getCurrentDayIndex() -> Int {
         let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        for (index, day) in days.enumerated() {
+            if calendar.isDate(day.date, inSameDayAs: today) {
+                return index
+            }
+        }
+        return 0
+    }
+    
+    private func generateEmptyWeek() -> [Day] {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.firstWeekday = 2
         let today = calendar.startOfDay(for: Date())
         let monday = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today))!
         var days: [Day] = []
@@ -99,7 +116,8 @@ class TimelineData: ObservableObject {
 }
 
 func generateDummyWeek() -> [Day] {
-    let calendar = Calendar.current
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.firstWeekday = 2
     let today = calendar.startOfDay(for: Date())
     let daysToAdd = 2 - calendar.component(.weekday, from: today)
     let monday = calendar.date(byAdding: .day, value: daysToAdd, to: today)!
@@ -108,7 +126,7 @@ func generateDummyWeek() -> [Day] {
         let date = calendar.date(byAdding: .day, value: 7 - i, to: monday)!
         let events: [Event] = getEvents(amount: i)
         let day = Day(date: date, events: events)
-        days.append(day)
+        days.insert(day, at: 0)
     }
     return days
 }
