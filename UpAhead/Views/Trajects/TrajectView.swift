@@ -64,6 +64,11 @@ struct RoadSection: View {
                             .foregroundColor(event.color)
                             .frame(height: 100)
                     }
+                    if day.editMode {
+                        TimeMark(side: day.events.count.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
+                            .foregroundColor(.gray)
+                            .frame(height: 100)
+                    }
                     Spacer()
                 }
             } else {

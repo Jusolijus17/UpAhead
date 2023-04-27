@@ -44,8 +44,8 @@ struct WiggleModifier: ViewModifier {
             .rotationEffect(.degrees(isWiggling ? 2.0 : 0))
             .onAppear {
                 if shouldWiggle {
-                    withAnimation(bounceAnimation) {
-                        withAnimation(rotateAnimation) {
+                    withAnimation(bounceAnimation.repeat(while: shouldWiggle, autoreverses: true)) {
+                        withAnimation(rotateAnimation.repeat(while: shouldWiggle, autoreverses: true)) {
                             isWiggling.toggle()
                         }
                     }

@@ -22,15 +22,19 @@ struct DayView: View {
                     TitleView(date: day.date, side: model.titleSide)
                         .id("title\(model.index)")
                     Spacer().frame(width: 40)
-                    HStack(spacing: 10) {
-                        editData.editMode ? AnyView(CustomEditButton(day: $day)) : AnyView(WeatherView())
+                    HStack {
+                        WeatherView()
+                            .frame(maxWidth: .infinity)
+                        editButton
+                            .padding(.trailing, 10)
                     }
-                    .frame(maxWidth: .infinity)
                 } else {
-                    HStack(spacing: 10) {
-                        editData.editMode ? AnyView(CustomEditButton(day: $day)) : AnyView(WeatherView())
+                    HStack {
+                        editButton
+                            .padding(.leading, 10)
+                        WeatherView()
+                            .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
                     Spacer().frame(width: 40)
                     TitleView(date: day.date, side: model.titleSide)
                         .id("title\(model.index)")
@@ -46,7 +50,7 @@ struct DayView: View {
         .environmentObject(model)
         .environmentObject(timelineData)
         .background(Color(UIColor.systemGray5))
-        .cornerRadius(40)
+        .cornerRadius(30)
         .padding(.horizontal, Constants.dayViewHorizontalPadding)
         .padding(.vertical, 5)
         .shadow(radius: 10)
@@ -56,33 +60,24 @@ struct DayView: View {
                 confettiCounter += 1
             }
         }
-    }
-}
-
-struct CustomEditButton: View {
-    @Binding var day: Day
-    
-    var body: some View {
-        Button {
-            let impactMed = UIImpactFeedbackGenerator(style: .medium)
-            impactMed.impactOccurred()
-            withAnimation {
-                day.toggleEditMode()
-            }
-        } label: {
-            HStack(spacing: 5) {
-                Text("Edit day")
-                    .fontWeight(.semibold)
-                Image(systemName: "slider.horizontal.below.square.and.square.filled")
-            }
-            .padding(10)
-            .background(.red)
-            .cornerRadius(10)
-            .foregroundColor(.white)
+        
+        var editButton: AnyView {
+            return AnyView(Button {
+                let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                impactMed.impactOccurred()
+                withAnimation {
+                    day.toggleEditMode()
+                }
+            } label: {
+                let icon = day.editMode ? "checkmark.circle.fill" : "ellipsis.circle.fill"
+                let color = day.editMode ? Color.green : nil
+                Image(systemName: icon)
+                    .font(.system(size: 26))
+                    .foregroundColor(color)
+            })
         }
     }
 }
-
 
 struct WeatherView: View {
     @EnvironmentObject var model: DayView.ViewModel
@@ -144,7 +139,7 @@ struct DayView_Previews: PreviewProvider {
         let weatherModel = WeatherModel()
         let model = DayView.ViewModel(index: 3, titleSide: .left, weatherModel: weatherModel)
         let day = generateDay()
-        let editData = EditData()
+        let editData = EditData(editMode: true)
         let timelineData = TimelineData()
         ZStack {
             Color.accentColor

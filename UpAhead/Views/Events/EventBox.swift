@@ -35,16 +35,16 @@ struct EventBox: View {
                     .foregroundColor(event.color == .green ? .blue : .green)
             }
             
-            if isEditing {
-                Button {
-                    guard let deleteEvent = deleteEvent else { return }
-                    deleteEvent()
-                } label: {
-                    DeleteButton()
-                        .frame(width: 25)
-                        .position(x: 0, y: 0)
-                }
-            }
+//            if isEditing {
+//                Button {
+//                    guard let deleteEvent = deleteEvent else { return }
+//                    deleteEvent()
+//                } label: {
+//                    DeleteButton()
+//                        .frame(width: 25)
+//                        .position(x: 0, y: 0)
+//                }
+//            }
         }
         .shouldWiggle($isEditing)
         .frame(width: Constants.eventBoxWidth, height: Constants.eventBoxHeight)
@@ -54,6 +54,9 @@ struct EventBox: View {
             }
             let impactMed = UIImpactFeedbackGenerator(style: .medium)
             impactMed.impactOccurred()
+        }
+        .onAppear {
+            print("Event \(event.title), editMode: \(isEditing)")
         }
     }
 }

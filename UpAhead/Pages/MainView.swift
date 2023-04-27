@@ -24,7 +24,7 @@ struct MainView: View {
                     }
                     BottomButtons()
                 }
-
+                
                 Editor()
             }
         }
@@ -32,21 +32,6 @@ struct MainView: View {
         .navigationBarBackButtonHidden(true)
     }
     
-}
-
-struct TopBar: View {
-    var body: some View {
-        ZStack {
-            Text("UpAhead!")
-                .font(.system(size: 32, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
-                .padding(.horizontal)
-                .background(Color.accentColor)
-                .cornerRadius(20)
-                .shadow(radius: 10)
-        }
-        .frame(maxWidth: .infinity)
-    }
 }
 
 struct Timeline: View {
@@ -75,24 +60,24 @@ struct Timeline: View {
                 }
                 .padding(.top, 50)
             }
-            .onAppear {
-                if timelineData.currentDayIndex != 0 {
-                    proxy.scrollTo("mark\(timelineData.days.count - timelineData.currentDayIndex)", anchor: .bottom)
-                } else {
-                    proxy.scrollTo("bottom", anchor: .bottom)
-                }
-            }
-            .onChange(of: timelineData.currentDayIndex) { newValue in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    withAnimation {
-                        if newValue != 0 {
-                            proxy.scrollTo("mark\(timelineData.days.count - newValue)", anchor: .bottom)
-                        } else {
-                            proxy.scrollTo("bottom", anchor: .bottom)
-                        }
-                    }
-                }
-            }
+            //            .onAppear {
+            //                if timelineData.currentDayIndex != 0 {
+            //                    proxy.scrollTo("mark\(timelineData.days.count - timelineData.currentDayIndex)", anchor: .bottom)
+            //                } else {
+            //                    proxy.scrollTo("bottom", anchor: .bottom)
+            //                }
+            //            }
+            //            .onChange(of: timelineData.currentDayIndex) { newValue in
+            //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            //                    withAnimation {
+            //                        if newValue != 0 {
+            //                            proxy.scrollTo("mark\(timelineData.days.count - newValue)", anchor: .bottom)
+            //                        } else {
+            //                            proxy.scrollTo("bottom", anchor: .bottom)
+            //                        }
+            //                    }
+            //                }
+            //            }
         }
     }
 }
@@ -108,7 +93,7 @@ struct BottomButtons: View {
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.error)
             }) {
-                Text("Skip Stop")
+                Text("Back")
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
                     .padding()
@@ -117,21 +102,6 @@ struct BottomButtons: View {
                     .cornerRadius(10)
             }
             
-            Button {
-                withAnimation {
-                    timelineData.toggleEditMode()
-                }
-            } label: {
-                Text("Edit")
-                    .font(.system(size: 20, weight: .semibold, design: .rounded))
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: 75)
-                    .background(Color.gray)
-                    .cornerRadius(10)
-            }
-            
-            
             Button(action: {
                 withAnimation {
                     timelineData.nextEvent()
@@ -139,7 +109,7 @@ struct BottomButtons: View {
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
             }) {
-                Text("Next Stop")
+                Text("Next")
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
                     .padding()

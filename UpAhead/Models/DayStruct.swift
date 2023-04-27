@@ -14,7 +14,11 @@ struct Day {
     var editMode: Bool = false
     
     var height: CGFloat {
-        return events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
+        var height: CGFloat = events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
+        if editMode {
+            height += 100
+        }
+        return height
     }
     
     var completedEventsCount: Int {
@@ -71,26 +75,11 @@ struct Day {
     }
     
     mutating func toggleEditMode(state: Bool? = nil) {
-        if state == nil {
-            if editMode {
-                if !events.isEmpty {
-                    events.removeLast()
-                }
-            } else {
-                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false, index: events.count))
-            }
-            editMode.toggle()
-        } else if state != nil && editMode != state {
-            if state == false {
-                if !events.isEmpty {
-                    events.removeLast()
-                }
-            } else {
-                events.append(Event(title: "AddBox", iconName: "", color: .gray, isCompleted: false, index: events.count))
-            }
-            editMode.toggle()
+        if let state = state {
+            self.editMode = state
+        } else {
+            self.editMode.toggle()
         }
-        
     }
 }
 

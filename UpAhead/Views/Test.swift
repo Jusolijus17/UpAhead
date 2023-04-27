@@ -183,8 +183,6 @@ struct Demo: View {
     }
 }
 
-
-
 struct Test_Preview: PreviewProvider {
     static var previews: some View {
 //        let screenHeight: CGFloat = UIScreen.main.bounds.height

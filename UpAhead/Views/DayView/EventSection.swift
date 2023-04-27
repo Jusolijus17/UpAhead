@@ -22,17 +22,30 @@ struct EventSection: View {
             //indicators
             
             List {
-                ForEach($day.events) { $event in
-                    let alignment = model.getAlignment(index: event.index)
-                    EventRow(alignment: alignment, event: $event, editMode: $day.editMode)
+                Group {
+                    ForEach($day.events) { $event in
+                        let alignment = model.getAlignment(index: event.index)
+                        EventRow(alignment: alignment, event: $event, editMode: $day.editMode)
+                    }
+                    .onMove(perform: move)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(emptyInset)
+                    .listRowBackground(EmptyView())
+                    
+                    if day.editMode {
+                        AddBox {
+                            triggerAddEvent()
+                        }
+                        .frame(maxWidth: .infinity, alignment: model.getAlignment(index: day.events.count))
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(emptyInset)
+                        .listRowBackground(EmptyView())
+                    }
                 }
-                .onMove(perform: move)
-                .listRowSeparator(.hidden)
-                .listRowInsets(emptyInset)
-                .listRowBackground(EmptyView())
+                .padding(.horizontal, 10)
             }
             .padding(.vertical)
-            .padding(.horizontal, Constants.listHorizontalPadding)
+            .padding(.horizontal, Constants.listHorizontalPadding - 10)
             .listStyle(.plain)
             .scrollDisabled(true)
         }
@@ -114,10 +127,20 @@ struct EventRow: View {
     @Binding var event: Event
     @Binding var editMode: Bool
     
+    var eventBox: AnyView {
+        return AnyView(EventBox(event: $event, isEditing: $editMode)
+            .frame(maxWidth: .infinity, alignment: alignment))
+    }
+    
+    var editButtons: AnyView {
+        return AnyView(EditButtons(alignement: alignment)
+            .frame(maxWidth: .infinity, alignment: alignment == .leading ? .trailing : .leading))
+    }
+    
     var body: some View {
         HStack {
-            EventBox(event: $event, isEditing: $editMode)
-                .frame(maxWidth: .infinity, alignment: alignment)
+            alignment == .leading ? eventBox : editMode ? editButtons : nil
+            alignment == .leading ? editMode ? editButtons : nil : eventBox
         }
         .id(event.id)
         .onDrag {
@@ -126,6 +149,40 @@ struct EventRow: View {
             EventBox(event: $event, isEditing: .constant(false))
                 .contentShape(.dragPreview, RoundedRectangle(cornerRadius: 10, style: .continuous))
         }
+    }
+}
+
+struct EditButtons: View {
+    var alignement: Alignment
+    
+    var trashButton: AnyView {
+        return AnyView(
+            Button {
+                print("Delete")
+            } label: {
+                Image(systemName: "trash.fill")
+                    .font(.system(size: 32))
+                    .foregroundColor(.red)
+            })
+    }
+    
+    var editButton: AnyView {
+        return AnyView(
+            Button {
+                print("Edit")
+            } label: {
+                Image(systemName: "square.and.pencil")
+                    .font(.system(size: 32))
+                    .foregroundColor(.blue)
+            })
+    }
+    
+    var body: some View {
+        HStack {
+            alignement == .leading ? trashButton : editButton
+            alignement == .leading ? editButton : trashButton
+        }
+        .padding(alignement == .leading ? .trailing : .leading, 8)
     }
 }
 
