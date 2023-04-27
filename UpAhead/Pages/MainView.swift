@@ -22,6 +22,7 @@ struct MainView: View {
                         Timeline()
                         ProgressHeader()
                     }
+                    .frame(maxHeight: .infinity)
                     BottomButtons()
                 }
                 

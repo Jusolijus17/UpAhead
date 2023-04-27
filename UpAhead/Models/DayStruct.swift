@@ -25,6 +25,10 @@ struct Day {
         return events.filter({ $0.isCompleted }).count
     }
     
+    var uncompletedEventsCount: Int {
+        return events.filter({ !$0.isCompleted }).count
+    }
+    
     var isDayCompleted: Bool {
         return completedEventsCount == events.count
     }

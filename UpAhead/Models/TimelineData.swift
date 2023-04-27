@@ -70,6 +70,29 @@ class TimelineData: ObservableObject {
         return (Double(totalCompletedCount) / Double(total)) * 100
     }
     
+    var isUpToDate: Bool {
+        for i in 0..<currentDayIndex {
+            if !days[i].isDayCompleted {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func getLateEventsList() -> [(String, Int)] {
+        var lateList: [(String, Int)] = []
+        if isUpToDate {
+            return []
+        }
+        for i in 0..<currentDayIndex {
+            let day = days[i]
+            if !day.isDayCompleted {
+                lateList.append((day.date.weekday, day.uncompletedEventsCount))
+            }
+        }
+        return lateList
+    }
+    
     func toggleEditMode() {
         if editData.editMode == true {
             for i in 0..<days.count {
