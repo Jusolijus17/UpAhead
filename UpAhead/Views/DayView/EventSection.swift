@@ -25,14 +25,14 @@ struct EventSection: View {
                 Group {
                     ForEach($day.events) { $event in
                         let alignment = model.getAlignment(index: event.index)
-                        EventRow(alignment: alignment, event: $event, editMode: $day.editMode)
+                        EventRow(alignment: alignment, event: $event, day: $day, editMode: $day.editMode)
                     }
                     .onMove(perform: move)
                     .listRowSeparator(.hidden)
                     .listRowInsets(emptyInset)
                     .listRowBackground(EmptyView())
                     
-                    if day.editMode {
+                    if day.editMode || day.events.isEmpty {
                         AddBox {
                             triggerAddEvent()
                         }
@@ -44,6 +44,7 @@ struct EventSection: View {
                 }
                 .padding(.horizontal, 10)
             }
+            .buttonStyle(BorderlessButtonStyle())
             .padding(.vertical)
             .padding(.horizontal, Constants.listHorizontalPadding - 10)
             .listStyle(.plain)
@@ -125,6 +126,7 @@ struct EventSection: View {
 struct EventRow: View {
     var alignment: Alignment
     @Binding var event: Event
+    @Binding var day: Day
     @Binding var editMode: Bool
     
     var eventBox: AnyView {
@@ -133,8 +135,11 @@ struct EventRow: View {
     }
     
     var editButtons: AnyView {
-        return AnyView(EditButtons(alignement: alignment)
-            .frame(maxWidth: .infinity, alignment: alignment == .leading ? .trailing : .leading))
+        var view: AnyView = AnyView(
+            EditButtons(alignement: alignment, day: $day, event: $event)
+                .frame(maxWidth: .infinity, alignment: alignment == .leading ? .trailing : .leading)
+        )
+        return view
     }
     
     var body: some View {
@@ -154,11 +159,18 @@ struct EventRow: View {
 
 struct EditButtons: View {
     var alignement: Alignment
+    @Binding var day: Day
+    @Binding var event: Event
     
     var trashButton: AnyView {
         return AnyView(
             Button {
-                print("Delete")
+                day.deleteEvent(event)
+                if day.events.isEmpty {
+                    withAnimation {
+                        day.toggleEditMode()
+                    }
+                }
             } label: {
                 Image(systemName: "trash.fill")
                     .font(.system(size: 32))

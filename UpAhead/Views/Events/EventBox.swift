@@ -34,17 +34,6 @@ struct EventBox: View {
                     .font(.system(size: 55))
                     .foregroundColor(event.color == .green ? .blue : .green)
             }
-            
-//            if isEditing {
-//                Button {
-//                    guard let deleteEvent = deleteEvent else { return }
-//                    deleteEvent()
-//                } label: {
-//                    DeleteButton()
-//                        .frame(width: 25)
-//                        .position(x: 0, y: 0)
-//                }
-//            }
         }
         .shouldWiggle($isEditing)
         .frame(width: Constants.eventBoxWidth, height: Constants.eventBoxHeight)
@@ -55,37 +44,25 @@ struct EventBox: View {
             let impactMed = UIImpactFeedbackGenerator(style: .medium)
             impactMed.impactOccurred()
         }
-        .onAppear {
-            print("Event \(event.title), editMode: \(isEditing)")
-        }
-    }
-}
-
-struct DeleteButton: View {
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(.gray)
-            
-            Image(systemName: "xmark")
-        }
     }
 }
 
 struct AddBox: View {
     var onTap: () -> Void
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(style: StrokeStyle(lineWidth: 2, dash: [6]))
-            
-            Image(systemName: "plus")
-                .font(.system(size: 40))
-        }
-        .frame(width: 100, height: 100)
-        .foregroundColor(.gray)
-        .onTapGesture {
+        Button {
             onTap()
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [6]))
+                    .frame(width: 99, height: 99)
+                
+                Image(systemName: "plus")
+                    .font(.system(size: 40))
+            }
+            .frame(width: 100, height: 100)
+            .foregroundColor(.gray)
         }
     }
 }

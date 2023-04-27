@@ -66,7 +66,9 @@ struct DayView: View {
                 let impactMed = UIImpactFeedbackGenerator(style: .medium)
                 impactMed.impactOccurred()
                 withAnimation {
-                    day.toggleEditMode()
+                    if !day.events.isEmpty {
+                        day.toggleEditMode()
+                    }
                 }
             } label: {
                 let icon = day.editMode ? "checkmark.circle.fill" : "ellipsis.circle.fill"

@@ -15,7 +15,7 @@ struct Day {
     
     var height: CGFloat {
         var height: CGFloat = events.count <= 1 ? 200 : CGFloat((events.count * 100) + 100)
-        if editMode {
+        if editMode && events.count != 0 {
             height += 100
         }
         return height
@@ -54,6 +54,12 @@ struct Day {
     
     mutating func deleteEvent(index: Int) {
         events.remove(at: index)
+    }
+    
+    mutating func deleteEvent(_ event: Event) {
+        if let index = events.firstIndex(where: { $0 == event }) {
+            events.remove(at: index)
+        }
     }
     
     mutating func reorganizeEvents() {
