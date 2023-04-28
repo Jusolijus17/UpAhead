@@ -18,6 +18,8 @@ extension DayView {
         @Published private(set) var symbolName: String = ""
         @Published private(set) var temperature: String = "-/- °C"
         
+        @Published private(set) var showStats: Bool = true
+        
         let weekColor: Color = Color.orange.opacity(0.8)
         let weekendColor: Color = Color.blue.opacity(0.65)
         
@@ -39,6 +41,17 @@ extension DayView {
             let side1: Alignment = titleSide == .left ? .leading : .trailing
             let side2: Alignment = titleSide == .left ? .trailing : .leading
             return index.isMultiple(of: 2) ? side1 : side2
+        }
+        
+        func onStatsTap() {
+            withAnimation {
+                showStats = false
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation {
+                    self.showStats = true
+                }
+            }
         }
     }
 }

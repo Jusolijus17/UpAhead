@@ -59,20 +59,29 @@ class TimelineData: ObservableObject {
         return height
     }
     
-    var completionPercent: Double {
+    private var totalEventsCount: Int {
         var total: Int = 0
-        var totalCompletedCount: Int = 0
         for day in days {
             total += day.events.count
-            totalCompletedCount += day.completedEventsCount
         }
-        total = total == 0 ? 1 : total
-        return (Double(totalCompletedCount) / Double(total)) * 100
+        return total
+    }
+    
+    private var totalCompletedEventsCount: Int {
+        var total: Int = 0
+        for day in days {
+            total += day.completedEventsCount
+        }
+        return total
+    }
+    
+    var completionPercent: Double {
+        return (Double(totalCompletedEventsCount) / Double(totalEventsCount)) * 100
     }
     
     var isUpToDate: Bool {
         for i in 0..<currentDayIndex {
-            if !days[i].isDayCompleted {
+            if !days[i].isCompleted {
                 return false
             }
         }
@@ -86,11 +95,18 @@ class TimelineData: ObservableObject {
         }
         for i in 0..<currentDayIndex {
             let day = days[i]
-            if !day.isDayCompleted {
+            if !day.isCompleted {
                 lateList.append((day.date.weekday, day.uncompletedEventsCount))
             }
         }
         return lateList
+    }
+    
+    func getDayProgressionContribution(day: Day) -> Double {
+        guard totalEventsCount != 0 else {
+            return 0
+        }
+        return (Double(day.events.count) / Double(totalEventsCount)) * 100
     }
     
     func toggleEditMode() {

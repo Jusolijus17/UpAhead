@@ -22,26 +22,30 @@ struct CreateEventView: View {
                 .padding(.top, 10)
                 .padding(.bottom, -20)
                 
-            
             Text("Create Event")
                 .font(.largeTitle)
                 .bold()
             
-            
-            EventBox(event: .constant(model.getEvent()), isEditing: .constant(false))
-            
-            Group {
-                TextField("Enter a title", text: $model.title)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-                    .onReceive(Publishers.keyboardHeight) { keyboardHeight in
-                        withAnimation {
-                            self.model.keyboardHeight = keyboardHeight
-                        }
+            HStack {
+                Spacer()
+                EventBox(event: .constant(model.getEvent(date: day.date)), isEditing: .constant(false))
+                Spacer()
+                    .overlay {
+                        DatePicker("Time of event", selection: $model.time, displayedComponents: .hourAndMinute)
+                            .labelsHidden()
                     }
             }
-            .padding(.horizontal, 30)
+            
+            TextField("Enter a title", text: $model.title)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(10)
+                .padding(.horizontal, 30)
+                .onReceive(Publishers.keyboardHeight) { keyboardHeight in
+                    withAnimation {
+                        self.model.keyboardHeight = keyboardHeight
+                    }
+                }
             
             ColorPickerView()
             
@@ -49,7 +53,7 @@ struct CreateEventView: View {
             
             Button(action: {
                 if model.title != "" {
-                    day.addEvent(model.getEvent())
+                    day.addEvent(model.getEvent(date: day.date))
                     withAnimation {
                         timelineData.editData.toggleEditor()
                     }

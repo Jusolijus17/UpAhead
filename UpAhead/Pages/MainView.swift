@@ -35,6 +35,26 @@ struct MainView: View {
     
 }
 
+//struct Header: View {
+//    var body: some View {
+//        HStack {
+//            Image(systemName: "arrow.triangle.2.circlepath")
+//                .font(.system(size: 22))
+//                .foregroundColor(.white)
+//                .shadow(color: .black, radius: 5)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//                .padding(.leading, 25)
+//            ProgressHeader()
+//            Image(systemName: "gearshape.fill")
+//                .font(.system(size: 22))
+//                .foregroundColor(.white)
+//                .shadow(color: .black, radius: 5)
+//                .frame(maxWidth: .infinity, alignment: .trailing)
+//                .padding(.trailing, 25)
+//        }
+//    }
+//}
+
 struct Timeline: View {
     @EnvironmentObject var timelineData: TimelineData
     
@@ -61,24 +81,6 @@ struct Timeline: View {
                 }
                 .padding(.top, 50)
             }
-            //            .onAppear {
-            //                if timelineData.currentDayIndex != 0 {
-            //                    proxy.scrollTo("mark\(timelineData.days.count - timelineData.currentDayIndex)", anchor: .bottom)
-            //                } else {
-            //                    proxy.scrollTo("bottom", anchor: .bottom)
-            //                }
-            //            }
-            //            .onChange(of: timelineData.currentDayIndex) { newValue in
-            //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            //                    withAnimation {
-            //                        if newValue != 0 {
-            //                            proxy.scrollTo("mark\(timelineData.days.count - newValue)", anchor: .bottom)
-            //                        } else {
-            //                            proxy.scrollTo("bottom", anchor: .bottom)
-            //                        }
-            //                    }
-            //                }
-            //            }
         }
     }
 }

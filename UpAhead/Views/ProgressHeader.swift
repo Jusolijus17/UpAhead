@@ -89,9 +89,13 @@ struct ProgressHeader: View {
         }
         .overlay {
             let font = Font.system(size: 32, weight: .bold, design: .rounded)
-            RollingText(font: font, value: $model.currentPercent)
-                .foregroundColor(.white)
-                .opacity(model.percentState.showCurrentPercent ? 1 : 0)
+            HStack(spacing: 0) {
+                RollingText(font: font, value: $model.currentPercent)
+                Text("%")
+                    .font(font)
+            }
+            .foregroundColor(.white)
+            .opacity(model.percentState.showCurrentPercent ? 1 : 0)
             
             !model.percentState.showCurrentPercent ? title : nil
         }

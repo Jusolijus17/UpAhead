@@ -69,7 +69,7 @@ struct AddBox: View {
 
 struct EventBox_Previews: PreviewProvider {
     static var previews: some View {
-        let dummyEvent = Event(title: "Test", iconName: "plus", color: .blue, isCompleted: true)
+        let dummyEvent = Event(title: "Test", date: randomDateInLast24Hours(), iconName: "plus", color: .blue, isCompleted: true)
         EventBox(event: .constant(dummyEvent), isEditing: .constant(true), deleteEvent: {})
             .previewLayout(.fixed(width: 175, height: 150))
         AddBox(onTap: {

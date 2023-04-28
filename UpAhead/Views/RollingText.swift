@@ -55,9 +55,6 @@ struct RollingText: View {
                     updateText()
                 }
             }
-            
-            Text("%")
-                .font(font)
         }
         .onAppear {
             let value = "\(value)".count

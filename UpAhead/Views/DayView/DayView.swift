@@ -55,7 +55,7 @@ struct DayView: View {
         .padding(.vertical, 5)
         .shadow(radius: 10)
         .confettiCannon(counter: $confettiCounter, num: 50, radius: 400.0)
-        .onChange(of: timelineData.currentDay.isDayCompleted) { newValue in
+        .onChange(of: timelineData.currentDay.isCompleted) { newValue in
             if newValue && timelineData.currentDayIndex == model.index {
                 confettiCounter += 1
             }
@@ -126,8 +126,8 @@ struct TitleView: View {
 func generateDay() -> Day {
     let date = Date()
     
-    let meetingEvent = Event(title: "Meeting", iconName: "calendar", color: .blue, isCompleted: false)
-    let lunchEvent = Event(title: "Lunch with Bob", iconName: "food", color: .green, isCompleted: false)
+    let meetingEvent = Event(title: "Meeting", date: randomDateInLast24Hours(), iconName: "calendar", color: .blue, isCompleted: false)
+    let lunchEvent = Event(title: "Lunch with Bob", date: randomDateInLast24Hours(), iconName: "food", color: .green, isCompleted: false)
     let events = [meetingEvent, lunchEvent, lunchEvent]
     
     let day = Day(date: date, events: events)

@@ -29,7 +29,7 @@ struct Day {
         return events.filter({ !$0.isCompleted }).count
     }
     
-    var isDayCompleted: Bool {
+    var isCompleted: Bool {
         return completedEventsCount == events.count
     }
     
@@ -51,7 +51,7 @@ struct Day {
     }
     
     mutating func addEvent(_ event: Event) {
-        var event = Event(title: event.title, iconName: event.iconName, color: event.color, isCompleted: event.isCompleted)
+        var event = Event(title: event.title, date: event.date, iconName: event.iconName, color: event.color, isCompleted: event.isCompleted)
         event.setIndex(events.count)
         events.append(event)
     }
@@ -71,7 +71,7 @@ struct Day {
     }
     
     mutating func nextEvent() {
-        if !isDayCompleted {
+        if !isCompleted {
             let index = events.count - completedEventsCount - 1
             events[index].isCompleted = true
         }
@@ -96,6 +96,9 @@ struct Day {
 struct Event: Hashable, Identifiable {
     let id = UUID()
     let title: String
+    let date: Date
+    
+    // UI data
     let iconName: String
     let color: Color
     var isCompleted: Bool
@@ -111,9 +114,10 @@ struct Event: Hashable, Identifiable {
 }
 
 func getEvents(amount: Int) -> [Event] {
-    let event1 = Event(title: "Meeting with Client A", iconName: "briefcase.fill", color: .blue, isCompleted: false)
-    let event2 = Event(title: "Lunch with Colleagues", iconName: "cart.fill", color: .green, isCompleted: false)
-    let event3 = Event(title: "Fitness Class", iconName: "figure.walk.circle.fill", color: .orange, isCompleted: false)
+    
+    let event1 = Event(title: "Meeting with Client A", date: randomDateInLast24Hours(), iconName: "briefcase.fill", color: .blue, isCompleted: false)
+    let event2 = Event(title: "Lunch with Colleagues", date: randomDateInLast24Hours(), iconName: "cart.fill", color: .green, isCompleted: false)
+    let event3 = Event(title: "Fitness Class", date: randomDateInLast24Hours(), iconName: "figure.walk.circle.fill", color: .orange, isCompleted: false)
     
     let events: [Event] = [event1, event2, event3]
     
@@ -124,6 +128,27 @@ func getEvents(amount: Int) -> [Event] {
     }
     
     return eventArray
+}
+
+func randomDateInLast24Hours() -> Date {
+    let hoursInDay = 24
+    let secondsInHour = 3600
+    
+    let randomNumber = Int.random(in: 1...hoursInDay * secondsInHour)
+    let randomTimeInterval = TimeInterval(randomNumber)
+    
+    let now = Date()
+    let randomDate = now - randomTimeInterval
+    
+    return randomDate
+}
+
+func defaultDate() -> Date {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let dateString = "2000-01-01 00:00:00"
+    let defaultDate = formatter.date(from: dateString)!
+    return defaultDate
 }
 
 func getProjects(for date: Date) -> [String] {

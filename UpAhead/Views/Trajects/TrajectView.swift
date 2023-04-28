@@ -56,18 +56,22 @@ struct RoadSection: View {
                 .foregroundColor(.gray)
                 .frame(height: 50)
                 .id("mark\(index)")
-            VStack(spacing: 0) {
-                Spacer()
-                ForEach(day.events) { event in
-                    TimeMark(side: event.index.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
-                        .foregroundColor(event.color)
-                        .frame(height: 100)
+            if !day.isCompleted || day.editMode {
+                VStack(spacing: 0) {
+                    Spacer()
+                    ForEach(day.events) { event in
+                        TimeMark(side: event.index.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
+                            .foregroundColor(event.color)
+                            .frame(height: 100)
+                    }
+                    if day.editMode || day.events.isEmpty {
+                        TimeMark(side: day.events.count.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
+                            .foregroundColor(.gray)
+                            .frame(height: 100)
+                    }
+                    Spacer()
                 }
-                if day.editMode || day.events.isEmpty {
-                    TimeMark(side: day.events.count.isMultiple(of: 2) ? titleSide : titleSide.opposite, secondaryMark: true)
-                        .foregroundColor(.gray)
-                        .frame(height: 100)
-                }
+            } else {
                 Spacer()
             }
         }

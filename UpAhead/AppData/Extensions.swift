@@ -92,3 +92,10 @@ extension View {
     }
 }
 
+extension DateFormatter {
+    static let hourAndMinuteWithAMPM: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        return formatter
+    }()
+}

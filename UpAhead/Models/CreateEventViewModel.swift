@@ -14,6 +14,7 @@ extension CreateEventView {
         @Published var title: String = ""
         @Published var keyboardHeight: CGFloat = 0
         @Published var color: Color = Color.blue
+        @Published var time: Date = Date.now
         
         let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink, .gray, .black, .white]
         
@@ -44,12 +45,22 @@ extension CreateEventView {
             "antenna.radiowaves.left.and.right"
         ]
         
-        func getEmptyEvent() -> Event {
-            return Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
-        }
-        
-        func getEvent() -> Event {
-            return Event(title: title, iconName: selectedIcon, color: color, isCompleted: false)
+        func getEvent(date: Date) -> Event {
+            var dayDate = date
+            let calendar = Calendar.current
+            let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
+            if let hour = timeComponents.hour, let minute = timeComponents.minute {
+                let dayComponents = calendar.dateComponents([.year, .month, .day], from: dayDate)
+                var newDayComponents = DateComponents()
+                newDayComponents.year = dayComponents.year
+                newDayComponents.month = dayComponents.month
+                newDayComponents.day = dayComponents.day
+                newDayComponents.hour = hour
+                newDayComponents.minute = minute
+                newDayComponents.second = 0
+                dayDate = calendar.date(from: newDayComponents)!
+            }
+            return Event(title: title, date: dayDate, iconName: selectedIcon, color: color, isCompleted: false)
         }
     }
 }

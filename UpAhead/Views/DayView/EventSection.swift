@@ -19,8 +19,6 @@ struct EventSection: View {
         let emptyInset = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         ZStack {
-            //indicators
-            
             List {
                 Group {
                     ForEach($day.events) { $event in
@@ -49,6 +47,14 @@ struct EventSection: View {
             .padding(.horizontal, Constants.listHorizontalPadding - 10)
             .listStyle(.plain)
             .scrollDisabled(true)
+            
+            if day.isCompleted && !day.editMode && !day.events.isEmpty {
+                statsOverlay
+                    .opacity(model.showStats ? 1 : 0)
+                    .onTapGesture {
+                        model.onStatsTap()
+                    }
+            }
         }
         .onChange(of: day.events) { newEvents in
             if !isMoving {
@@ -58,6 +64,53 @@ struct EventSection: View {
                 }
             }
         }
+    }
+    
+    var statsOverlay: some View {
+        VStack(spacing: 0) {
+            let progression = Int(round(timelineData.getDayProgressionContribution(day: day)))
+            day.events.count > 1 ? Spacer() : nil
+            VStack {
+                HStack(spacing: 0) {
+                    Text("+")
+                    RollingText(value: .constant(day.events.count))
+                }
+                Text("events done")
+            }
+            .frame(maxWidth: .infinity, alignment: model.getAlignment(index: 0))
+            .padding(model.getAlignment(index: 0) == .leading ? .leading : .trailing)
+            
+            if day.events.count > 1 {
+                Spacer()
+                
+                VStack {
+                    HStack(spacing: 0) {
+                        Text("+")
+                        RollingText(value: .constant(progression))
+                        Text("%")
+                    }
+                    Text("progression")
+                }
+                .frame(maxWidth: .infinity, alignment: model.getAlignment(index: 1))
+                .padding(model.getAlignment(index: 0) == .leading ? .trailing : .leading)
+                
+                Spacer()
+            }
+            if day.events.count > 2 {
+                VStack {
+                    RollingText(value: .constant(2))
+                    Text("events late")
+                }
+                .frame(maxWidth: .infinity, alignment: model.getAlignment(index: 2))
+                .padding(model.getAlignment(index: 0) == .leading ? .leading : .trailing)
+                
+                Spacer()
+            }
+        }
+        .font(.system(size: 28))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .foregroundColor(.secondary)
+        .background(.ultraThinMaterial)
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -81,46 +134,6 @@ struct EventSection: View {
         }
         return AnyView(EmptyView())
     }
-    
-    //    private func VStack1(side: Side) -> some View {
-//        return VStack(spacing: 100) {
-//            ForEach(day.events.indices.filter { $0 % 2 == 0 }, id: \.self) { index in
-//                if day.events[index].title != "AddBox" {
-//                    EventBox(event: $day.events[index], isEditing: $day.editMode, side: side) {
-//                        day.deleteEvent(index: index)
-//                    }
-//                } else {
-//                    AddBox {
-//                        triggerAddEvent()
-//                    }
-//                }
-//            }
-//            if day.events.count.isMultiple(of: 2) {
-//                Spacer().frame(height: 0)
-//            }
-//        }
-//        .frame(maxWidth: .infinity)
-//    }
-//
-//    private func VStack2(side: Side) -> some View {
-//        VStack(spacing: 100) {
-//            if day.events.count.isMultiple(of: 2) {
-//                Spacer().frame(height: 0)
-//            }
-//            ForEach(day.events.indices.filter { $0 % 2 == 1 }, id: \.self) { index in
-//                if day.events[index].title != "AddBox" {
-//                    EventBox(event: $day.events[index], isEditing: $day.editMode, side: side) {
-//                        day.deleteEvent(index: index)
-//                    }
-//                } else {
-//                    AddBox {
-//                        triggerAddEvent()
-//                    }
-//                }
-//            }
-//        }
-//        .frame(maxWidth: .infinity)
-//    }
 }
 
 struct EventRow: View {
@@ -135,7 +148,7 @@ struct EventRow: View {
     }
     
     var editButtons: AnyView {
-        var view: AnyView = AnyView(
+        let view: AnyView = AnyView(
             EditButtons(alignement: alignment, day: $day, event: $event)
                 .frame(maxWidth: .infinity, alignment: alignment == .leading ? .trailing : .leading)
         )
@@ -144,8 +157,22 @@ struct EventRow: View {
     
     var body: some View {
         HStack {
+            if !editMode && alignment == .trailing {
+                Text("\(event.date, formatter: DateFormatter.hourAndMinuteWithAMPM)")
+                    .foregroundColor(.primary)
+                    .strikethrough(event.isCompleted, color: .red)
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .padding(.leading)
+            }
             alignment == .leading ? eventBox : editMode ? editButtons : nil
             alignment == .leading ? editMode ? editButtons : nil : eventBox
+            if !editMode && alignment == .leading {
+                Text("\(event.date, formatter: DateFormatter.hourAndMinuteWithAMPM)")
+                    .foregroundColor(.primary)
+                    .strikethrough(event.isCompleted, color: .red)
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .padding(.trailing)
+            }
         }
         .id(event.id)
         .onDrag {
